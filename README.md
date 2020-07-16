@@ -17,3 +17,12 @@ portable incubator that the Armadillo, described [elsewhere](http://jhe.ewb.org.
 ## Initial Design Approach
 
 ![Basic Structure of Portable Incubator (1)](https://user-images.githubusercontent.com/5296671/86680945-b470ad80-bfc4-11ea-9ef6-19c4f70aceba.png)
+
+## References (Incomplete)
+
+[https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf](https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf)
+[https://www.jove.com/t/58443/construction-low-cost-mobile-incubator-for-field-laboratory](https://www.jove.com/t/58443/construction-low-cost-mobile-incubator-for-field-laboratory)
+
+## Acknowledgements
+
+Thanks to Dr. Sabia Abidi of Rice University for iput and references.
