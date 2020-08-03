@@ -34,7 +34,7 @@ int menuSelection = 0;
 bool inMenu = true;
 bool up = false;
 bool down = false;
-bool select = true;
+bool select = false;
 
 void showNumber(float number){
   display.clearDisplay();
@@ -75,7 +75,7 @@ void showMenu(){
   display.setCursor(LEFT_MARGIN,SPLIT + LINE_HEIGHT);
   display.println("Graph");
   display.setCursor(LEFT_MARGIN,SPLIT + 2*LINE_HEIGHT);
-  display.println("Start");
+  display.println("Set Temperature");
   //print cursor
   display.setCursor(0,SPLIT + menuSelection*LINE_HEIGHT);
   display.fillCircle(3, SPLIT + menuSelection*LINE_HEIGHT + 3, 3, SSD1306_WHITE);
@@ -167,21 +167,32 @@ void loop() {
     if(up && menuSelection > 0){
       menuSelection--;
     }
-    else if(down != 0 && menuSelection < 2){
+    else if(down && menuSelection < 2){
       menuSelection++;
     }
-    else if(select != 0){
+    else if(select){
       inMenu = false;
     }
     showMenu();
   }
   else{
-    if(digitalRead(BTN_SELECT) != 0){
+    //return to menu on select
+    if(select){
       inMenu = true;
     }
+    //show temperature option
     if(menuSelection == 0){
-      Serial.println("tick");
       showNumber(temperature);
+    }
+    //set target temperature option
+    else if(menuSelection == 2){
+      showNumber(targetTemperature);
+      if(up){
+        targetTemperature++;
+      }
+      if(down){
+        targetTemperature--;
+      }
     }
   }
   
