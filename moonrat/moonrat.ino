@@ -36,6 +36,11 @@ bool up = false;
 bool down = false;
 bool select = false;
 
+//storage data
+uint8_t temps[1000]; 
+int milliTime = 0;
+bool incubating = false;
+
 void showNumber(float number){
   display.clearDisplay();
   display.setCursor(28,24);
@@ -67,7 +72,10 @@ void showMenu(){
   //print title
   display.setCursor(0,0);
   display.setTextSize(2);
-  display.println("Menu");
+  display.print("Menu");
+  display.setTextSize(1);
+  String timer = " " + getTimeString();
+  display.print(timer);
   //print options
   display.setTextSize(1);
   display.setCursor(LEFT_MARGIN,SPLIT);
@@ -76,6 +84,12 @@ void showMenu(){
   display.println("Graph");
   display.setCursor(LEFT_MARGIN,SPLIT + 2*LINE_HEIGHT);
   display.println("Set Temperature");
+  display.setCursor(LEFT_MARGIN,SPLIT + 3*LINE_HEIGHT);
+  if(incubating){
+    display.println("Stop");
+  }else{
+    display.println("Start");   
+  }
   //print cursor
   display.setCursor(0,SPLIT + menuSelection*LINE_HEIGHT);
   display.fillCircle(3, SPLIT + menuSelection*LINE_HEIGHT + 3, 3, SSD1306_WHITE);
@@ -91,12 +105,32 @@ void heatOff(){
   digitalWrite(HEAT_PIN, LOW);
 }
 
-void convertTemp(int raw){
+double convertTemp(int raw){
   double temp = (double)raw / 1024;       //find percentage of input reading
   temp = temp * 5;                 //multiply by 5V to get voltage
   temp = temp - 0.5;               //Subtract the offset 
   temp = temp * 180 + 32 ;          //Convert to degrees
   temperature = (3*temperature + temp)/4;
+  return temperature;
+}
+
+String getTimeString(){
+  int mils = milliTime;
+  int hours = mils / 3600000;
+  mils = mils % 3600000;
+  int mins = mils / 60000;
+  mils = mils % 60000;
+  int secs = mils / 1000;
+  mils = mils % 1000;
+  String timeString = "";
+  timeString.concat(hours);
+  timeString.concat(":");
+  timeString.concat(mins);
+  timeString.concat(":");
+  timeString.concat(secs);
+  timeString.concat(".");
+  timeString.concat(mils);
+  return timeString;
 }
 
 //starts the interrupts
@@ -146,11 +180,16 @@ void setup() {
 //main
 void loop() {
   convertTemp(rawTemp);
-  //toggle heat
-  if(!heating && temperature < targetTemperature - 1){
-    heating = true;
+  //toggle heat if incubator is running
+  if(incubating){
+    if(!heating && temperature < targetTemperature - 1){
+      heating = true;
+    }
+    else if(heating && temperature > targetTemperature + 1){
+      heating = false;
+    }
   }
-  else if(heating && temperature > targetTemperature + 1){
+  else{
     heating = false;
   }
 
@@ -167,7 +206,7 @@ void loop() {
     if(up && menuSelection > 0){
       menuSelection--;
     }
-    else if(down && menuSelection < 2){
+    else if(down && menuSelection < 3){
       menuSelection++;
     }
     else if(select){
@@ -194,12 +233,27 @@ void loop() {
         targetTemperature--;
       }
     }
+    //toggle incubation
+    else if(menuSelection == 3){
+      incubating = !incubating;
+      milliTime = 0;
+
+      inMenu = true;
+    }
+  }
+
+  if(incubating){
+    if(milliTime % 300000 == 0){
+      temps[milliTime / 300000] = temperature;
+    }
+    milliTime += 250;
   }
   
   //Serial.print("Current Temperature: ");
   //Serial.println(temperature);
 }
 
+//runs at 8 Hz
 ISR(TIMER1_COMPA_vect){
   rawTemp = analogRead(A0);    //read the analog sensor and store it
   //read buttons
