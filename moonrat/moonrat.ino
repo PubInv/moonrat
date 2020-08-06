@@ -19,9 +19,9 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 
 int sensePin = A0;  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
-int targetTemperature = 85;
+int targetTemperature = 95;
 int rawTemp = 0;
-double temperature;        //The variable we will use to store temperature in degrees.
+float temperature;        //The variable we will use to store temperature in degrees.
 bool heating = false;
 
 //graph variables
@@ -37,7 +37,7 @@ bool down = false;
 bool select = false;
 
 //storage data
-uint8_t temps[1000]; 
+uint8_t temps[250]; 
 int milliTime = 0;
 bool incubating = false;
 
@@ -53,7 +53,17 @@ void showNumber(float number){
  * Shows a graph of the temperature data over a period of time
  */
 void showGraph(){
+  display.clearDisplay();
+  display.setCursor(LEFT_MARGIN, SPLIT);
+  //display.writeLine(LEFT_MARGIN,SPLIT, 128,64, SSD1306_WHITE);
+  for(int i = 0; i < 128-LEFT_MARGIN; i++){
+    int ypos = (int)(temps[i] - 50);
+    if(ypos < 0)
+      ypos = 0;
+    display.drawPixel(LEFT_MARGIN + i, 64-ypos, SSD1306_WHITE);
+  }
   
+  display.display();
 }
 
 /* Displays the menu.
@@ -133,6 +143,9 @@ String getTimeString(){
   return timeString;
 }
 
+void buzz(){
+}
+
 //starts the interrupts
 void startInterrupts(){
   noInterrupts();
@@ -173,8 +186,6 @@ void setup() {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
-  display.setCursor(28,25);
-  display.println("Hello");
 }
 
 //main
@@ -182,10 +193,10 @@ void loop() {
   convertTemp(rawTemp);
   //toggle heat if incubator is running
   if(incubating){
-    if(!heating && temperature < targetTemperature - 1){
+    if(!heating && temperature < targetTemperature - .25){
       heating = true;
     }
-    else if(heating && temperature > targetTemperature + 1){
+    else if(heating && temperature > targetTemperature + .25){
       heating = false;
     }
   }
@@ -223,6 +234,10 @@ void loop() {
     if(menuSelection == 0){
       showNumber(temperature);
     }
+    //show graph
+    else if(menuSelection == 1){
+      showGraph();
+    }
     //set target temperature option
     else if(menuSelection == 2){
       showNumber(targetTemperature);
@@ -243,14 +258,18 @@ void loop() {
   }
 
   if(incubating){
-    if(milliTime % 300000 == 0){
-      temps[milliTime / 300000] = temperature;
+    if(milliTime % 30000 == 0){ // five minutes
+      int index = milliTime / 30000;
+      while(index >= 250){
+        index -= 250;
+      }
+      temps[index] = temperature;
     }
     milliTime += 250;
+    if(milliTime > 172800000){ //48 hours
+      buzz();
+    }
   }
-  
-  //Serial.print("Current Temperature: ");
-  //Serial.println(temperature);
 }
 
 //runs at 8 Hz
