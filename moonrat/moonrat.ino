@@ -16,6 +16,7 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 #define BTN_UP 6
 #define BTN_DOWN 7
 #define BTN_SELECT 5
+#define BZR_PIN 9
 
 int sensePin = A0;  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
@@ -37,8 +38,8 @@ bool down = false;
 bool select = false;
 
 //storage data
-uint8_t temps[250]; 
-int milliTime = 0;
+uint8_t temps[150]; 
+uint32_t milliTime = 0;
 bool incubating = false;
 
 void showNumber(float number){
@@ -84,8 +85,9 @@ void showMenu(){
   display.setTextSize(2);
   display.print("Menu");
   display.setTextSize(1);
-  String timer = " " + getTimeString();
-  display.print(timer);
+  display.setCursor(64, 7);
+  String currentTime = getTimeString();
+  display.println(currentTime);
   //print options
   display.setTextSize(1);
   display.setCursor(LEFT_MARGIN,SPLIT);
@@ -125,12 +127,12 @@ double convertTemp(int raw){
 }
 
 String getTimeString(){
-  int mils = milliTime;
-  int hours = mils / 3600000;
+  uint32_t mils = milliTime;
+  uint8_t hours = mils / 3600000;
   mils = mils % 3600000;
-  int mins = mils / 60000;
+  uint8_t mins = mils / 60000;
   mils = mils % 60000;
-  int secs = mils / 1000;
+  uint8_t secs = mils / 1000;
   mils = mils % 1000;
   String timeString = "";
   timeString.concat(hours);
@@ -144,6 +146,7 @@ String getTimeString(){
 }
 
 void buzz(){
+  digitalWrite(BZR_PIN, HIGH);
 }
 
 //starts the interrupts
@@ -174,6 +177,8 @@ void setup() {
   pinMode(BTN_UP, INPUT);
   pinMode(BTN_DOWN, INPUT);
   pinMode(BTN_SELECT, INPUT);
+  pinMode(BZR_PIN, OUTPUT);
+  digitalWrite(BZR_PIN, LOW);
   pinMode(HEAT_PIN, OUTPUT);
   heatOff();
 
@@ -260,8 +265,8 @@ void loop() {
   if(incubating){
     if(milliTime % 30000 == 0){ // five minutes
       int index = milliTime / 30000;
-      while(index >= 250){
-        index -= 250;
+      while(index >= 150){
+        index -= 150;
       }
       temps[index] = temperature;
     }
