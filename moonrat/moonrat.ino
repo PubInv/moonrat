@@ -55,8 +55,14 @@ void showNumber(float number){
  */
 void showGraph(){
   display.clearDisplay();
-  display.setCursor(LEFT_MARGIN, SPLIT);
-  //display.writeLine(LEFT_MARGIN,SPLIT, 128,64, SSD1306_WHITE);
+  display.setTextSize(2);
+  display.setCursor(0,0);
+  display.println("GRAPH");
+  display.setTextSize(1);
+  display.setCursor(1, SPLIT);
+  display.println("100");
+  display.setCursor(1, 56);
+  display.println("50");
   for(int i = 0; i < 128-LEFT_MARGIN; i++){
     int ypos = (int)(temps[i] - 50);
     if(ypos < 0)
@@ -263,7 +269,7 @@ void loop() {
   }
 
   if(incubating){
-    if(milliTime % 30000 == 0){ // five minutes
+    if(milliTime % 30000 == 0){ // 30 seconds
       int index = milliTime / 30000;
       while(index >= 150){
         index -= 150;
