@@ -183,7 +183,7 @@ uint16_t rom_read16(uint16_t address){
 
 /*
  * Marks the EEPROM as empty by clearing the first address
- * Note: Data is not actually cleared from larger addresses
+ * Note: Data is not actually cleared from other addresses
  */
 void rom_reset(){
   rom_write16(0,0);
