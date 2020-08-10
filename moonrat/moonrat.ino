@@ -22,7 +22,7 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 #define BZR_PIN 9
 
 //temperature variables
-int sensePin = A0;  //This is the Arduino Pin that will read the sensor output
+#define TEMP_PIN A0  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
 int targetTemperature = 85;
 int rawTemp = 0;
@@ -41,12 +41,16 @@ bool up = false;
 bool down = false;
 bool select = false;
 
+//eeprom variables
+#define INDEX_ADDRESS 0 //location of index tracker in EEPROM
+#define MAX_ADDRESS 1023 //highest possible address in arduino UNO EEPROM
+#define MAX_SAMPLES 511 //maximum number of samples that we can store in EEPROM
+
 //other variables
-uint8_t temps[150]; 
 uint32_t milliTime = 0;
 bool incubating = false;
 
-//DISPLAY FUNCTIONS
+// DISPLAY FUNCTIONS --------------------------------------------------
 
 void showNumber(float number){
   display.clearDisplay();
@@ -70,7 +74,7 @@ void showGraph(){
   display.setCursor(1, 56);
   display.println("50");
   for(int i = 0; i < 128-LEFT_MARGIN; i++){
-    int ypos = (int)(temps[i] - 50);
+    int ypos = (int)(readIndex(i) - 50);
     if(ypos < 0)
       ypos = 0;
     display.drawPixel(LEFT_MARGIN + i, 64-ypos, SSD1306_WHITE);
@@ -121,7 +125,7 @@ void showMenu(){
   display.display();
 }
 
-//UTILITY FUNCTIONS
+// UTILITY FUNCTIONS --------------------------------------------------
 
 void heatOn(){
   digitalWrite(HEAT_PIN, HIGH);
@@ -163,14 +167,24 @@ void buzz(){
   digitalWrite(BZR_PIN, HIGH);
 }
 
-//EEPROM FUNCTIONS
+uint16_t floatToSixteen(float flt){
+  uint16_t out = round(flt*100);
+  return out;
+}
+
+float sixteenToFloat(uint16_t sixteen){
+  float flt = sixteen / 100.0;
+  return flt;
+}
+
+// EEPROM FUNCTIONS --------------------------------------------------
 
 /*
  * Writes 16 bits into EEPROM using big-endian respresentation
  */
 void rom_write16(uint16_t address, uint16_t data){
   EEPROM.write(address, (data & 0xFF00) >> 8);
-  EEPROM.write(address, data & 0x00FF);
+  EEPROM.write(address + 1, data & 0x00FF);
 }
 
 /*
@@ -179,6 +193,7 @@ void rom_write16(uint16_t address, uint16_t data){
 uint16_t rom_read16(uint16_t address){
   uint16_t data = EEPROM.read(address) << 8;
   data += EEPROM.read(address + 1);
+  return data;
 }
 
 /*
@@ -186,12 +201,43 @@ uint16_t rom_read16(uint16_t address){
  * Note: Data is not actually cleared from other addresses
  */
 void rom_reset(){
-  rom_write16(0,0);
+  rom_write16(INDEX_ADDRESS,0);
 }
 
-//SETUP FUNCTIONS
+/*
+ * Writes a new entry into the next spot in EEPROM
+ * returns false if the list is full
+ */
+bool writeNewEntry(float data){
+  uint16_t bitData = floatToSixteen(data);
+  uint16_t index = rom_read16(INDEX_ADDRESS);
+  if(index >= MAX_SAMPLES){
+    return false;
+  }
+  index = index + 1;
+  rom_write16(2*index, bitData);
+  rom_write16(INDEX_ADDRESS, index);
+  return true;
+}
 
-//starts the interrupts
+/*
+ * Reads the data at a given index, first index is 1
+ * Returns -1 if the index is invalid
+ */
+float readIndex(int index){
+  if(index > MAX_SAMPLES){
+    return -1;
+  }
+  uint16_t bitData = rom_read16(index*2);
+  return sixteenToFloat(bitData);
+}
+
+// SETUP FUNCTIONS --------------------------------------------------
+
+/*
+ * Starts interrupts
+ * Timer1 runs at 8 Hz
+ */
 void startInterrupts(){
   noInterrupts();
   
@@ -199,7 +245,7 @@ void startInterrupts(){
   TCCR1A = 0;// set entire TCCR1A register to 0
   TCCR1B = 0;// same for TCCR1B
   TCNT1  = 0;//initialize counter value to 0
-  // set compare match register for 1hz increments
+  // set compare match register for 8hz increments
   OCR1A = 1952;// = (16*10^6) / (8*1024) - 1
   // turn on CTC mode
   TCCR1B |= (1 << WGM12);
@@ -224,6 +270,8 @@ void setup() {
   pinMode(HEAT_PIN, OUTPUT);
   heatOff();
 
+  rom_reset();
+
   startInterrupts();
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){
@@ -235,7 +283,7 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);
 }
 
-//LOOP
+// LOOP --------------------------------------------------
 
 //main
 void loop() {
@@ -260,7 +308,6 @@ void loop() {
   }
 
   delay(250);
-  Serial.println("tick");
   if(inMenu){
     //read buttons and menu
     if(up && menuSelection > 0){
@@ -308,11 +355,7 @@ void loop() {
 
   if(incubating){
     if(milliTime % 30000 == 0){ // 30 seconds
-      int index = milliTime / 30000;
-      while(index >= 150){
-        index -= 150;
-      }
-      temps[index] = temperature;
+      writeNewEntry(temperature);
     }
     milliTime += 250;
     if(milliTime > 172800000){ //48 hours
@@ -321,11 +364,11 @@ void loop() {
   }
 }
 
-//ISRs
+// ISRs --------------------------------------------------
 
 //runs at 8 Hz
 ISR(TIMER1_COMPA_vect){
-  rawTemp = analogRead(A0);    //read the analog sensor and store it
+  rawTemp = analogRead(TEMP_PIN);    //read the analog sensor and store it
   //read buttons
   up = digitalRead(BTN_UP);
   down = digitalRead(BTN_DOWN);
