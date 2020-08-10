@@ -1,8 +1,10 @@
 #include <SPI.h>
 #include <Wire.h>
+#include <EEPROM.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+//display variables
 #define WIDTH 128
 #define HEIGHT 64
 #define SPLIT 16
@@ -12,15 +14,17 @@
 #define OLED_RESET 4
 Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 
+//pin variables
 #define HEAT_PIN 8
 #define BTN_UP 6
 #define BTN_DOWN 7
 #define BTN_SELECT 5
 #define BZR_PIN 9
 
+//temperature variables
 int sensePin = A0;  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
-int targetTemperature = 95;
+int targetTemperature = 85;
 int rawTemp = 0;
 float temperature;        //The variable we will use to store temperature in degrees.
 bool heating = false;
@@ -37,10 +41,12 @@ bool up = false;
 bool down = false;
 bool select = false;
 
-//storage data
+//other variables
 uint8_t temps[150]; 
 uint32_t milliTime = 0;
 bool incubating = false;
+
+//DISPLAY FUNCTIONS
 
 void showNumber(float number){
   display.clearDisplay();
@@ -115,6 +121,8 @@ void showMenu(){
   display.display();
 }
 
+//UTILITY FUNCTIONS
+
 void heatOn(){
   digitalWrite(HEAT_PIN, HIGH);
 }
@@ -154,6 +162,34 @@ String getTimeString(){
 void buzz(){
   digitalWrite(BZR_PIN, HIGH);
 }
+
+//EEPROM FUNCTIONS
+
+/*
+ * Writes 16 bits into EEPROM using big-endian respresentation
+ */
+void rom_write16(uint16_t address, uint16_t data){
+  EEPROM.write(address, (data & 0xFF00) >> 8);
+  EEPROM.write(address, data & 0x00FF);
+}
+
+/*
+ * Reads 16 bits from EEPROM using big-endian respresentation
+ */
+uint16_t rom_read16(uint16_t address){
+  uint16_t data = EEPROM.read(address) << 8;
+  data += EEPROM.read(address + 1);
+}
+
+/*
+ * Marks the EEPROM as empty by clearing the first address
+ * Note: Data is not actually cleared from larger addresses
+ */
+void rom_reset(){
+  rom_write16(0,0);
+}
+
+//SETUP FUNCTIONS
 
 //starts the interrupts
 void startInterrupts(){
@@ -198,6 +234,8 @@ void setup() {
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
 }
+
+//LOOP
 
 //main
 void loop() {
@@ -282,6 +320,8 @@ void loop() {
     }
   }
 }
+
+//ISRs
 
 //runs at 8 Hz
 ISR(TIMER1_COMPA_vect){
