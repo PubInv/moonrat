@@ -354,7 +354,7 @@ void loop() {
   }
 
   if(incubating){
-    if(milliTime % 30000 == 0){ // 30 seconds
+    if(milliTime % 300000 == 0){ // 5 minutes
       writeNewEntry(temperature);
     }
     milliTime += 250;
