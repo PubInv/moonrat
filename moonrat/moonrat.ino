@@ -49,6 +49,11 @@ bool select = false;
 //other variables
 uint32_t milliTime = 0;
 bool incubating = false;
+bool entryFlag = false;
+int ticksSinceHeat = 0;
+
+#define FIVE_MINUTES 300000
+#define TICK_LENGTH 125
 
 // DISPLAY FUNCTIONS --------------------------------------------------
 
@@ -287,6 +292,7 @@ void setup() {
 
 //main
 void loop() {
+  /*
   convertTemp(rawTemp);
   //toggle heat if incubator is running
   if(incubating){
@@ -305,9 +311,33 @@ void loop() {
     heatOn();
   }else{
     heatOff();
+  }*/
+
+  delay(200);
+  convertTemp(rawTemp);
+  //if temp below target turn heat on
+  //if temp above target + gap turn heat off
+  if(incubating){
+    if(temperature > targetTemperature + 0.5){
+      heatOn();
+      ticksSinceHeat = 0;
+    }
+    else if(temperature < targetTemperature){
+      heatOff();
+    }
+  }
+  else{
+    heatOff();
   }
 
-  delay(250);
+  //prevents battery from turning off
+  if(ticksSinceHeat*TICK_LENGTH > 1000){
+    heatOn();
+    delay(100);
+    heatOff();
+    ticksSinceHeat = 0;
+  }
+  
   if(inMenu){
     //read buttons and menu
     if(up && menuSelection > 0){
@@ -353,14 +383,10 @@ void loop() {
     }
   }
 
-  if(incubating){
-    if(milliTime % 300000 == 0){ // 5 minutes
-      writeNewEntry(temperature);
-    }
-    milliTime += 250;
-    if(milliTime > 172800000){ //48 hours
-      buzz();
-    }
+  //store temperature when flag is set by ISR
+  if(entryFlag){
+    entryFlag = false;
+    writeNewEntry(temperature);
   }
 }
 
@@ -373,4 +399,11 @@ ISR(TIMER1_COMPA_vect){
   up = digitalRead(BTN_UP);
   down = digitalRead(BTN_DOWN);
   select = digitalRead(BTN_SELECT);
+  if(incubating){
+    milliTime += TICK_LENGTH;
+    if(milliTime % FIVE_MINUTES == 0){ // 5 minutes
+      entryFlag = true;
+    }
+    ticksSinceHeat += 1;
+  }
 }
