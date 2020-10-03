@@ -30,4 +30,4 @@ Incubator [https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf](http
 
 ## Acknowledgements
 
-Thanks to Dr. Sabia Abidi of Rice University for iput and references.
+Thanks to Dr. Sabia Abidi of Rice University for input and references.
