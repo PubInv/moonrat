@@ -12,22 +12,59 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+// TODO:
+// A) The module for the electronics needs to be designed so that it 
+// can be fitted onto or mates with the heating chamber design in such 
+// a way that the electronics can be inserted. - 2 hours
+// B) We need to choose a Bill of Materials for standoffs and design the
+// holes for that - 2 hours
+// C) We need to choose the hinge and get the precise dimensions. - 2 hours
+// D) We need to decide on latching hardware and make sure it is mountable. - 2 hours
+// E) We need to design a platform to support the materials - 2 hours
+// F) We need to add a pipette holder - 2 hours
+// G) We need to design some sort of battery attachment underneath - 2 hours
+// H) We need to decide the dimensions of the inner chamber carefull - 1 hour
+
+// I think we can define a basic "interface" the electronics module which will
+// be a standard physical mount. This will allow us to use a standard inteface
+// with a variety of boxes. Possibly this can be done with pillow mounts.
+
+// MEDIA DIMENSIONS
+// Petrifilms and other media vary in size.
+// https://www.3m.com/3M/en_US/company-us/all-3m-products/~/ECOLICT-3M-Petrifilm-E-coli-Coliform-Count-Plates/?N=5002385+3293785155&preselect=3293786499&rt=rud
+// However, E. coli Petrifilms are precisely:
+ecoli_pf_width_mm = 74;
+ecoli_pf_length_mm = 100;
+ecoli_pf_height_mm = 1; // This is not a precise measumrent, but close.
+// Note that Petfilims are allows to be stacked no more than 20 high.
+ecoli_stack_number = 20;
+// I suggest that we base the interior dimentions on this.
+
+// Note this site:
+// https://www.shoppopdisplays.com/CS004/clear-acrylic-box-with-hasp-lock-hinged-lid-custom-size.html
+// sells custom boxes with hasps and hinges which could be acceptable for the
+// out box if we bolt something on; the other parts we can 3D print
+
 include <rcube.scad>
 
 // These are for the inner heat chanber dimensions
-hc_len = 86;
-hc_wid = 46;
-hc_hgt = 19;
+// I'm going to add some padding so the chamber won't be to cramped
+hc_margin_mm = 10;
+hc_len = ecoli_pf_length_mm + hc_margin_mm;
+hc_wid = ecoli_pf_width_mm + hc_margin_mm;
+// NOTE : This currently does not take account of the tray and heatin pad height.
+hc_hgt = ecoli_stack_number*ecoli_pf_height_mm+hc_margin_mm;
 
 // These are the outer dimensions; they could be 
 // computed from the hc dimensions
-hc_ins_width = 30; // an empty insulation width
+hc_ins_width = 50; // an empty insulation width
 
 hc_olen = hc_len+hc_ins_width;
 hc_owid = hc_wid+hc_ins_width;
 hc_ohgt = hc_hgt+hc_ins_width;
 inner_shell_width = 3;
-outer_shell_width = 6;
+outer_shell_width = 3;
+outer_shell_radius = 3;
 
 // hinge specifcation (assume two holes)
 hinge_hole_distance = 10;
@@ -81,21 +118,53 @@ module  createHeatChamber(ilen,iwid,ihgt,olen,owid,ohgt,ish,osh,fl,ft) {
     // outer box, which has "lips" cut off for lid
     difference() {
         union() {
-        open_box(olen,owid,ohgt,osh);
+        open_box(olen,owid,ohgt,osh,outer_shell_radius,0);
         createHingeFlange(olen,owid,ohgt,fl,ft);
         }
         // here I need to cut out the edges
         translate([-osh,0,ohgt/2])
         cube(size=[olen+osh*2, owid-osh*2, osh*2],center=true);
     }
-    // This is printed separately!!!
+
+}
+// This is printed separately!!!
+module innerChamber(ilen,iwid,ihgt,ish) {
     color([1,0,0])
-    open_box(ilen,iwid,ihgt,ish);
+    open_box(ilen,iwid,ihgt,ish,0,0);
 }
 
+module hingeleaf(olen,owid,ohgt,fsh) {
+        color([1,0.5,0.5])
+        scale([2,2,2])
+        rcube([hinge_leaf_width*2,hinge_leaf_length,hinge_leaf_thickness],1);
+}
 // LID -- This needs to have a place for the latch hardware
-module lid() {
-    // TBD...
+module lid(olen,owid,ohgt,osh,fsh) {
+    difference() {
+        union() {
+        difference() {
+            union() {
+                translate([0,0,ohgt/2-osh/2])
+                cube(size=[olen,owid-osh*2,osh],center=true);
+            } 
+            translate([olen/2+-hinge_hole_distance_from_pin,0,ohgt/2 - hinge_screw_length/2]) 
+             { 
+                translate([0,hinge_hole_distance/2,0])     
+                cylinder(hinge_screw_length*2,hinge_screw_barrel_radius,hinge_screw_barrel_radius,true);
+                translate([0,-hinge_hole_distance/2,0])
+                cylinder(hinge_screw_length*2,hinge_screw_barrel_radius,hinge_screw_barrel_radius,true);
+             }                   
+    
+        }
+        translate([olen/2+-hinge_hole_distance_from_pin,0,ohgt/2 - hinge_screw_length/2]) 
+        dualBarrels();
+        }
+        // now we cut away the hinge_leaf....
+        // we first translate it an then rotate it....
+        translate([olen/2,0,ohgt/2 - hinge_leaf_thickness/2]) 
+        rotate([0,180,0])
+        hingeleaf(olen,owid,ohgt,fsh);
+    }
 }
 
 module screwBarrel(len,od,id) {
@@ -122,38 +191,38 @@ module createHingeFlange(olen,owid,ohgt,flen,fsh) {
     // tool to cut out the holes!!
     difference() {
         union() {
-    difference() {
-        translate([olen/2+flen/2,0,ohgt/2 - fsh/2])
-        cube(size=[flen, owid, fsh],center=true);
-        translate([olen/2+hinge_hole_distance_from_pin,0,ohgt/2 - hinge_screw_length/2]) 
-        {    
-            translate([0,hinge_hole_distance/2,0])     
-            cylinder(hinge_screw_length*2,hinge_screw_barrel_radius,hinge_screw_barrel_radius,true);
-            translate([0,-hinge_hole_distance/2,0])
-            cylinder(hinge_screw_length*2,hinge_screw_barrel_radius,hinge_screw_barrel_radius,true);
-        }      
-    }
+            difference() {
+                    translate([olen/2+flen/2,0,ohgt/2 - fsh/2])
+                    cube(size=[flen, owid, fsh],center=true);
+                    translate([olen/2+hinge_hole_distance_from_pin,0,ohgt/2 - hinge_screw_length/2]) 
+                // This cuts the screw holes
+                    {    
+                        translate([0,hinge_hole_distance/2,0])     
+                        cylinder(hinge_screw_length*2,hinge_screw_barrel_radius,hinge_screw_barrel_radius,true);
+                        translate([0,-hinge_hole_distance/2,0])
+                        cylinder(hinge_screw_length*2,hinge_screw_barrel_radius,hinge_screw_barrel_radius,true);
+                    }      
+                }
 
         translate([olen/2+hinge_hole_distance_from_pin,0,ohgt/2 - hinge_screw_length/2]) 
         dualBarrels();
-}
+            }
                // now we cut away a "recession" for the hinge...
             // this is mostly to make it easier to see how pieces fit together!!!
+            // this is mostly to make it easier to see how pieces fit together!!!
         translate([olen/2,0,ohgt/2 - hinge_leaf_thickness/2]) 
-        color([1,0.5,0.5])
-        scale([2,2,2])
-        cube(size=[hinge_leaf_width*2,hinge_leaf_length,hinge_leaf_thickness],center=true);
+        hingeleaf(olen,owid,ohgt,flen,fsh);
     }
 
 }
 
 
-module  open_box(olen,owid,ohgt,sh) {   
+module  open_box(olen,owid,ohgt,sh, or=4,ir =2) {   
     // inside
     difference() {
         difference() {             
-                cube(size=[olen, owid, ohgt],center=true); 
-                cube(size=[olen-2*sh, owid-2*sh, ohgt-2*sh],center=true); 
+                rcube([olen, owid, ohgt],or, center=true); 
+                rcube([olen-2*sh, owid-2*sh, ohgt-2*sh],ir,center=true); 
         }
         // This makes the box "open"
         translate([0,0,sh])
@@ -207,13 +276,19 @@ difference(){
 }
 }
 
-translate([250,100,0]){
-            cube(size=[length2hole,width2hole,heighthole],center=false);
-        }
+//translate([250,100,0]){
+//            cube(size=[length2hole,width2hole,heighthole],center=false);
+//        }
         
 //createCaseBottom(width,length,height,shellWidth,dividerFromTop);
 createHeatChamber(hc_len,hc_wid,hc_hgt,hc_olen,hc_owid,hc_ohgt,inner_shell_width,outer_shell_width,flange_length,flange_thickness);
 
-translate([150,0,0])
- createCaseTop();
-        
+translate([-120,0,0]) 
+color([0,0,1,0.7])       
+lid(hc_olen,hc_owid,hc_ohgt,outer_shell_width);
+
+//translate([150,0,0])
+// createCaseTop();
+      
+ translate([150,0,0])
+ innerChamber(hc_len,hc_wid,hc_hgt,inner_shell_width);
