@@ -47,10 +47,11 @@ ecoli_pf_height_mm = 1; // This is not a precise measumrent, but close.
 ecoli_stack_number = 20;
 // I suggest that we base the interior dimentions on this.
 
+heatingClothGap=5;
 plateWidth=3;
-cassetteHeight=15;
+cassetteHeight=heatingClothGap+2*plateWidth;// 
 throatDiameter=60;
-backWallHeight=25;
+backWallHeight=20;
 
 include <Perforated_plate.scad>
 
@@ -310,17 +311,17 @@ difference(){
 module cassettePlate() {
     difference() {
     cube(size=[throatDiameter,ecoli_pf_length_mm,plateWidth],center=true);
-        arrayOfCylinders(5,14,10);
+        arrayOfCylinders(5,14,10); // TODO: Make these constants
     }
 }
 
 module cassetteTop() {
     translate([0,0,cassetteHeight/2])
     union() {
-        #translate([0,ecoli_pf_length_mm/2,backWallHeight/2])
-        cube(size=[throatDiameter,plateWidth,backWallHeight],center=true);
-        #translate([0,ecoli_pf_length_mm/2-backWallHeight,backWallHeight])
-        cube(size=[throatDiameter,backWallHeight,plateWidth],center=true);
+        translate([0,ecoli_pf_length_mm/2-plateWidth/2,backWallHeight/2])
+        cube(size=[throatDiameter/2,plateWidth,backWallHeight],center=true);
+        translate([0,ecoli_pf_length_mm/2-backWallHeight/2,backWallHeight])
+        cube(size=[throatDiameter/2,backWallHeight,plateWidth],center=true);
         cassettePlate();
     }
 }
