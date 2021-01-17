@@ -12,6 +12,13 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
+
+
+// This is a quick customizable way to make an array of holes of any size in a cylindrical plate - specifically for use in a Buchner funnel.
+
+
+
 // TODO:
 // A) The module for the electronics needs to be designed so that it 
 // can be fitted onto or mates with the heating chamber design in such 
@@ -39,6 +46,13 @@ ecoli_pf_height_mm = 1; // This is not a precise measumrent, but close.
 // Note that Petfilims are allows to be stacked no more than 20 high.
 ecoli_stack_number = 20;
 // I suggest that we base the interior dimentions on this.
+
+plateWidth=3;
+cassetteHeight=15;
+throatDiameter=60;
+backWallHeight=25;
+
+include <Perforated_plate.scad>
 
 // Note this site:
 // https://www.shoppopdisplays.com/CS004/clear-acrylic-box-with-hasp-lock-hinged-lid-custom-size.html
@@ -281,14 +295,52 @@ difference(){
 //        }
         
 //createCaseBottom(width,length,height,shellWidth,dividerFromTop);
-createHeatChamber(hc_len,hc_wid,hc_hgt,hc_olen,hc_owid,hc_ohgt,inner_shell_width,outer_shell_width,flange_length,flange_thickness);
-
-translate([-120,0,0]) 
-color([0,0,1,0.7])       
-lid(hc_olen,hc_owid,hc_ohgt,outer_shell_width);
+//createHeatChamber(hc_len,hc_wid,hc_hgt,hc_olen,hc_owid,hc_ohgt,inner_shell_width,outer_shell_width,flange_length,flange_thickness);
+//
+//translate([-120,0,0]) 
+//color([0,0,1,0.7])       
+//lid(hc_olen,hc_owid,hc_ohgt,outer_shell_width);
 
 //translate([150,0,0])
 // createCaseTop();
       
- translate([150,0,0])
- innerChamber(hc_len,hc_wid,hc_hgt,inner_shell_width);
+// translate([150,0,0])
+// innerChamber(hc_len,hc_wid,hc_hgt,inner_shell_width);
+
+module cassettePlate() {
+    difference() {
+    cube(size=[throatDiameter,ecoli_pf_length_mm,plateWidth],center=true);
+        arrayOfCylinders(5,14,10);
+    }
+}
+
+module cassetteTop() {
+    translate([0,0,cassetteHeight/2])
+    union() {
+        #translate([0,ecoli_pf_length_mm/2,backWallHeight/2])
+        cube(size=[throatDiameter,plateWidth,backWallHeight],center=true);
+        #translate([0,ecoli_pf_length_mm/2-backWallHeight,backWallHeight])
+        cube(size=[throatDiameter,backWallHeight,plateWidth],center=true);
+        cassettePlate();
+    }
+}
+module cassetteBottom() {
+    translate([0,0,-cassetteHeight/2])
+    cassettePlate();
+}
+module cassetteMounts() {
+    translate([throatDiameter/2-plateWidth/2,0,0])
+    cube(size=[plateWidth,ecoli_pf_length_mm,cassetteHeight],center=true);
+        translate(-[throatDiameter/2-plateWidth/2,0,0])
+    cube(size=[plateWidth,ecoli_pf_length_mm,cassetteHeight],center=true);
+}
+
+module thermosCassette() {
+    union () {
+        cassetteTop();
+        cassetteBottom();
+        cassetteMounts();
+    }
+}
+
+thermosCassette();
