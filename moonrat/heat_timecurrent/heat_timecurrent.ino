@@ -35,7 +35,7 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 //temperature variables
 #define TEMP_PIN A0  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
-int targetTemperature = 75;//in fahrenheit
+int targetTemperature = 85;//in fahrenheit
 int rawTemp = 0;
 float temperature;        //The variable we will use to store temperature in degrees.
 bool heating = false;
@@ -317,13 +317,14 @@ void showMenu(){
 
 // UTILITY FUNCTIONS --------------------------------------------------
 //turn the heating pad on
-void heatOn(){
+void heatsOFF(){
   digitalWrite(HEAT_PIN, HIGH);
-  heating=true;
+  
 }
 //turn the heating pad off
-void heatOff(){
+void heatsON(){
   digitalWrite(HEAT_PIN, LOW);
+  
 }
 // convert temparature sensor data to fareinheit
 double convertTemp(int raw){
@@ -472,7 +473,7 @@ void setup() {
   pinMode(BZR_PIN, OUTPUT);
   digitalWrite(BZR_PIN, LOW);
   pinMode(HEAT_PIN, OUTPUT); 
-  heatOff();
+  heatsON();
 
   rom_reset();
 
@@ -491,6 +492,7 @@ void setup() {
 //main
 void loop() {
   //read keyboard entries from the serial monitor
+  heating=false;
   char T;
 
     if (Serial.available()){
@@ -538,9 +540,9 @@ void loop() {
     heating = false;
   }
   if(heating){
-    heatOn();
+    heatsOFF();
   }else{
-    heatOff();
+    heatsON();
   }*/
 
   delay(1000);
@@ -550,22 +552,24 @@ void loop() {
   //if the incubating has started then start heating if the temperature is too low. 
   if(incubating){
     if(temperature > targetTemperature + 0.5){
-      heatOn();
+      heatsOFF();
       ticksSinceHeat = 0;
+      heating=false;
     }
     else if(temperature < targetTemperature){
-      heatOff();
+      heatsON();
+      heating=true;
     }
   }
   else{
-    heatOff();
+    heatsON();
   }
 
   //prevents battery from turning off
   if(ticksSinceHeat*TICK_LENGTH > 1000){
-    heatOn();
+    heatsOFF();
     delay(100);
-    heatOff();
+    heatsON();
     ticksSinceHeat = 0;
   }
   
@@ -630,7 +634,7 @@ void loop() {
   buzz();
   Serial.println(heatTime);
  }
-
+  
   
 }
 
@@ -655,6 +659,7 @@ ISR(TIMER1_COMPA_vect){
   }
   if(heating){
     heatTime+=TICK_LENGTH;
+    heating= false;
   }
 }
   
