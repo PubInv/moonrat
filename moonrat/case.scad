@@ -41,7 +41,7 @@
 // https://www.3m.com/3M/en_US/company-us/all-3m-products/~/ECOLICT-3M-Petrifilm-E-coli-Coliform-Count-Plates/?N=5002385+3293785155&preselect=3293786499&rt=rud
 // However, E. coli Petrifilms are precisely:
 ecoli_pf_width_mm = 74;
-ecoli_pf_length_mm = 100;
+ecoli_pf_length_mm = 100+2;
 ecoli_pf_height_mm = 1; // This is not a precise measumrent, but close.
 // Note that Petfilims are allows to be stacked no more than 20 high.
 ecoli_stack_number = 20;
@@ -315,13 +315,21 @@ module cassettePlate() {
     }
 }
 
-module cassetteTop() {
-    translate([0,0,cassetteHeight/2])
+module petrifilmHolder() {
     union() {
         translate([0,ecoli_pf_length_mm/2-plateWidth/2,backWallHeight/2])
         cube(size=[throatDiameter/2,plateWidth,backWallHeight],center=true);
         translate([0,ecoli_pf_length_mm/2-backWallHeight/2,backWallHeight])
         cube(size=[throatDiameter/2,backWallHeight,plateWidth],center=true);
+    }
+}
+
+module cassetteTop() {
+    translate([0,0,cassetteHeight/2])
+    union() {
+        petrifilmHolder();
+        rotate([0,0,180])
+        petrifilmHolder();
         cassettePlate();
     }
 }
