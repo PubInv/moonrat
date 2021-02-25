@@ -35,7 +35,7 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 //temperature variables
 #define TEMP_PIN A0  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
-int targetTemperature = 85;//in fahrenheit
+int targetTemperature = 95;//in fahrenheit
 int rawTemp = 0;
 float temperature;        //The variable we will use to store temperature in degrees.
 bool heating = false;
@@ -62,7 +62,8 @@ int xaxisright=128-24;
 float timeleft=0;//(xaxisright-xaxisleft)*FIVE_MINUTES;
 float timemid=(((float)(graphwidth)/2)*FIVE_MINUTES)/3600000;//(xaxisright-xaxismid)*FIVE_MINUTES;
 float timeright=((float)(graphwidth)*FIVE_MINUTES)/3600000;//xaxisright*FIVE_MINUTES;
-
+//int countery=0;
+//int timerpulse=0;
 
 //menu variables
 int menuSelection = 0;
@@ -418,7 +419,6 @@ bool writeNewEntry(float data){
  */
 /*#define ARRAY_LENGTH 5
 uint16_t arra[ARRAY_LENGTH];
-
 //void createarray(){
     for(int i=0; i<ARRAY_LENGTH; i++){
       arra[i]=i;
@@ -552,12 +552,12 @@ void loop() {
   //if the incubating has started then start heating if the temperature is too low. 
   if(incubating){
     if(temperature > targetTemperature + 0.5){
-      heatsOFF();
+      heatsON();
       ticksSinceHeat = 0;
       heating=false;
     }
     else if(temperature < targetTemperature){
-      heatsON();
+      heatsOFF();
       heating=true;
     }
   }
@@ -566,12 +566,12 @@ void loop() {
   }
 
   //prevents battery from turning off
-  if(ticksSinceHeat*TICK_LENGTH > 1000){
+  /*if(ticksSinceHeat*TICK_LENGTH > 1000){
     heatsOFF();
     delay(100);
     heatsON();
     ticksSinceHeat = 0;
-  }
+  }*/
   
  //controls menu selection
   if(inMenu){
@@ -629,13 +629,20 @@ void loop() {
       
     }
  }
+ //countery=countery+1;
+ //timerpulse=timerpulse+digitalRead(HEAT_PIN);
  //start buzzing after 48 hours until the user stops incubating
- if (incubating && (milliTime>=FORTYEIGHT_HOURS)){
-  buzz();
+ int timern= ceil(milliTime/1000);
+ if (incubating && (timern% 60==0)){
+  //buzz();
+  //Serial.println(float(timerpulse/countery));
   Serial.println(heatTime);
+  
  }
   
-  
+ //Serial.println(temperature);
+  //Serial.println(digitalRead(HEAT_PIN));
+ 
 }
 
 
@@ -657,7 +664,7 @@ ISR(TIMER1_COMPA_vect){
     
     ticksSinceHeat += 1;
   }
-  if(heating){
+  if(digitalRead(HEAT_PIN)){
     heatTime+=TICK_LENGTH;
     heating= false;
   }
