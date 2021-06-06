@@ -15,7 +15,15 @@ portable incubator that the Armadillo, described [elsewhere](http://jhe.ewb.org.
 
 ## Current Design
 
-Our current design use a "casette" which is bolted to the inside of the lid of a thermos bottle, shown below. Our circuit is on a breadboard, and we have not yet designed the enclosure for the electronics integrated into the cap or as a holder for the bottle.
+Our current design use a "casette" which is bolted to the inside of the lid of a thermos bottle, shown below. Our circuit is on a breadboard, and we have not yet designed the enclosure for the electronics integrated into the cap or as a holder for the bottle. We use a 3D printed bracket to hold the Thernos bottle. We believe this is the most compact design which will be thermally efficient.
+
+### Thermos Bottle in Bracekt With Battery in Place
+
+![Thermos Bottle In Bracket With Battery](https://github.com/PubInv/moonrat/blob/master/moonrat/3D_printed_part_pictures/6C0C779D-602B-4875-BB12-1951AA8B21C5.jpg)
+
+### Bracket by Itself
+
+![Bracket by itself](https://github.com/PubInv/moonrat/blob/master/moonrat/3D_printed_part_pictures/9DBF69BE-EAB6-436A-977B-694C6931730C.jpg)
 
 Our analysis is preliminary, but our current tests show we at 25C ambient temperature we can hold the needed 35C incubation temperature with only 
 (12V * 12V / 8 Ohms * 6% duty cycle * 48 hours) = 51.84 Watt Hours.  This will have to be supplied by a battery pack, which will be about the same size as the Thermos bottle.
