@@ -37,9 +37,9 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 //temperature variables
 #define TEMP_PIN A0  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
-int targetTemperature = 95;//in fahrenheit
+int targetTemperatureC = 35;// Celcius
 int rawTemp = 0;
-float temperature;        //The variable we will use to store temperature in degrees.
+float temperatureC;        //The variable we will use to store temperature in degrees.
 bool heating = false;
 
 //time variables
@@ -50,12 +50,12 @@ bool heating = false;
 //graph variables
 int graphTimeLength = 24;//2 hours long bexause plotting every 5 mins
 /*graphTimeLength2=511;*/
-int graphMaxTemp = targetTemperature+2; //initializing max temp
-int graphMinTemp = targetTemperature-2; //initializing min temp
-int graphMaxTemp1 = targetTemperature+20; //initializing max temp
-int graphMinTemp1 = targetTemperature-20; //initializing min temp
-int maxtarget= targetTemperature+2; //max range for target temp
-int mintarget= targetTemperature-2; //min range for target temp
+int graphMaxTemp = targetTemperatureC+2; //initializing max temp
+int graphMinTemp = targetTemperatureC-2; //initializing min temp
+int graphMaxTemp1 = targetTemperatureC+20; //initializing max temp
+int graphMinTemp1 = targetTemperatureC-20; //initializing min temp
+int maxtarget= targetTemperatureC+2; //max range for target temp
+int mintarget= targetTemperatureC-2; //min range for target temp
 int center= SPLIT+ ((64-SPLIT)/2);
 int graphwidth= 128-LEFT_MARGIN;
 int xaxisleft=LEFT_MARGIN*2;
@@ -212,7 +212,7 @@ void showGraph2(int b, int multiple){
   display.setCursor(1, 56);
   display.println(graphMinTemp1);
   display.setCursor(1, center);
-  display.println(targetTemperature);
+  display.println(targetTemperatureC);
   display.setCursor(LEFT_MARGIN*2, 56);
   display.println(timeleft);
   display.setCursor(xaxismid, 56);
@@ -322,23 +322,24 @@ void showMenu(){
 // UTILITY FUNCTIONS --------------------------------------------------
 //turn the heating pad on
 void heatsOFF(){
-  digitalWrite(HEAT_PIN, HIGH);
-  
+//  digitalWrite(HEAT_PIN, HIGH);
+  digitalWrite(HEAT_PIN, LOW);
 }
 //turn the heating pad off
 void heatsON(){
-  digitalWrite(HEAT_PIN, LOW);
-  
+//  digitalWrite(HEAT_PIN, LOW);
+  digitalWrite(HEAT_PIN, HIGH);  
 }
-// convert temparature sensor data to fareinheit
-double convertTemp(int raw){
-  double temp = (double)raw / 1024;       //find percentage of input reading 
-  temp = temp * 5;                 //multiply by 5V to get voltage
-  temp = temp - 0.5;               //Subtract the offset 
-  temp = temp * 180 + 32 ;          //Convert to degrees
-  temperature = (3*temperature + temp)/4;
-  return temperature;
-}
+//// convert temparature sensor data to fareinheit
+//// WARNING: I don't know what sensor this is for! It is not the TMP36!
+//double convertTemp(int raw){
+//  double temp = (double)raw / 1024;       //find percentage of input reading 
+//  temp = temp * 5;                 //multiply by 5V to get voltage
+//  temp = temp - 0.5;               //Subtract the offset 
+//  temp = temp * 180 + 32 ;          //Convert to degrees
+//  temperature = (3*temperature + temp)/4;
+//  return temperature;
+//}
 //function to display current time
 String getTimeString(){
   uint32_t mils = milliTime;
@@ -498,15 +499,22 @@ void setup() {
  * Switch test program
  */
 
+double read_temp() {
+  double sensorInput = analogRead(A0);        //read the analog sensor and store it
+  double temp = (double)sensorInput / (double) 1024.0;   //find percentage of input reading
+  double voltage = temp * 5.0;  //multiply by 5V to get voltage
+  Serial.print("voltage: ");
+  Serial.println(voltage);
+  double offsetVoltage = voltage - 0.5;                   //Subtract the offset 
+  double degreesC = offsetVoltage * 100.0;                   //Convert to degrees C
+  return degreesC;
+}
 
 //main
 void loop() {
 
 // Test reading the buttons...
-  Serial.print(digitalRead(BTN_SELECT));   
-  Serial.print(digitalRead(BTN_UP));
-  Serial.print(digitalRead(BTN_DOWN));
-  Serial.println();
+
   
   //read keyboard entries from the serial monitor
   heating=false;
@@ -520,12 +528,26 @@ void loop() {
     down=(T=='d');
     select=(T=='s');
   }  
+
+  select = digitalRead(BTN_SELECT);
+  up = digitalRead(BTN_UP);
+  down = digitalRead(BTN_DOWN);
+
+   Serial.print(select);   
+  Serial.print(up);
+  Serial.print(down);
+  Serial.println();
+  
+  Serial.print("Temp (C): ");
+  temperatureC = read_temp();
+  Serial.println(temperatureC);
+  
   int numEEPROM=0;
   int multiple=0;
   //store temperature when flag is set by ISR every five minutes
   if(entryFlag){
     entryFlag = false;
-    writeNewEntry(temperature);
+    writeNewEntry(temperatureC);
       //print EEprom data on serial monitor
    
     if (b<513){
@@ -546,10 +568,10 @@ void loop() {
   convertTemp(rawTemp);
   //toggle heat if incubator is running
   if(incubating){
-    if(!heating && temperature < targetTemperature - .25){
+    if(!heating && temperature < targetTemperatureC - .25){
       heating = true;
     }
-    else if(heating && temperature > targetTemperature + .25){
+    else if(heating && temperature > targetTemperatureC + .25){
       heating = false;
     }
   }
@@ -562,18 +584,18 @@ void loop() {
     heatsON();
   }*/
 
-  delay(1000);
-  convertTemp(rawTemp);
+//  delay(1000);
+//  convertTemp(rawTemp);
   //if temp below target turn heat on
   //if temp above target + gap turn heat off
   //if the incubating has started then start heating if the temperature is too low. 
   if(incubating){
-    if(temperature > targetTemperature + 0.5){
+    if(temperatureC > targetTemperatureC + 0.5){
       heatsON();
       ticksSinceHeat = 0;
       heating=false;
     }
-    else if(temperature < targetTemperature){
+    else if(temperatureC < targetTemperatureC - 0.5){
       heatsOFF();
       heating=true;
     }
@@ -612,7 +634,7 @@ void loop() {
     //show temperature option
     switch(menuSelection){
       case 0 :
-        showNumber(temperature);
+        showNumber(temperatureC);
         break;
       
       //show graph1
@@ -627,12 +649,12 @@ void loop() {
       
       //set target temperature option
       case 3 :
-        showNumber(targetTemperature);
+        showNumber(targetTemperatureC);
         if(up){
-          targetTemperature++;
+          targetTemperatureC++;
         }
         if(down){
-          targetTemperature--;
+          targetTemperatureC--;
         }
         break;
       
@@ -659,7 +681,7 @@ void loop() {
   
  //Serial.println(temperature);
   //Serial.println(digitalRead(HEAT_PIN));
- 
+ delay(100);
 }
 
 
@@ -681,6 +703,7 @@ ISR(TIMER1_COMPA_vect){
     
     ticksSinceHeat += 1;
   }
+  // This is wrong for an N_Channel Mosfet!!!
   if(digitalRead(HEAT_PIN)){
     heatTime+=TICK_LENGTH;
     heating= false;
