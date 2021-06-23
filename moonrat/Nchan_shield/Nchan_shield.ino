@@ -1,3 +1,8 @@
+#define NCHAN_SHIELD 1
+// #define RICE_PETRI_FI 2
+// #define HALIMAT_VERSION 3
+ 
+
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_I2CRegister.h>
 #include <Adafruit_SPIDevice.h>
@@ -16,6 +21,23 @@
 #include <EEPROM.h>
 #include <SPI.h>
 #include <Wire.h>
+// For our temperature sensor
+
+// This hardware uses a "onewire" digital temperature sensor
+#ifdef NCHAN_SHIELD
+
+#define INPUT_PIN A0
+#include <OneWire.h>
+#include <DallasTemperature.h>
+OneWire oneWire(INPUT_PIN);
+// Pass our oneWire reference to Dallas Temperature. 
+DallasTemperature sensors(&oneWire);
+#endif
+
+
+
+
+
 
 //display variables
 #define WIDTH 128
@@ -27,7 +49,7 @@
 Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 
 //pin variables
-#define HEAT_PIN 8
+#define HEAT_PIN 8  
 #define BTN_SELECT 5
 #define BTN_UP 6
 #define BTN_DOWN 7
@@ -491,6 +513,13 @@ void setup() {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
+
+#ifdef NCHAN_SHIELD
+  pinMode(INPUT_PIN, INPUT);
+  pinMode(A0, INPUT_PULLUP);
+  
+#endif
+ 
 }
 // Loop
 
@@ -498,7 +527,7 @@ void setup() {
 /*
  * Switch test program
  */
-
+#ifndef NCHAN_SHIELD
 double read_temp() {
   double sensorInput = analogRead(A0);        //read the analog sensor and store it
   double temp = (double)sensorInput / (double) 1024.0;   //find percentage of input reading
@@ -509,6 +538,30 @@ double read_temp() {
   double degreesC = offsetVoltage * 100.0;                   //Convert to degrees C
   return degreesC;
 }
+#endif
+
+#ifdef NCHAN_SHIELD
+double read_temp() {
+Serial.print("Requesting temperatures...");
+  sensors.requestTemperatures(); // Send the command to get temperatures
+  Serial.println("DONE");
+  // After we got the temperatures, we can print them here.
+  // We use the function ByIndex, and as an example get the temperature from the first sensor only.
+  float tempC = sensors.getTempCByIndex(0);
+
+  // Check if reading was successful
+  if(tempC != DEVICE_DISCONNECTED_C) 
+  {
+    Serial.print("Temperature for the device 1 (index 0) is: ");
+    Serial.println(tempC);
+  } 
+  else
+  {
+    Serial.println("Error: Could not read temperature data");
+  }
+  return tempC;
+}
+#endif
 
 //main
 void loop() {
