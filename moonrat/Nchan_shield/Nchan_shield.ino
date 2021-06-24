@@ -1,3 +1,21 @@
+//  Moonrat Control Code
+//  Copyright (C) 2021 Robert L. Read and Halimat Farayola
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+
 #define NCHAN_SHIELD 1
 // #define RICE_PETRI_FI 2
 // #define HALIMAT_VERSION 3
@@ -62,7 +80,7 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 #define TEMP_PIN A0  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
 
-#define USE_DEBUGGING_TARGET 
+// #define USE_DEBUGGING_TARGET 
 #ifdef USE_DEBUGGING_TARGET
 int targetTemperatureC = 30;// Celcius
 #else
@@ -688,8 +706,10 @@ void loop() {
   if (LOG_LEVEL >= LOG_DEBUG) {
     Serial.print(F("Temp (C): "));
     Serial.println(temperatureC);
-    Serial.print(F("Time spent heating (ms):"));
-    Serial.println(time_spent_heating_ms);
+        Serial.print(F("Time spent incubating (s):"));
+    Serial.println(((float) time_incubating())/1000.0);
+    Serial.print(F("Time spent heating (s):"));
+    Serial.println(((float) time_heating())/1000.0);
    }
   
   int numEEPROM=0;
@@ -705,15 +725,16 @@ void loop() {
   //if temp below target turn heat on
   //if temp above target + gap turn heat off
   //if the incubating has started then start heating if the temperature is too low. 
+  // Note: This should probably protected as a "strategy".
   if(incubating){
-    if(temperatureC > targetTemperatureC + 0.5){
+    if(temperatureC > (targetTemperatureC + 0.25)){
       heatOFF();
     }
-    else if(temperatureC < targetTemperatureC - 0.5){
+    else if(temperatureC < (targetTemperatureC - 0.25)){
       heatON();
     } else { // no change
       
-    }
+          }
   }
   else{
     heatOFF();
