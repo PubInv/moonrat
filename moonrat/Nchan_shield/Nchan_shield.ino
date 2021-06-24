@@ -1,3 +1,33 @@
+//  Moonrat Control Code
+//  Copyright (C) 2021 Robert L. Read and Halimat Farayola
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+
+#define NCHAN_SHIELD 1
+// #define RICE_PETRI_FI 2
+// #define HALIMAT_VERSION 3
+ 
+#define LOG_VERBOSE 5
+#define LOG_DEBUG 4
+#define LOG_WARNING 3
+#define LOG_MAJOR 2
+#define LOG_ERROR 1
+#define LOG_PANIC 0
+#define LOG_LEVEL 4
+
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_I2CRegister.h>
 #include <Adafruit_SPIDevice.h>
@@ -16,6 +46,18 @@
 #include <EEPROM.h>
 #include <SPI.h>
 #include <Wire.h>
+// For our temperature sensor
+
+// This hardware uses a "onewire" digital temperature sensor
+#ifdef NCHAN_SHIELD
+
+#define INPUT_PIN A0
+#include <OneWire.h>
+#include <DallasTemperature.h>
+OneWire oneWire(INPUT_PIN);
+// Pass our oneWire reference to Dallas Temperature. 
+DallasTemperature sensors(&oneWire);
+#endif
 
 //display variables
 #define WIDTH 128
@@ -27,7 +69,7 @@
 Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 
 //pin variables
-#define HEAT_PIN 8
+#define HEAT_PIN 8  
 #define BTN_SELECT 5
 #define BTN_UP 6
 #define BTN_DOWN 7
@@ -37,11 +79,28 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 //temperature variables
 #define TEMP_PIN A0  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
-int targetTemperature = 95;//in fahrenheit
+
+// #define USE_DEBUGGING_TARGET 
+#ifdef USE_DEBUGGING_TARGET
+int targetTemperatureC = 30;// Celcius
+#else
+int targetTemperatureC = 35;// Celcius
+#endif
+
+
 int rawTemp = 0;
-float temperature;        //The variable we will use to store temperature in degrees.
+float temperatureC;        //The variable we will use to store temperature in degrees.
 bool heating = false;
 
+// This is switched ONLY when turning heater on or off.
+bool currently_heating = false;
+uint32_t time_incubation_started_ms = 0;
+uint32_t time_heater_turned_on_ms = 0;
+uint32_t time_spent_heating_ms = 0;
+uint32_t time_spent_incubating_ms = 0;
+uint32_t time_of_last_entry = 0;
+
+#define DATA_RECORD_PERIOD 5*60*1000
 //time variables
 #define FIVE_MINUTES 300000
 
@@ -50,12 +109,12 @@ bool heating = false;
 //graph variables
 int graphTimeLength = 24;//2 hours long bexause plotting every 5 mins
 /*graphTimeLength2=511;*/
-int graphMaxTemp = targetTemperature+2; //initializing max temp
-int graphMinTemp = targetTemperature-2; //initializing min temp
-int graphMaxTemp1 = targetTemperature+20; //initializing max temp
-int graphMinTemp1 = targetTemperature-20; //initializing min temp
-int maxtarget= targetTemperature+2; //max range for target temp
-int mintarget= targetTemperature-2; //min range for target temp
+int graphMaxTemp = targetTemperatureC+2; //initializing max temp
+int graphMinTemp = targetTemperatureC-2; //initializing min temp
+int graphMaxTemp1 = targetTemperatureC+20; //initializing max temp
+int graphMinTemp1 = targetTemperatureC-20; //initializing min temp
+int maxtarget= targetTemperatureC+2; //max range for target temp
+int mintarget= targetTemperatureC-2; //min range for target temp
 int center= SPLIT+ ((64-SPLIT)/2);
 int graphwidth= 128-LEFT_MARGIN;
 int xaxisleft=LEFT_MARGIN*2;
@@ -74,7 +133,7 @@ bool up ;
 bool down ;
 bool select ;
 
-const int BAUD_RATE = 19200;
+const int BAUD_RATE = 9600;
 
 //eeprom variables
 #define INDEX_ADDRESS 0 //location of index tracker in EEPROM
@@ -86,7 +145,7 @@ uint16_t value2;//last bits of EEprom
 //other variables
 uint32_t milliTime = 0;
 uint32_t heatTime = 0;
-bool incubating = false;
+bool incubating = true;
 bool entryFlag = false; //set to true when data should be put in EEPROM ie every 5 minutes
 int ticksSinceHeat = 0;
 int b=1;//initialize serial print index
@@ -212,7 +271,7 @@ void showGraph2(int b, int multiple){
   display.setCursor(1, 56);
   display.println(graphMinTemp1);
   display.setCursor(1, center);
-  display.println(targetTemperature);
+  display.println(targetTemperatureC);
   display.setCursor(LEFT_MARGIN*2, 56);
   display.println(timeleft);
   display.setCursor(xaxismid, 56);
@@ -262,9 +321,7 @@ void showGraph2(int b, int multiple){
       }
     }
     
-    
-  }
-    
+  }  
   
   display.display();
 }
@@ -320,25 +377,61 @@ void showMenu(){
 }
 
 // UTILITY FUNCTIONS --------------------------------------------------
+void incubationON() {
+  if (incubating) return;
+  time_incubation_started_ms = millis();
+  
+}
+void incubationOFF() {
+  if (!incubating) return;
+  uint32_t time_now = millis();
+  time_spent_incubating_ms = time_now - time_incubation_started_ms;
+}
+uint32_t time_incubating() {
+  return (incubating) ? 
+    millis() - time_incubation_started_ms :
+  time_spent_incubating_ms;
+}
 //turn the heating pad on
-void heatsOFF(){
-  digitalWrite(HEAT_PIN, HIGH);
-  
-}
-//turn the heating pad off
-void heatsON(){
+void heatOFF(){
+  if (currently_heating) {
+//  digitalWrite(HEAT_PIN, HIGH);
+#ifdef NCHAN_SHIELD
   digitalWrite(HEAT_PIN, LOW);
+#else
+  Serial.println(F("not implemented heatsOFF")); 
+#endif
+  if (LOG_LEVEL >= LOG_DEBUG) {
+    Serial.println(F("HEAT OFF!"));
+  }
+  currently_heating = false;
+  uint32_t time_now = millis();
+  time_spent_heating_ms = time_now - time_heater_turned_on_ms;
   
+  }
 }
-// convert temparature sensor data to fareinheit
-double convertTemp(int raw){
-  double temp = (double)raw / 1024;       //find percentage of input reading 
-  temp = temp * 5;                 //multiply by 5V to get voltage
-  temp = temp - 0.5;               //Subtract the offset 
-  temp = temp * 180 + 32 ;          //Convert to degrees
-  temperature = (3*temperature + temp)/4;
-  return temperature;
+void heatON(){
+  if (!currently_heating) {
+//  digitalWrite(HEAT_PIN, LOW);
+#ifdef NCHAN_SHIELD
+  digitalWrite(HEAT_PIN, HIGH); 
+#else
+  Serial.println(F("not implemented heatsOFF")); 
+#endif
+    if (LOG_LEVEL >= LOG_DEBUG) {
+      Serial.println(F("HEAT ON!"));
+    }
+    time_heater_turned_on_ms = millis();
+    currently_heating = true; 
+  }
 }
+
+uint32_t time_heating() {
+  return (currently_heating) ? 
+  time_spent_heating_ms +  (millis() - time_heater_turned_on_ms) :
+  time_spent_heating_ms;
+}
+
 //function to display current time
 String getTimeString(){
   uint32_t mils = milliTime;
@@ -415,22 +508,6 @@ bool writeNewEntry(float data){
   rom_write16(INDEX_ADDRESS, index);
   return true;
 }
-
-/*
- * Reads the data at a given index, first index is 1
- * Returns -1 if the index is invalid
- */
-/*#define ARRAY_LENGTH 5
-uint16_t arra[ARRAY_LENGTH];
-//void createarray(){
-    for(int i=0; i<ARRAY_LENGTH; i++){
-      arra[i]=i;
-    }
-}*/
-/*float readIndex2(int i){
-  return ((i%50)+50);
- 
-}*/
   
 
 // SETUP FUNCTIONS --------------------------------------------------
@@ -440,33 +517,12 @@ uint16_t arra[ARRAY_LENGTH];
  * Timer1 runs at 8 Hz
  */
 
-void startInterrupts(){
-  noInterrupts();
-  
-  //set timer1 interrupt at 8Hz
-  TCCR1A = 0;// set entire TCCR1A register to 0
-  TCCR1B = 0;// same for TCCR1B
-  TCNT1  = 0;//initialize counter value to 0
-  // set compare match register for 8hz increments
-  OCR1A = 1952;// = (16*10^6) / (8*1024) - 1
-  // turn on CTC mode
-  TCCR1B |= (1 << WGM12);
-  // Set CS12 and CS10 bits for 1024 prescaler
-  TCCR1B |= (1 << CS12) | (1 << CS10);  
-  // enable timer compare interrupt
-  TIMSK1 |= (1 << OCIE1A);
-
-  interrupts();
-}
-
-//setup
-
 void setup() {
      // put your setup code here, to run once:
   Serial.begin(BAUD_RATE); //Start the Serial Port at 9600 baud (default)
   delay(500);
 //  while (! Serial); // Wait untilSerial is ready
-  Serial.println("Enter u, d, s");
+  Serial.println(F("Enter u, d, s"));
 
   //createarray();
 
@@ -477,19 +533,27 @@ void setup() {
   pinMode(BZR_PIN, OUTPUT);
   digitalWrite(BZR_PIN, LOW);
   pinMode(HEAT_PIN, OUTPUT); 
-  heatsON();
+ // heatsON();
 
   rom_reset();
 
-  startInterrupts();
+//  startInterrupts();
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){
-    Serial.println(F("SSD1306 allocation failed"));
+    Serial.println(F("SSD1306 allocation failed -- This is an internal error."));
     for(;;);
   }
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
+
+#ifdef NCHAN_SHIELD
+  pinMode(INPUT_PIN, INPUT);
+  pinMode(A0, INPUT_PULLUP);
+  
+#endif
+
+  incubationON();
 }
 // Loop
 
@@ -497,100 +561,83 @@ void setup() {
 /*
  * Switch test program
  */
+#ifndef NCHAN_SHIELD
+double read_temp() {
+  double sensorInput = analogRead(A0);        //read the analog sensor and store it
+  double temp = (double)sensorInput / (double) 1024.0;   //find percentage of input reading
+  double voltage = temp * 5.0;  //multiply by 5V to get voltage
+  Serial.print(F("voltage: "));
+  Serial.println(voltage);
+  double offsetVoltage = voltage - 0.5;                   //Subtract the offset 
+  double degreesC = offsetVoltage * 100.0;                   //Convert to degrees C
+  return degreesC;
+}
+#endif
 
+#ifdef NCHAN_SHIELD
+double read_temp() {
+  sensors.requestTemperatures(); // Send the command to get temperatures
+  // After we got the temperatures, we can print them here.
+  // We use the function ByIndex, and as an example get the temperature from the first sensor only.
+  float tempC = sensors.getTempCByIndex(0);
+
+  // Check if reading was successful
+  if(tempC != DEVICE_DISCONNECTED_C) 
+  {
+    Serial.print(F("Temperature for the device 1 (index 0) is: "));
+    Serial.println(tempC);
+  } 
+  else
+  {
+    Serial.println(F("Error: Could not read temperature data"));
+  }
+  return tempC;
+}
+#endif
 
 //main
+// NOTE: I now 
+#define PERIOD_TO_CHECK_TEMP_MS 5000
+uint32_t last_temp_check_ms = 0;
 void loop() {
+  delay(100);
 
+  uint32_t loop_start = millis();
 // Test reading the buttons...
-  Serial.print(digitalRead(BTN_SELECT));   
-  Serial.print(digitalRead(BTN_UP));
-  Serial.print(digitalRead(BTN_DOWN));
-  Serial.println();
+  if (LOG_LEVEL >= LOG_VERBOSE) {
+    Serial.print(F("Incubating: "));   
+    Serial.println(incubating);
+    Serial.print(F("Currently Heating: "));   
+    Serial.println(currently_heating);
+ 
+  }
   
   //read keyboard entries from the serial monitor
-  heating=false;
   char T;
   if (Serial.available()){
     T=Serial.read(); //getting string input in varaible "T" 
       
-    Serial.print("T =");
+    Serial.print(F("T ="));
     Serial.println(T);  
     up= (T=='u');
     down=(T=='d');
     select=(T=='s');
   }  
-  int numEEPROM=0;
+
+  select = digitalRead(BTN_SELECT);
+  up = digitalRead(BTN_UP);
+  down = digitalRead(BTN_DOWN);
+
+  if (LOG_LEVEL >= LOG_VERBOSE) {
+    Serial.print(select);   
+    Serial.print(up);
+    Serial.print(down);
+    Serial.println();
+  }
+// I don't know what this is supposed to do...
   int multiple=0;
-  //store temperature when flag is set by ISR every five minutes
-  if(entryFlag){
-    entryFlag = false;
-    writeNewEntry(temperature);
-      //print EEprom data on serial monitor
-   
-    if (b<513){
-        
-      Serial.print(b);
-      Serial.print("\t");
-      uint16_t EEdata = rom_read16(b*2);
-      Serial.println( sixteenToFloat(EEdata));
-      b=b+1;
-    }
-    
-    Serial.println(b);
-    
-    multiple= ceil((float)b/(float)(graphwidth));
-    Serial.println(multiple);
-  }
-  /*
-  convertTemp(rawTemp);
-  //toggle heat if incubator is running
-  if(incubating){
-    if(!heating && temperature < targetTemperature - .25){
-      heating = true;
-    }
-    else if(heating && temperature > targetTemperature + .25){
-      heating = false;
-    }
-  }
-  else{
-    heating = false;
-  }
-  if(heating){
-    heatsOFF();
-  }else{
-    heatsON();
-  }*/
 
-  delay(1000);
-  convertTemp(rawTemp);
-  //if temp below target turn heat on
-  //if temp above target + gap turn heat off
-  //if the incubating has started then start heating if the temperature is too low. 
-  if(incubating){
-    if(temperature > targetTemperature + 0.5){
-      heatsON();
-      ticksSinceHeat = 0;
-      heating=false;
-    }
-    else if(temperature < targetTemperature){
-      heatsOFF();
-      heating=true;
-    }
-  }
-  else{
-    heatsON();
-  }
-
-  //prevents battery from turning off
-  /*if(ticksSinceHeat*TICK_LENGTH > 1000){
-    heatsOFF();
-    delay(100);
-    heatsON();
-    ticksSinceHeat = 0;
-  }*/
-  
- //controls menu selection
+//controls menu selection
   if(inMenu){
     //read buttons and menu
     if(up && menuSelection > 0){
@@ -612,7 +659,7 @@ void loop() {
     //show temperature option
     switch(menuSelection){
       case 0 :
-        showNumber(temperature);
+        showNumber(temperatureC);
         break;
       
       //show graph1
@@ -627,12 +674,12 @@ void loop() {
       
       //set target temperature option
       case 3 :
-        showNumber(targetTemperature);
+        showNumber(targetTemperatureC);
         if(up){
-          targetTemperature++;
+          targetTemperatureC++;
         }
         if(down){
-          targetTemperature--;
+          targetTemperatureC--;
         }
         break;
       
@@ -645,45 +692,77 @@ void loop() {
         break;
       
     }
- }
+  }
+  // We have to process menu changes without delay to have
+  // a good user experience; but reading the temperature can 
+  // be delayed.
+  if (loop_start <  (last_temp_check_ms + PERIOD_TO_CHECK_TEMP_MS  ))
+    return; 
+    
+// otherwise we need to processe temperature stuff
+  last_temp_check_ms = loop_start;
+  
+  temperatureC = read_temp();
+  if (LOG_LEVEL >= LOG_DEBUG) {
+    Serial.print(F("Temp (C): "));
+    Serial.println(temperatureC);
+        Serial.print(F("Time spent incubating (s):"));
+    Serial.println(((float) time_incubating())/1000.0);
+    Serial.print(F("Time spent heating (s):"));
+    Serial.println(((float) time_heating())/1000.0);
+   }
+  
+  int numEEPROM=0;
+
+  uint32_t time_now = millis();
+  uint32_t time_since_last_entry = time_now - time_of_last_entry;
+  if(time_since_last_entry < DATA_RECORD_PERIOD){
+  //  entryFlag = false;
+    writeNewEntry(temperatureC);
+    time_of_last_entry = time_now;
+  }
+
+  //if temp below target turn heat on
+  //if temp above target + gap turn heat off
+  //if the incubating has started then start heating if the temperature is too low. 
+  // Note: This should probably protected as a "strategy".
+  if(incubating){
+    if(temperatureC > (targetTemperatureC + 0.25)){
+      heatOFF();
+    }
+    else if(temperatureC < (targetTemperatureC - 0.25)){
+      heatON();
+    } else { // no change
+      
+          }
+  }
+  else{
+    heatOFF();
+  }
+
+  if (LOG_LEVEL >= LOG_DEBUG) {
+    if (time_incubating() > 0) {
+      float duty_factor = ((float) time_heating()) / ((float) time_incubating() );
+      Serial.print(F("Duty Factor: "));
+      Serial.println(duty_factor);
+      if (LOG_LEVEL >= LOG_VERBOSE) {
+        Serial.println(time_heating());
+        Serial.println(time_incubating());
+      }
+    }
+  }
  //countery=countery+1;
  //timerpulse=timerpulse+digitalRead(HEAT_PIN);
  //start buzzing after 48 hours until the user stops incubating
  int timern= ceil(milliTime/1000);
+ // I think this buzzes every minute...but the logic of this is wrong,
+ // and I don't have a buzzer installed!
+ // I think we need a new state to represent incubation ended..
  if (incubating && (timern% 60==0)){
   //buzz();
   //Serial.println(float(timerpulse/countery));
-  Serial.println(heatTime);
+
   
  }
-  
- //Serial.println(temperature);
-  //Serial.println(digitalRead(HEAT_PIN));
- 
+
 }
-
-
-
-// ISRs --------------------------------------------------
-
-//runs at 8 Hz
-ISR(TIMER1_COMPA_vect){
-  rawTemp = analogRead(TEMP_PIN);    //read the analog sensor and store it
-  
-  //up = digitalRead(BTN_UP);
-  //down = digitalRead(BTN_DOWN);
-  //select = digitalRead(BTN_SELECT);
-  if(incubating/*&& ZOOMIN*/){
-    milliTime += TICK_LENGTH;
-    if(milliTime % FIVE_MINUTES == 0){ // 5 minutes
-      entryFlag = true;
-    }
-    
-    ticksSinceHeat += 1;
-  }
-  if(digitalRead(HEAT_PIN)){
-    heatTime+=TICK_LENGTH;
-    heating= false;
-  }
-}
-  
