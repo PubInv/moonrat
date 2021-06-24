@@ -41,11 +41,6 @@ OneWire oneWire(INPUT_PIN);
 DallasTemperature sensors(&oneWire);
 #endif
 
-
-
-
-
-
 //display variables
 #define WIDTH 128
 #define HEIGHT 64
@@ -81,9 +76,10 @@ bool heating = false;
 
 // This is switched ONLY when turning heater on or off.
 bool currently_heating = false;
+uint32_t time_incubation_started_ms = 0;
 uint32_t time_heater_turned_on_ms = 0;
 uint32_t time_spent_heating_ms = 0;
-uint32_t time_spent_incubating = 0;
+uint32_t time_spent_incubating_ms = 0;
 uint32_t time_of_last_entry = 0;
 
 #define DATA_RECORD_PERIOD 5*60*1000
@@ -307,9 +303,7 @@ void showGraph2(int b, int multiple){
       }
     }
     
-    
-  }
-    
+  }  
   
   display.display();
 }
@@ -365,8 +359,23 @@ void showMenu(){
 }
 
 // UTILITY FUNCTIONS --------------------------------------------------
+void incubationON() {
+  if (incubating) return;
+  time_incubation_started_ms = millis();
+  
+}
+void incubationOFF() {
+  if (!incubating) return;
+  uint32_t time_now = millis();
+  time_spent_incubating_ms = time_now - time_incubation_started_ms;
+}
+uint32_t time_incubating() {
+  return (incubating) ? 
+    millis() - time_incubation_started_ms :
+  time_spent_incubating_ms;
+}
 //turn the heating pad on
-void heatsOFF(){
+void heatOFF(){
   if (currently_heating) {
 //  digitalWrite(HEAT_PIN, HIGH);
 #ifdef NCHAN_SHIELD
@@ -383,7 +392,7 @@ void heatsOFF(){
   
   }
 }
-void heatsON(){
+void heatON(){
   if (!currently_heating) {
 //  digitalWrite(HEAT_PIN, LOW);
 #ifdef NCHAN_SHIELD
@@ -399,16 +408,12 @@ void heatsON(){
   }
 }
 
-//// convert temparature sensor data to fareinheit
-//// WARNING: I don't know what sensor this is for! It is not the TMP36!
-//double convertTemp(int raw){
-//  double temp = (double)raw / 1024;       //find percentage of input reading 
-//  temp = temp * 5;                 //multiply by 5V to get voltage
-//  temp = temp - 0.5;               //Subtract the offset 
-//  temp = temp * 180 + 32 ;          //Convert to degrees
-//  temperature = (3*temperature + temp)/4;
-//  return temperature;
-//}
+uint32_t time_heating() {
+  return (currently_heating) ? 
+  time_spent_heating_ms +  (millis() - time_heater_turned_on_ms) :
+  time_spent_heating_ms;
+}
+
 //function to display current time
 String getTimeString(){
   uint32_t mils = milliTime;
@@ -485,22 +490,6 @@ bool writeNewEntry(float data){
   rom_write16(INDEX_ADDRESS, index);
   return true;
 }
-
-/*
- * Reads the data at a given index, first index is 1
- * Returns -1 if the index is invalid
- */
-/*#define ARRAY_LENGTH 5
-uint16_t arra[ARRAY_LENGTH];
-//void createarray(){
-    for(int i=0; i<ARRAY_LENGTH; i++){
-      arra[i]=i;
-    }
-}*/
-/*float readIndex2(int i){
-  return ((i%50)+50);
- 
-}*/
   
 
 // SETUP FUNCTIONS --------------------------------------------------
@@ -509,27 +498,6 @@ uint16_t arra[ARRAY_LENGTH];
  * Starts interrupts
  * Timer1 runs at 8 Hz
  */
-
-//void startInterrupts(){
-//  noInterrupts();
-//  
-//  //set timer1 interrupt at 8Hz
-//  TCCR1A = 0;// set entire TCCR1A register to 0
-//  TCCR1B = 0;// same for TCCR1B
-//  TCNT1  = 0;//initialize counter value to 0
-//  // set compare match register for 8hz increments
-//  OCR1A = 1952;// = (16*10^6) / (8*1024) - 1
-//  // turn on CTC mode
-//  TCCR1B |= (1 << WGM12);
-//  // Set CS12 and CS10 bits for 1024 prescaler
-//  TCCR1B |= (1 << CS12) | (1 << CS10);  
-//  // enable timer compare interrupt
-//  TIMSK1 |= (1 << OCIE1A);
-//
-//  interrupts();
-//}
-
-//setup
 
 void setup() {
      // put your setup code here, to run once:
@@ -554,7 +522,7 @@ void setup() {
 //  startInterrupts();
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){
-    Serial.println(F("SSD1306 allocation failed"));
+    Serial.println(F("SSD1306 allocation failed -- This is an internal error."));
     for(;;);
   }
   display.clearDisplay();
@@ -566,7 +534,8 @@ void setup() {
   pinMode(A0, INPUT_PULLUP);
   
 #endif
- 
+
+  incubationON();
 }
 // Loop
 
@@ -610,15 +579,19 @@ double read_temp() {
 
 //main
 // NOTE: I now 
-
+#define PERIOD_TO_CHECK_TEMP_MS 5000
+uint32_t last_temp_check_ms = 0;
 void loop() {
+  delay(100);
 
+  uint32_t loop_start = millis();
 // Test reading the buttons...
-  if (LOG_LEVEL >= LOG_DEBUG) {
+  if (LOG_LEVEL >= LOG_VERBOSE) {
     Serial.print(F("Incubating: "));   
     Serial.println(incubating);
     Serial.print(F("Currently Heating: "));   
     Serial.println(currently_heating);
+ 
   }
   
   //read keyboard entries from the serial monitor
@@ -637,53 +610,16 @@ void loop() {
   up = digitalRead(BTN_UP);
   down = digitalRead(BTN_DOWN);
 
-  if (LOG_LEVEL >= LOG_DEBUG) {
+  if (LOG_LEVEL >= LOG_VERBOSE) {
     Serial.print(select);   
     Serial.print(up);
     Serial.print(down);
     Serial.println();
   }
-
-  temperatureC = read_temp();
-  if (LOG_LEVEL >= LOG_DEBUG) {
-    Serial.print(F("Temp (C): "));
-    Serial.println(temperatureC);
-    Serial.print(F("Time spent heating (ms):"));
-    Serial.println(time_spent_heating_ms);
-   }
-  
-  int numEEPROM=0;
+// I don't know what this is supposed to do...
   int multiple=0;
-  //store temperature when flag is set by ISR every five minutes
-  uint32_t time_now = millis();
-  uint32_t time_since_last_entry = time_now - time_of_last_entry;
-  if(time_since_last_entry < DATA_RECORD_PERIOD){
-  //  entryFlag = false;
-    writeNewEntry(temperatureC);
-    time_of_last_entry = time_now;
-  }
 
-//  delay(1000);
-//  convertTemp(rawTemp);
-  //if temp below target turn heat on
-  //if temp above target + gap turn heat off
-  //if the incubating has started then start heating if the temperature is too low. 
-  if(incubating){
-    if(temperatureC > targetTemperatureC + 0.5){
-      heatsOFF();
-    }
-    else if(temperatureC < targetTemperatureC - 0.5){
-      heatsON();
-    } else { // no change
-      
-    }
-  }
-  else{
-    heatsOFF();
-  }
-
-  
- //controls menu selection
+//controls menu selection
   if(inMenu){
     //read buttons and menu
     if(up && menuSelection > 0){
@@ -738,16 +674,74 @@ void loop() {
         break;
       
     }
- }
+  }
+  // We have to process menu changes without delay to have
+  // a good user experience; but reading the temperature can 
+  // be delayed.
+  if (loop_start <  (last_temp_check_ms + PERIOD_TO_CHECK_TEMP_MS  ))
+    return; 
+    
+// otherwise we need to processe temperature stuff
+  last_temp_check_ms = loop_start;
+  
+  temperatureC = read_temp();
+  if (LOG_LEVEL >= LOG_DEBUG) {
+    Serial.print(F("Temp (C): "));
+    Serial.println(temperatureC);
+    Serial.print(F("Time spent heating (ms):"));
+    Serial.println(time_spent_heating_ms);
+   }
+  
+  int numEEPROM=0;
+
+  uint32_t time_now = millis();
+  uint32_t time_since_last_entry = time_now - time_of_last_entry;
+  if(time_since_last_entry < DATA_RECORD_PERIOD){
+  //  entryFlag = false;
+    writeNewEntry(temperatureC);
+    time_of_last_entry = time_now;
+  }
+
+  //if temp below target turn heat on
+  //if temp above target + gap turn heat off
+  //if the incubating has started then start heating if the temperature is too low. 
+  if(incubating){
+    if(temperatureC > targetTemperatureC + 0.5){
+      heatOFF();
+    }
+    else if(temperatureC < targetTemperatureC - 0.5){
+      heatON();
+    } else { // no change
+      
+    }
+  }
+  else{
+    heatOFF();
+  }
+
+  if (LOG_LEVEL >= LOG_DEBUG) {
+    if (time_incubating() > 0) {
+      float duty_factor = ((float) time_heating()) / ((float) time_incubating() );
+      Serial.print(F("Duty Factor: "));
+      Serial.println(duty_factor);
+      if (LOG_LEVEL >= LOG_VERBOSE) {
+        Serial.println(time_heating());
+        Serial.println(time_incubating());
+      }
+    }
+  }
  //countery=countery+1;
  //timerpulse=timerpulse+digitalRead(HEAT_PIN);
  //start buzzing after 48 hours until the user stops incubating
  int timern= ceil(milliTime/1000);
+ // I think this buzzes every minute...but the logic of this is wrong,
+ // and I don't have a buzzer installed!
+ // I think we need a new state to represent incubation ended..
  if (incubating && (timern% 60==0)){
   //buzz();
   //Serial.println(float(timerpulse/countery));
-  Serial.println(heatTime);
+
   
  }
- delay(100);
+
 }
