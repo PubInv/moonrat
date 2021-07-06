@@ -100,9 +100,22 @@ int targetTemperatureC = 30;// Celcius
 int targetTemperatureC = 35;// Celcius
 #endif
 
+// Variables to represent the state of the machine
+// BASIC_STATE (this is different from the GUI State)
+#define PREPARING 0
+#define INCUBATING 1
+#define FINISHED 2
+int basic_state = INCUBATING;
+
+// When Incubating, when are in two modes: warm-up phase or balance phase.
+// The warm-up phase occurs when you we are first turned on or badly too cool.
+// the balance phase is when we want slow stable mainteance of the target temperature.
+// I am aribritraily defining warm-up phase as 4C below target phase.
+#define WARM_UP_TEMP_DIFF_C 4.0
+int warm_up_phase = true;
+
 // This is a change to use PWM on our transistor, and further more
 // to use a PID controller to set this parameter.
-
 //Define Variables we'll be connecting to
 #define USE_PID_AND_PWM 1
 double Setpoint = 0.0 ,
@@ -112,17 +125,22 @@ double Setpoint = 0.0 ,
 // Think we can create a different set of factors for the startup period.
 // Basically we will have zero integration, a high Kd, and a high Kp.
 double SLOW_DOWN_FACTOR = .05;
-double SKp = 10.0 / SLOW_DOWN_FACTOR, sKi = 0.0 / SLOW_DOWN_FACTOR, SKd = 5.0 / SLOW_DOWN_FACTOR;
 
 // Once we get within 4 degrees of the target temp, we will switch from the 
 // Startup parameters to the normal parameters.
 // These are specifically stable for 12V power supply near the temperature range.
-//Specify the links and initial tuning parameters
+//Specify the links and initial tuninng parameters
+
+double SKp = 10.0 / SLOW_DOWN_FACTOR, SKi = 0.0 / SLOW_DOWN_FACTOR, SKd = 1.0 / SLOW_DOWN_FACTOR;
+
+// NOTE: These prameters seem to work pretty well once the stable temperature is 
+// reached, but overshoot badly if you start, so we really need a two phase solution!!
+// double Kp = 7.0 / SLOW_DOWN_FACTOR, Ki = 3.0 / SLOW_DOWN_FACTOR, Kd = 2.0 / SLOW_DOWN_FACTOR;
 double Kp = 7.0 / SLOW_DOWN_FACTOR, Ki = 3.0 / SLOW_DOWN_FACTOR, Kd = 2.0 / SLOW_DOWN_FACTOR;
 
 
 
-PID* myPID;
+PID* myPID = 0;
 
 // This is the "Control Variable". It's range is 0-255, and it
 // is the a PWM value for our heating circuit.
@@ -183,13 +201,32 @@ uint16_t value1;//first two bits of eeprom storage
 uint16_t value2;//last bits of EEprom
 
 //other variables
-uint32_t milliTime = 0;
-uint32_t heatTime = 0;
+uint32_t milliTime = 0; // time of incubation start
 bool incubating = true;
 bool entryFlag = false; //set to true when data should be put in EEPROM ie every 5 minutes
 int ticksSinceHeat = 0;
 int b = 1; //initialize serial print index
 
+
+void enter_warm_up_phase() {
+  // These are the "balance" points
+//  myPID = new PID(&Input, &Output, &Setpoint, SKp, SKi, SKd, DIRECT);
+//  myPID = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+  myPID->SetTunings(SKp, SKi, SKd);          
+//  myPID->SetOutputLimits(0, 255);
+//  myPID->SetMode(AUTOMATIC); 
+  warm_up_phase = true;
+  Serial.println(F("Entered Warmup Phase!"));
+}
+void leave_warm_up_phase() {
+  // These are the "balance" points
+//  myPID = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+  myPID->SetTunings(Kp, Ki, Kd); 
+//  myPID->SetOutputLimits(0, 255);
+//  myPID->SetMode(AUTOMATIC);
+  warm_up_phase = false;
+  Serial.println(F("Left Warmup Phase!")); 
+}
 
 //gets the contents of the EEPROM at each indec
 float readIndex(int index) {
@@ -519,32 +556,17 @@ void setHeatPWM(double intended_df) {
   Serial.println(duty_factor());
 }
 
-
-
-
-
-// TODO: We should not use the Ssting Class.
-//function to display current time
 void getTimeString(char *buff) {
-  uint32_t mils = milliTime;
+  uint32_t mils = time_incubating();
   uint8_t hours = mils / 3600000;
   mils = mils % 3600000;
   uint8_t mins = mils / 60000;
   mils = mils % 60000;
   uint8_t secs = mils / 1000;
   mils = mils % 1000;
-  
-//  sprintf(buff, "%02d:%02d:%02d:%02d ~ ", hours, mins, secs, mils);
 
-//  String timeString = "";
-//  timeString.concat(hours);
-//  timeString.concat(":");
-//  timeString.concat(mins);
-//  timeString.concat(":");
-//  timeString.concat(secs);
-//  timeString.concat(".");
-//  timeString.concat(mils);
-//  return timeString;
+  sprintf(buff, "%02d:%02d:%02d", hours, mins, secs);
+
 }
 //Turn on buzzer at an interval of 20 seconds
 void buzz() {
@@ -646,10 +668,10 @@ void setup() {
   pinMode(INPUT_PIN, INPUT);
   pinMode(A0, INPUT_PULLUP);
 #endif
-
-  myPID = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+  myPID = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT); 
   myPID->SetOutputLimits(0, 255);
-  myPID->SetMode(AUTOMATIC);
+  myPID->SetMode(AUTOMATIC); 
+  enter_warm_up_phase();
 
   incubationON();
 }
@@ -703,6 +725,8 @@ uint32_t last_temp_check_ms = 0;
 void loop() {
   delay(100);
 
+
+
   uint32_t loop_start = millis();
   // Test reading the buttons...
   if (LOG_LEVEL >= LOG_VERBOSE) {
@@ -710,7 +734,6 @@ void loop() {
     Serial.println(incubating);
     Serial.print(F("Currently Heating: "));
     Serial.println(currently_heating);
-
   }
 
   //read keyboard entries from the serial monitor
@@ -786,7 +809,6 @@ void loop() {
       case 4 :
         incubating = !incubating;
         milliTime = 0;
-
         inMenu = true;
         break;
 
@@ -805,14 +827,27 @@ void loop() {
   if (LOG_LEVEL >= LOG_DEBUG) {
     Serial.print(F("Temp (C): "));
     Serial.println(temperatureC);
-//    Serial.print(F("Target Temp (C): "));
-//    Serial.println(targetTemperatureC);
-//    Serial.print(F("Time spent incubating (s):"));
-//    Serial.println(((float) time_incubating()) / 1000.0);
-//    Serial.print(F("Time spent heating (s):"));
-//    Serial.println(((float) time_heating()) / 1000.0);
+    if (LOG_LEVEL >= LOG_VERBOSE ) {
+      Serial.print(F("Target Temp (C): "));
+      Serial.println(targetTemperatureC);
+      Serial.print(F("Time spent incubating (s):"));
+      Serial.println(((float) time_incubating()) / 1000.0);
+      Serial.print(F("Time spent heating (s):"));
+      Serial.println(((float) time_heating()) / 1000.0);
+    }
   }
-
+// Test warm_up_phase or not...
+  if ((temperatureC < (targetTemperatureC - WARM_UP_TEMP_DIFF_C))
+    && !warm_up_phase)
+  {
+    enter_warm_up_phase();
+  }
+  if ((temperatureC >= (targetTemperatureC - WARM_UP_TEMP_DIFF_C))
+    && warm_up_phase)
+  {
+    leave_warm_up_phase();
+  }
+ 
   int numEEPROM = 0;
 
   uint32_t time_now = millis();
@@ -823,16 +858,23 @@ void loop() {
     time_of_last_entry = time_now;
   }
 
-
   // Here is the actual heat algorithm...
   const int USE_PID = 1;
   if (USE_PID) {
     Setpoint = targetTemperatureC;
     Input = temperatureC;
+    if (LOG_LEVEL >= LOG_VERBOSE) {
+      Serial.print(F("SetPoint"));
+      Serial.println(Input);
+      Serial.print(F("Input:"));
+      Serial.println(Input);
+    }
     myPID->Compute();
-//    Serial.print("Output:");
-//    Serial.println(Output);
-//    Serial.println(target_duty_cycle);
+    if (LOG_LEVEL >= LOG_VERBOSE) {
+      Serial.print(F("Output:"));
+      Serial.println(Output);
+      Serial.println(target_duty_cycle);
+    }
     target_duty_cycle = Output;
     setHeatPWM(target_duty_cycle);
   } else {
@@ -865,11 +907,14 @@ void loop() {
 //      Serial.println(duty_f);
 //      Serial.println(duty_factor());
       if (LOG_LEVEL >= LOG_VERBOSE) {
+        Serial.println(F("Warm Up: "));
+        Serial.println(warm_up_phase);
         Serial.println(time_heating());
         Serial.println(time_incubating());
       }
     }
   }
+  
   //countery=countery+1;
   //timerpulse=timerpulse+digitalRead(HEAT_PIN);
   //start buzzing after 48 hours until the user stops incubating
@@ -880,8 +925,6 @@ void loop() {
   if (incubating && (timern % 60 == 0)) {
     //buzz();
     //Serial.println(float(timerpulse/countery));
-
-
   }
 
 }
