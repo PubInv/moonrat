@@ -17,18 +17,31 @@ When adding the capabilities for the SD card, we found that it was important whi
 ### Arduino Uno Pin Setup
 
 SD Chip Select (SDCS):                  10
+
 MOSI:                                   11
+
 MISO:                                   12
+
 SCLK:                                   13
+
 DC:                                     4
+
 OLED Chip Select (OLED CS):             5
+
 RST:                                    6
+
 Up Button:                              3
+
 Select Button:                          8
+
 Down Button:                            9
+
 Transistor (Heating Pad):               2
+
 LED:                                    0
+
 One-Wire Bus (Digital Thermometer):     7
+
 Piezo Alarm:                            A1 (Analog Pin 1)
 
 ## "PetriFI_PID.ino"
