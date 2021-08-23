@@ -15,9 +15,17 @@ portable incubator that the Armadillo, described [elsewhere](http://jhe.ewb.org.
 
 ## Current Design
 
-Our current design use a "casette" which is bolted to the inside of the lid of a thermos bottle, shown below. Our circuit is on a breadboard, and we have not yet designed the enclosure for the electronics integrated into the cap or as a holder for the bottle. We use a 3D printed bracket to hold the Thernos bottle. We believe this is the most compact design which will be thermally efficient.
+Our current design uses a soup thermos to have good insulation. 3D printed parts hold the Petrifilms inside the thermos and way from the metal edges. 
+Additional parts hold the heating cloth and thermometer, which our powered and sensed by an external Arduino. 
 
-### Thermos Bottle in Bracekt With Battery in Place
+![IMG-2511](https://user-images.githubusercontent.com/5296671/130527922-66cce437-a89f-4815-a980-bc79295f1a5a.JPG)
+
+Our previous design use a "casette" which is bolted to the inside of the lid of a thermos bottle, shown below. Our circuit is on a breadboard, and we have not yet designed the enclosure for the electronics integrated into the cap or as a holder for the bottle. We use a 3D printed bracket to hold the Thernos bottle. We believe this is the most compact design which will be thermally efficient.
+
+
+
+
+### Previous designThermos Bottle in Bracekt With Battery in Place
 
 ![Thermos Bottle In Bracket With Battery](https://github.com/PubInv/moonrat/blob/master/moonrat/3D_printed_part_pictures/6C0C779D-602B-4875-BB12-1951AA8B21C5.jpg)
 
