@@ -1,6 +1,19 @@
 # moonrat
 Moonrat: A second-generation portable incubator
 
+# Current Status
+
+This project is currently seeking a new lead engineer skilled in Arduino programming and relatively
+simple microelectronics design. We have a working prototype that was made by hand. It is likely time
+to make a simple PCB design. We have functional software, but it is messy; a rewrite is needed. 
+I believe a skilled maker could finish the project to the level of short-run mass production in a 
+quarter of working 6-10 hours per week. We have a skilled 3D modeller available already. Significant
+supervision will be provided by Robert L. Read, founder of Public Invention.
+
+# Future Work
+
+We need to make a design suitable for testing and short-run production of 20 units.
+
 
 
 ## Motivation
