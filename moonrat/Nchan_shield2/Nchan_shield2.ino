@@ -38,7 +38,7 @@
 #define LOG_MAJOR 2
 #define LOG_ERROR 1
 #define LOG_PANIC 0
-#define LOG_LEVEL 4
+#define LOG_LEVEL 3
 
 // These are Menu items
 #define TEMPERATURE_M 0
@@ -289,17 +289,18 @@ void showSetTempMenu(float target) {
 
 // here we dump to the serial port for debugging and checking 
 void dumpData() {
-   Serial.println(F("DATA DUMP:"));
-     delay(300); 
-   uint16_t index = rom_read16(INDEX_ADDRESS); 
+   Serial.println(F("DATA DUMP:")); 
+   uint16_t num_samples = rom_read16(INDEX_ADDRESS); 
    Serial.print(F("# samples: "));
-   Serial.println(index);
-   delay(300);
-   if (index < 510) index = 510;
-   for (int i; i < index; i++) {
+   Serial.println(num_samples);
+   if (num_samples > 510) num_samples = 510;
+   for (int i = 1; i < num_samples; i++) {
     float currenttemp = readIndex(i);
+    Serial.print(i);
+    Serial.print(F(" "));
     Serial.println(currenttemp);
    }
+   Serial.println(F("Done with output!"));
 }
 
 /*
@@ -326,9 +327,8 @@ float timeright = ((float)(num_samples_drawn) * DATA_RECORD_PERIOD) / 3600000; /
     int diff1;
   int diff2;
   
-  int j = 0;
   // index begins at the end minus graph width
-  int startIndex = (eeindex > graphwidth) ? eeindex - graphwidth : 0;
+  int startIndex = (eeindex > graphwidth) ? 1+eeindex - graphwidth : 1;
   //plots 119 points fron the EEPROM Contents at a period of 5 minutes
   // This logic should render the last 119 samples, I suppose
   float maxTempToGraph = -1.0;
@@ -342,11 +342,7 @@ float timeright = ((float)(num_samples_drawn) * DATA_RECORD_PERIOD) / 3600000; /
 
   int graphMaxTemp = ceil(maxTempToGraph);
   int graphMinTemp = floor(minTempToGraph);
-
-
-  Serial.print(graphMinTemp);
-  Serial.print(F(" "));
-  Serial.println(graphMaxTemp);
+  
   display.clearDisplay();
   display.setTextSize(2);
   display.setCursor(0, 0);
@@ -368,18 +364,19 @@ float timeright = ((float)(num_samples_drawn) * DATA_RECORD_PERIOD) / 3600000; /
     // Pixels per degree
     float scale = (64.0 - SPLIT) / (float) (graphMaxTemp - graphMinTemp); //creates scale y axis pixels
 
-  float meanTemp = ((graphMaxTemp - graphMinTemp) / 2.0);
-  int middle = meanTemp - graphMinTemp;
+  float meanTemp = (((float) graphMaxTemp + (float) graphMinTemp) / 2.0);
+  float middle = meanTemp - (float) graphMinTemp;
+  int j = 0;
   for (int i = startIndex; i < eeindex; i++) {
     float currentTemp = readIndex(i); 
     float ypos = (currentTemp - graphMinTemp);
 
     int x = LEFT_MARGIN + j;
-    int y = (SPLIT + 64 - (scale * ypos));
-    int midy = (SPLIT + 64 - (scale * middle));  
+    int y = (64 - (scale * ypos));
+    int midy = (64 - (scale * middle));  
     display.drawPixel(x, y, SSD1306_WHITE); //plots temparature
-    display.drawPixel(x, midy, SSD1306_WHITE); 
-    j += 1;
+    display.drawPixel(x, midy, SSD1306_WHITE);
+    j++; 
    }
 
   display.display();
@@ -585,7 +582,7 @@ uint16_t rom_read16(uint16_t address) {
    Note: Data is not actually cleared from other addresses
 */
 void rom_reset() {
-  rom_write16(INDEX_ADDRESS, 0);
+  rom_write16(INDEX_ADDRESS, 1);
 }
 
 /*
@@ -775,22 +772,16 @@ void loop() {
     } 
     showMenu();
   }  else {
-      Serial.println(F("menu selection XX"));
-      Serial.println(menuSelection);
-
        switch (menuSelection) {
         case TEMPERATURE_M :
-          Serial.println(F("TeMP")); 
            showCurStatus(temperatureC, duty_factor());
           break;
         case GRAPH_1_M : {
           uint16_t index = rom_read16(INDEX_ADDRESS);
           showGraph(index);
-          Serial.println(F("GRAPH!")); 
         }
           break;
-        case SET_TEMP_M : {
-           Serial.println(F("Set TEMP!"));   
+        case SET_TEMP_M : {  
         // This is wrong; we whould be showing instructions
           showSetTempMenu(targetTemperatureC);
           if (up) {
