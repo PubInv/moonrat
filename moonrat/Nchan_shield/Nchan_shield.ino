@@ -40,6 +40,14 @@
 #define LOG_PANIC 0
 #define LOG_LEVEL 4
 
+
+// These are Menu items
+#define TEMPERATURE_M 0
+#define GRAPH_1_M 1
+#define GRAPH_2_M 2
+#define SET_TEMP_M 3
+#define STOP_M 4
+
 #include <PID_v1.h>
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_I2CRegister.h>
@@ -95,9 +103,9 @@ int sensorInput;    //The variable we will use to store the sensor input
 
 // #define USE_DEBUGGING_TARGET 1
 #ifdef USE_DEBUGGING_TARGET
-int targetTemperatureC = 30;// Celcius
+uint16_t targetTemperatureC = 30;// Celcius
 #else
-int targetTemperatureC = 35;// Celcius
+uint16_t targetTemperatureC = 35;// Celcius
 #endif
 
 // Variables to represent the state of the machine
@@ -159,6 +167,20 @@ uint32_t time_spent_incubating_ms = 0;
 uint32_t time_of_last_entry = 0;
 
 #define DATA_RECORD_PERIOD 5*60*1000
+
+
+// This is ten minutes, this should give us more
+// than 48 hours. We record data in the eprom at this rate 
+// once the begin is done.
+#define BASE_DATA_RECORD_PERIOD 10*60*1000
+
+// For DEBUGGING, we may use a faster rate, of every 10 seconds
+#ifdef USE_DEBUGGING_TARGET
+#define DATA_RECORD_PERIOD (BASE_DATA_RECORD_PERIOD / 60)
+#else
+#define DATA_RECORD_PERIOD BASE_DATA_RECORD_PERIOD
+#endif
+
 //time variables
 #define FIVE_MINUTES 300000
 
@@ -194,9 +216,10 @@ bool select ;
 const int BAUD_RATE = 9600;
 
 //eeprom variables
+#define TARGET_TEMP_ADDRESS 1023
 #define INDEX_ADDRESS 0 //location of index tracker in EEPROM
 #define MAX_ADDRESS 1023 //highest possible address in arduino UNO EEPROM
-#define MAX_SAMPLES 511 //maximum number of samples that we can store in EEPROM
+#define MAX_SAMPLES 510 //maximum number of samples that we can store in EEPROM
 uint16_t value1;//first two bits of eeprom storage
 uint16_t value2;//last bits of EEprom
 
@@ -209,7 +232,7 @@ int b = 1; //initialize serial print index
 
 
 void enter_warm_up_phase() {
-  // These are the "balance" points
+  // These are the "balance" frpoints
 //  myPID = new PID(&Input, &Output, &Setpoint, SKp, SKi, SKd, DIRECT);
 //  myPID = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
   myPID->SetTunings(SKp, SKi, SKd);          
@@ -253,6 +276,21 @@ void showCurStatus(float temp, float duty_factor) {
 /*
    Shows a graph of the temperature data over a period of time
 */
+
+// here we dump to the serial port for debugging and checking 
+void dumpData() {
+   Serial.println("DATA DUMP:");
+     delay(300); 
+   uint16_t index = rom_read16(INDEX_ADDRESS); 
+   Serial.print("# samples: ");
+   Serial.println(index);
+   delay(300);
+   if (index < 510) index = 510;
+   for (int i; i < index; i++) {
+    float currenttemp = readIndex(i);
+    Serial.println(currenttemp);
+   }
+}
 
 void showGraph(int eeindex) {
   //TODO find out have to shift x axis values
@@ -626,6 +664,14 @@ bool writeNewEntry(float data) {
   return true;
 }
 
+uint16_t getTargetTemp() {
+  uint16_t targetTempC = rom_read16(TARGET_TEMP_ADDRESS);
+  return targetTempC; 
+}
+void setTargetTemp(uint16_t temp) {
+  rom_write16(TARGET_TEMP_ADDRESS,temp);
+}
+
 
 // SETUP FUNCTIONS --------------------------------------------------
 
@@ -736,6 +782,7 @@ void loop() {
     Serial.println(currently_heating);
   }
 
+  boolean dumpdata = false;
   //read keyboard entries from the serial monitor
   char T;
   if (Serial.available()) {
@@ -746,12 +793,19 @@ void loop() {
     up = (T == 'u');
     down = (T == 'd');
     select = (T == 's');
+    dumpdata = (T == 'x');
+  } else {
+    select = digitalRead(BTN_SELECT);
+    up = digitalRead(BTN_UP);
+    down = digitalRead(BTN_DOWN);
   }
 
-  select = digitalRead(BTN_SELECT);
-  up = digitalRead(BTN_UP);
-  down = digitalRead(BTN_DOWN);
-
+  if (dumpdata) {
+    Serial.println(F("DUMPING DATA!"));
+    Serial.println(dumpdata);
+    dumpData();
+  }
+  
   if (LOG_LEVEL >= LOG_VERBOSE) {
     Serial.print(select);
     Serial.print(up);
