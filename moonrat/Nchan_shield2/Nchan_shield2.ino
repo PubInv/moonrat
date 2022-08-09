@@ -210,10 +210,10 @@ int xaxisright = 128 - 24;
 
 //menu variables
 int menuSelection = 0;
-bool inMenu = true;
+bool inMainMenu = true;
 bool up ;
 bool down ;
-bool select ;
+bool sel ;
 
 const int BAUD_RATE = 9600;
 
@@ -342,7 +342,8 @@ float timeright = ((float)(num_samples_drawn) * DATA_RECORD_PERIOD) / 3600000; /
 
   int graphMaxTemp = ceil(maxTempToGraph);
   int graphMinTemp = floor(minTempToGraph);
-    Serial.print(F("min max :"));
+
+
   Serial.print(graphMinTemp);
   Serial.print(F(" "));
   Serial.println(graphMaxTemp);
@@ -366,8 +367,6 @@ float timeright = ((float)(num_samples_drawn) * DATA_RECORD_PERIOD) / 3600000; /
 
     // Pixels per degree
     float scale = (64.0 - SPLIT) / (float) (graphMaxTemp - graphMinTemp); //creates scale y axis pixels
-    Serial.println("Pixels per Degree C:");
-    Serial.println(scale);
 
   float meanTemp = ((graphMaxTemp - graphMinTemp) / 2.0);
   int middle = meanTemp - graphMinTemp;
@@ -386,80 +385,6 @@ float timeright = ((float)(num_samples_drawn) * DATA_RECORD_PERIOD) / 3600000; /
   display.display();
 }
 
-
-////create another graph function for all EEPROM contents
-//void showGraph2(int b, int multiple) {
-//
-//  if (b > graphwidth) {
-//
-//    timeleft = timeleft + (multiple * 0.08333333333333);
-//    timemid = timemid + (multiple * 0.0833333333333);
-//    timeright = timeright + (multiple * 0.0833333333333);
-//  }
-//  display.clearDisplay();
-//  display.setTextSize(2);
-//  display.setCursor(0, 0);
-//  display.println(F("GRAPH"));
-//  display.setTextSize(1);
-//  display.setCursor(1, SPLIT);
-//  display.println(graphMaxTemp1);
-//  display.setCursor(1, 56);
-//  display.println(graphMinTemp1);
-//  display.setCursor(1, center);
-//  display.println(targetTemperatureC);
-//  display.setCursor(LEFT_MARGIN * 2, 56);
-//  display.println(timeleft);
-//  display.setCursor(xaxismid, 56);
-//  display.println(timemid);
-//  display.setCursor(xaxisright, 56);
-//  display.println(timeright);
-//
-//  //plots 119 points fron the EEPROM Contents at a period of ceil(b/119)*5 minutes
-//  for (int i = 0; i < (graphwidth) ; i++) {
-//    float currenttemp = readIndex(i);
-//    if ((b < (graphwidth)) && (floor(currenttemp) > 0)) {
-//
-//      //plot one value
-//      int ypos = (int)(currenttemp - graphMinTemp1);//subtract y coordinate from value of x axis
-//
-//
-//      if (ypos < 0) {
-//        ypos = 0;
-//      }
-//      //make a loop from center to the y value
-//
-//      display.drawLine(LEFT_MARGIN + i, center, LEFT_MARGIN + i, 64 - (ypos + 8), SSD1306_WHITE); //plots temparature
-//
-//    }
-//    else if ((b >= (graphwidth)) && (floor(currenttemp) > 0)) {
-//
-//      //loop through the values in width multiple and find the min and max
-//      int maxval;
-//      int minval;
-//      int newi = multiple * i;
-//
-//      for (int j = 0; j < multiple - 1; j++) {
-//        maxval = max(readIndex(newi + j), readIndex(newi + j + 1));
-//        minval = min(readIndex(newi + j), readIndex(newi + j + 1));
-//      }
-//
-//      int ypos = (int)(maxval - graphMinTemp1);//subtract max y coordinate from value of x axis
-//      int ypos1 = (int)(minval - graphMinTemp1);//subtract min y coordinate from value of x axis
-//
-//
-//      if (ypos < 0)
-//        ypos = 0;
-//      if (ypos1 < 0)
-//        ypos1 = 0;
-//      if ((maxval > 0) && (minval > 0)) {
-//        display.drawLine(LEFT_MARGIN + i, 64 - (ypos1 + 8), LEFT_MARGIN + i, 64 - (ypos + 8), SSD1306_WHITE); //plots temparature
-//      }
-//    }
-//
-//  }
-//
-//  display.display();
-//}
 /* Displays the menu.
 
    Menu Options:
@@ -785,6 +710,7 @@ double read_temp() {
 //main
 #define PERIOD_TO_CHECK_TEMP_MS 5000
 uint32_t last_temp_check_ms = 0;
+bool returnToMain = false;
 void loop() {
   delay(100);
 
@@ -808,10 +734,10 @@ void loop() {
     Serial.println(T);
     up = (T == 'u');
     down = (T == 'd');
-    select = (T == 's');
+    sel = (T == 's');
     dumpdata = (T == 'x');
   } else {
-    select = digitalRead(BTN_SELECT);
+    sel = digitalRead(BTN_SELECT);
     up = digitalRead(BTN_UP);
     down = digitalRead(BTN_DOWN);
   }
@@ -820,65 +746,79 @@ void loop() {
     dumpData();
   }
 
-  if (LOG_LEVEL >= LOG_VERBOSE) {
-    Serial.print(select);
+  if (LOG_LEVEL >= LOG_DEBUG) {
+    Serial.print(inMainMenu);
+    Serial.print(menuSelection);
+    Serial.print(F("-"));
+    Serial.print(sel);
     Serial.print(up);
     Serial.print(down);
     Serial.println();
   }
   // I don't know what this is supposed to do...
   int multiple = 0;
+  if (!inMainMenu && sel) {
+    returnToMain = true;
+  }
 
   //controls menu selection
-  if (inMenu) {
+  if (inMainMenu) {
     //read buttons and menu
     if (up && menuSelection > 0) {
       menuSelection--;
     }
-    else if (down && menuSelection < 4) {
+    else if (down && menuSelection < 3) {
       menuSelection++;
     }
-    else if (select) {
-      inMenu = false;
-    }
+    else if (sel) {
+      inMainMenu = false;
+    } 
     showMenu();
-  }
-  else {
-    //return to menu on select
-    if (select) {
-      inMenu = true;
-    }
-    //show temperature option
-    switch (menuSelection) {
-      case TEMPERATURE_M :
-        showCurStatus(temperatureC, duty_factor());
-        break;
-      //show graph1
-      case GRAPH_1_M :
-        uint16_t index = rom_read16(INDEX_ADDRESS);
-        showGraph(index);
-        break;
-      //set target temperature option
-      case SET_TEMP_M :
-      // This is wrong; we whould be showing instructions
-        showSetTempMenu(targetTemperatureC);
-        if (up) {
-          targetTemperatureC++;
-        }
-        if (down) {
-          targetTemperatureC--;
-        }
-        break;
+  }  else {
+      Serial.println(F("menu selection XX"));
+      Serial.println(menuSelection);
 
-      //toggle incubation
-      case STOP_M :
-        incubating = !incubating;
-        milliTime = 0;
-        inMenu = true;
-        break;
-
+       switch (menuSelection) {
+        case TEMPERATURE_M :
+          Serial.println(F("TeMP")); 
+           showCurStatus(temperatureC, duty_factor());
+          break;
+        case GRAPH_1_M : {
+          uint16_t index = rom_read16(INDEX_ADDRESS);
+          showGraph(index);
+          Serial.println(F("GRAPH!")); 
+        }
+          break;
+        case SET_TEMP_M : {
+           Serial.println(F("Set TEMP!"));   
+        // This is wrong; we whould be showing instructions
+          showSetTempMenu(targetTemperatureC);
+          if (up) {
+            targetTemperatureC++;
+          }
+          if (down) {
+            targetTemperatureC--;
+          }    
+        }    
+          break;
+        case STOP_M : {
+                  Serial.println(F("Toggling Incubation!"));
+          if (!incubating) {
+            // In this case, we want to restart the EEPROM...
+            rom_reset();
+            Serial.println(F("EEPROM RESET!"));
+          }
+          incubating = !incubating;
+          milliTime = 0;
+          inMainMenu = true;
+        }
+          break;
+      }
+      if (returnToMain) {
+        returnToMain = false;
+        inMainMenu = true;
+      }
     }
-  }
   // We have to process menu changes without delay to have
   // a good user experience; but reading the temperature can
   // be delayed.
@@ -922,9 +862,7 @@ void loop() {
 #ifdef USE_DEBUGGING
     Serial.println(F("DEBUGGING MODE!"));
 #endif
-  Serial.println(F("Data Period:"));
-  Serial.println(DATA_RECORD_PERIOD);
-  Serial.println(time_since_last_entry);
+
   if (time_since_last_entry > DATA_RECORD_PERIOD) {
     //  entryFlag = false;
     Serial.println(F("Writing New Entry"));
