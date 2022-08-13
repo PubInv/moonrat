@@ -109,9 +109,12 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 #define TEMP_PIN A0  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
 
+#define MAX_TEMPERATURE_C 40
+
 // #define USE_DEBUGGING
 // #define USE_DEBUGGING 1
-#ifdef USE_DEBUGGING
+// #define USE_LOW_TEMP 1
+#ifdef USE_LOW_TEMP
 uint16_t targetTemperatureC = 30;// Celcius
 #else
 uint16_t targetTemperatureC = 35;// Celcius
@@ -219,9 +222,14 @@ const int BAUD_RATE = 9600;
 
 //eeprom variables
 // This basically implements a ring buffer...
-#define TARGET_TEMP_ADDRESS 1023
+// NOTE: I treat the EEPROM as 16-bit words.
+#define TARGET_TEMP_ADDRESS 511
+// Because we keep the "INDEX" at location, we chave to be careful
+// about our accounting and our meaning.
+// INDEX is the number of samples we have at any point in time.
+// Our functions to read and write must remove the 0-indexed element
+// in which a sample is not stored.
 #define INDEX_ADDRESS 0 //location of index tracker in EEPROM
-#define MAX_ADDRESS 1023 //highest possible address in arduino UNO EEPROM
 #define MAX_SAMPLES 509 //maximum number of samples that we can store in EEPROM
 uint16_t value1;//first two bits of eeprom storage
 uint16_t value2;//last bits of EEprom
@@ -259,7 +267,7 @@ float readIndex(int index) {
   if (index > MAX_SAMPLES) {
     return -1;
   }
-  uint16_t bitData = rom_read16(index * 2);
+  uint16_t bitData = rom_read16((index+1) * 2);
   return sixteenToFloat(bitData);
 }
 
@@ -293,8 +301,8 @@ void dumpData() {
    uint16_t num_samples = rom_read16(INDEX_ADDRESS); 
    Serial.print(F("# samples: "));
    Serial.println(num_samples);
-   if (num_samples > 510) num_samples = 510;
-   for (int i = 1; i < num_samples; i++) {
+   if (num_samples > MAX_SAMPLES) num_samples = MAX_SAMPLES;
+   for (int i = 0; i < num_samples; i++) {
     float currenttemp = readIndex(i);
     Serial.print(i);
     Serial.print(F(" "));
@@ -328,7 +336,7 @@ float timeright = ((float)(num_samples_drawn) * DATA_RECORD_PERIOD) / 3600000; /
   int diff2;
   
   // index begins at the end minus graph width
-  int startIndex = (eeindex > graphwidth) ? 1+eeindex - graphwidth : 1;
+  int startIndex = (eeindex > graphwidth) ? eeindex - graphwidth : 0;
   //plots 119 points fron the EEPROM Contents at a period of 5 minutes
   // This logic should render the last 119 samples, I suppose
   float maxTempToGraph = -1.0;
@@ -401,10 +409,17 @@ void showMenu() {
   display.print(F("Menu"));
   display.setTextSize(1);
   //displays time since incubation started
-  display.setCursor(64, 7);
+  display.setCursor(56, 7);
+
+  // It's really useful to see the current temp at all times...
+  double curTemp = read_temp();
+  display.print(curTemp);
+  display.print(" ");
   char currentTime[80];
  // String currentTime = 
   getTimeString(currentTime);
+  // chop off the seconds...
+  currentTime[5] = '\0';
   display.println(currentTime);
   //menu option for current temperature
   display.setTextSize(1);
@@ -565,8 +580,8 @@ float sixteenToFloat(uint16_t sixteen) {
    Writes 16 bits into EEPROM using big-endian respresentation. Will be called to enter temp at a specific address every 5 mibutes
 */
 void rom_write16(uint16_t address, uint16_t data) {
-  EEPROM.write(address, (data & 0xFF00) >> 8);
-  EEPROM.write(address + 1, data & 0x00FF);
+  EEPROM.update(address, (data & 0xFF00) >> 8);
+  EEPROM.update(address + 1, data & 0x00FF);
 }
 
 /*
@@ -582,7 +597,7 @@ uint16_t rom_read16(uint16_t address) {
    Note: Data is not actually cleared from other addresses
 */
 void rom_reset() {
-  rom_write16(INDEX_ADDRESS, 1);
+  rom_write16(INDEX_ADDRESS * 2, 0);
 }
 
 /*
@@ -591,22 +606,22 @@ void rom_reset() {
 */
 bool writeNewEntry(float data) {
   uint16_t bitData = floatToSixteen(data);
-  uint16_t index = rom_read16(INDEX_ADDRESS);
+  uint16_t index = rom_read16(INDEX_ADDRESS*2);
   if (index >= MAX_SAMPLES) {
     return false;
   }
+  rom_write16(2 * (index+1), bitData);
   index = index + 1;
-  rom_write16(2 * index, bitData);
-  rom_write16(INDEX_ADDRESS, index);
+  rom_write16(INDEX_ADDRESS * 2, index);
   return true;
 }
 
 uint16_t getTargetTemp() {
-  uint16_t targetTempC = rom_read16(TARGET_TEMP_ADDRESS);
+  uint16_t targetTempC = rom_read16(TARGET_TEMP_ADDRESS*2);
   return targetTempC; 
 }
 void setTargetTemp(uint16_t temp) {
-  rom_write16(TARGET_TEMP_ADDRESS,temp);
+  rom_write16(TARGET_TEMP_ADDRESS*2,temp);
 }
 
 // SETUP FUNCTIONS --------------------------------------------------
@@ -657,8 +672,18 @@ void setup() {
 
   incubationON();
 
-
- // targetTemperatureC = getTargetTemp();
+  uint16_t storedTargetTemp = getTargetTemp();
+  if (storedTargetTemp > MAX_TEMPERATURE_C) {
+    setTargetTemp(MAX_TEMPERATURE_C);
+    storedTargetTemp = MAX_TEMPERATURE_C;
+  }
+  if (storedTargetTemp < 25) {
+    setTargetTemp(35);
+    Serial.println(F("target temp to low, setting to 35!"));
+    storedTargetTemp = 35;
+  }
+  targetTemperatureC = storedTargetTemp;
+ 
 }
 // Loop
 
@@ -714,12 +739,12 @@ void loop() {
 
   uint32_t loop_start = millis();
   // Test reading the buttons...
-  if (LOG_LEVEL >= LOG_VERBOSE) {
-    Serial.print(F("Incubating: "));
-    Serial.println(incubating);
-    Serial.print(F("Currently Heating: "));
-    Serial.println(currently_heating);
-  }
+//  if (LOG_LEVEL >= LOG_VERBOSE) {
+//    Serial.print(F("Incubating: "));
+//    Serial.println(incubating);
+//    Serial.print(F("Currently Heating: "));
+//    Serial.println(currently_heating);
+//  }
 
   boolean dumpdata = false;
   //read keyboard entries from the serial monitor
@@ -743,15 +768,15 @@ void loop() {
     dumpData();
   }
 
-  if (LOG_LEVEL >= LOG_DEBUG) {
-    Serial.print(inMainMenu);
-    Serial.print(menuSelection);
-    Serial.print(F("-"));
-    Serial.print(sel);
-    Serial.print(up);
-    Serial.print(down);
-    Serial.println();
-  }
+//  if (LOG_LEVEL >= LOG_DEBUG) {
+//    Serial.print(inMainMenu);
+//    Serial.print(menuSelection);
+//    Serial.print(F("-"));
+//    Serial.print(sel);
+//    Serial.print(up);
+//    Serial.print(down);
+//    Serial.println();
+//  }
   // I don't know what this is supposed to do...
   int multiple = 0;
   if (!inMainMenu && sel) {
@@ -785,10 +810,16 @@ void loop() {
         // This is wrong; we whould be showing instructions
           showSetTempMenu(targetTemperatureC);
           if (up) {
+            if (targetTemperatureC > MAX_TEMPERATURE_C) {
+              targetTemperatureC = MAX_TEMPERATURE_C;
+              targetTemperatureC++;
+            }
             targetTemperatureC++;
+            setTargetTemp(targetTemperatureC);
           }
           if (down) {
             targetTemperatureC--;
+            setTargetTemp(targetTemperatureC);
           }    
         }    
           break;
@@ -862,13 +893,19 @@ void loop() {
   }
 
   // Here is the actual heat algorithm...
-  const int USE_PID = 0;
+  int USE_PID;
+#ifdef USE_PID_AND_PWM
+  USE_PID = 1;
+#else
+  USE_PID = 0;
+#endif
+
   if (USE_PID) {
-    Setpoint = targetTemperatureC;
+    Setpoint = (double) targetTemperatureC;
     Input = temperatureC;
     if (LOG_LEVEL >= LOG_VERBOSE) {
       Serial.print(F("SetPoint"));
-      Serial.println(Input);
+      Serial.println(Setpoint);
       Serial.print(F("Input:"));
       Serial.println(Input);
     }
