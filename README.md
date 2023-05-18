@@ -31,7 +31,14 @@ portable incubator that the Armadillo, described [elsewhere](http://jhe.ewb.org.
 Our current design uses a soup thermos to have good insulation. 3D printed parts hold the Petrifilms inside the thermos and way from the metal edges.
 Additional parts hold the heating cloth and thermometer, which our powered and sensed by an external Arduino.
 
-![IMG-2511](https://user-images.githubusercontent.com/5296671/130527922-66cce437-a89f-4815-a980-bc79295f1a5a.JPG)
+<a
+href="https://user-images.githubusercontent.com/5296671/130527922-66cce437-a89f-4815-a980-bc79295f1a5a.JPG"><img
+src="https://user-images.githubusercontent.com/5296671/130527922-66cce437-a89f-4815-a980-bc79295f1a5a.JPG"
+alt="https://user-images.githubusercontent.com/5296671/130527922-66cce437-a89f-4815-a980-bc79295f1a5a.JPG"
+width="400">
+IMG-2511
+</a> 
+
 
 Our previous design use a "casette" which is bolted to the inside of the lid of a thermos bottle, shown below. Our circuit is on a breadboard, and we have not yet designed the enclosure for the electronics integrated into the cap or as a holder for the bottle. We use a 3D printed bracket to hold the Thernos bottle. We believe this is the most compact design which will be thermally efficient.
 
@@ -61,22 +68,45 @@ for example, a 3x2 JST layout would be better than 6 pins in line.
 
 
 ### Previous designThermos Bottle in Bracekt With Battery in Place
-
-![Thermos Bottle In Bracket With Battery](https://github.com/PubInv/moonrat/blob/master/moonrat/3D_printed_part_pictures/6C0C779D-602B-4875-BB12-1951AA8B21C5.jpg)
+<a
+href="./moonrat/3D_printed_part_pictures/6C0C779D-602B-4875-BB12-1951AA8B21C5.jpg"><img
+src="./moonrat/3D_printed_part_pictures/6C0C779D-602B-4875-BB12-1951AA8B21C5.jpg"
+alt="./moonrat/3D_printed_part_pictures/6C0C779D-602B-4875-BB12-1951AA8B21C5.jpg"
+width="400">
+Thermos Bottle In Bracket With Battery
+</a> 
 
 ### Bracket by Itself
+<a
+href="./moonrat/3D_printed_part_pictures/9DBF69BE-EAB6-436A-977B-694C6931730C.jpg"><img
+src="./moonrat/3D_printed_part_pictures/9DBF69BE-EAB6-436A-977B-694C6931730C.jpg"
+alt="./moonrat/3D_printed_part_pictures/9DBF69BE-EAB6-436A-977B-694C6931730C.jpg"
+width="400">
+Bracket by itself
+</a> 
 
-![Bracket by itself](https://github.com/PubInv/moonrat/blob/master/moonrat/3D_printed_part_pictures/9DBF69BE-EAB6-436A-977B-694C6931730C.jpg)
 
 Our analysis is preliminary, but our current tests show we at 25C ambient temperature we can hold the needed 35C incubation temperature with only
 (12V * 12V / 8 Ohms * 6% duty cycle * 48 hours) = 51.84 Watt Hours.  This will have to be supplied by a battery pack, which will be about the same size as the Thermos bottle.
 
-![MoonratWithBreadBoard](https://user-images.githubusercontent.com/5296671/110479740-580de280-80ab-11eb-90c4-a859c0519b3d.png)
-
+<a
+href="https://user-images.githubusercontent.com/5296671/110479740-580de280-80ab-11eb-90c4-a859c0519b3d.png"><img 
+src="https://user-images.githubusercontent.com/5296671/110479740-580de280-80ab-11eb-90c4-a859c0519b3d.png"
+alt="https://user-images.githubusercontent.com/5296671/110479740-580de280-80ab-11eb-90c4-a859c0519b3d.png"
+width="400">
+MoonratWithBreadBoard
+</a> 
 
 ## Initial Design Approach
 
-![Basic Structure of Portable Incubator (1)](https://user-images.githubusercontent.com/5296671/86680945-b470ad80-bfc4-11ea-9ef6-19c4f70aceba.png)
+<a
+href="https://user-images.githubusercontent.com/5296671/86680945-b470ad80-bfc4-11ea-9ef6-19c4f70aceba.png"><img style="border:5px double black"
+src="https://user-images.githubusercontent.com/5296671/86680945-b470ad80-bfc4-11ea-9ef6-19c4f70aceba.png"
+alt="https://user-images.githubusercontent.com/5296671/86680945-b470ad80-bfc4-11ea-9ef6-19c4f70aceba.png"
+width="400">
+Basic Structure of Portable Incubator (1)
+</a> 
+
 
 ## References (Incomplete)
 
