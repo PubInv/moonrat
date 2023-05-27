@@ -1,5 +1,7 @@
-# moonrat
-Moonrat: A second-generation portable incubator
+# Moonrat II
+
+Moonrat: A second-generation portable incubator.
+This is the development effort of 2023.
 
 # Current Status
 
@@ -13,8 +15,6 @@ supervision will be provided by Robert L. Read, founder of Public Invention.
 # Future Work
 
 We need to make a design suitable for testing and short-run production of 20 units.
-
-
 
 ## Motivation
 
@@ -38,7 +38,6 @@ alt="https://user-images.githubusercontent.com/5296671/130527922-66cce437-a89f-4
 width="400">
 IMG-2511
 </a> 
-
 
 Our previous design use a "casette" which is bolted to the inside of the lid of a thermos bottle, shown below. Our circuit is on a breadboard, and we have not yet designed the enclosure for the electronics integrated into the cap or as a holder for the bottle. We use a 3D printed bracket to hold the Thernos bottle. We believe this is the most compact design which will be thermally efficient.
 
