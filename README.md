@@ -1,6 +1,6 @@
 # Moonrat II
 
-Moonrat: A second-generation portable incubator.
+Moonrat: A second-generation portable incubator.  
 This is the development effort of 2023.
 
 # Current Status
