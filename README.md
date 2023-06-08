@@ -1,6 +1,6 @@
-# Moonrat II
+# Tote-Size Portable Incubator for Rapid Field Work
 
-Moonrat: A second-generation portable incubator.  
+Aliases used by other developers include Moonrat, Rice MiniCubator, and Rice Petri FI. 
 This is the development effort of 2023.
 
 # Current Status
