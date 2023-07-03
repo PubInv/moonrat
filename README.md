@@ -1,9 +1,11 @@
 # Tote-Size Portable Incubator for Rapid Field Work
 
 Aliases used by other developers include Moonrat, Rice MiniCubator, and Rice Petri FI. 
-This is the development effort of 2023.
+**moonratII** is the development effort of 2023.
 
 # Current Status
+
+July 2023, A KiCad schematic is under development. Attempting to capture the hand made design of 2020. 
 
 This project is currently seeking a new lead engineer skilled in Arduino programming and relatively
 simple microelectronics design. We have a working prototype that was made by hand. It is likely time
