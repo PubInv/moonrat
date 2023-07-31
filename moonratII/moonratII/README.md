@@ -1,12 +1,14 @@
 #  UP TO DATE View KiCad files with on line viewer 
-View both cchematic and PCB files with Kicanvas  
 
-##  View Schematics on Line
-[Schematic](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmaster%2FmoonratII%2FmoonratII%2FmoonratII.kicad_sch)
-##  View PCB on Line
-[PCB](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmaster%2FmoonratII%2FmoonratII%2FmoonratII.kicad_pcb)
 
-## Some Screen Shots
+View both schematic and PCB files with Kicanvas   
+| Description             	| LINK                                                                                                	|   	|
+|-------------------------	|-------------------------------------------------------------------------------------------------	|---	|
+| Schematic 	|[Schematic](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmaster%2FmoonratII%2FmoonratII%2FmoonratII.kicad_sch)
+| PCB        	|[PCB](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmaster%2FmoonratII%2FmoonratII%2FmoonratII.kicad_pcb)|   	|
+
+
+## Some Stale Screen Shots
 
 | Description             	|                                                                                                 	|   	|
 |-------------------------	|-------------------------------------------------------------------------------------------------	|---	|
