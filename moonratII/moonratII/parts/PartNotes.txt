@@ -10,3 +10,11 @@ Opossum byAmnsonis licensed under theCreative Commons - Attributionlicense.
 Post a Make!
 Remember to come back and post what you've printed as a Make. It's good for the designer and the community (that means you)!
 
+
+
+OLED Display
+File: SSD1306_OLED_Display(128x64).step
+https://grabcad.com/library/pantalla-oled-0-96-128x64-1
+
+File: OLED Display 0.96_.step from
+https://grabcad.com/library/0-96-oled-display-module-new-1
