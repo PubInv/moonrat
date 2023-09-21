@@ -7354,7 +7354,7 @@
     (property "Value" "Polyfuse 6A" (at 72.39 29.845 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "GeneralPurposeAlarmDevicePCB:PlaceHolderOpossum" (at 67.31 34.925 0)
+    (property "Footprint" "GeneralPurposeAlarmDevicePCB:Fuse_BSMD_1812" (at 67.31 34.925 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
     (property "Datasheet" "BSMD1812-300-16V.pdf" (at 72.39 33.655 0)
