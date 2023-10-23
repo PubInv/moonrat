@@ -1,9 +1,11 @@
 # Tote-Size Portable Incubator for Rapid Field Work
 
 Aliases used by other developers include Moonrat, Rice MiniCubator, and Rice Petri FI. 
-This is the development effort of 2023.
+**moonratII** is the development effort of 2023.
 
 # Current Status
+
+July 2023, A KiCad schematic is under development. Attempting to capture the hand made design of 2020. 
 
 This project is currently seeking a new lead engineer skilled in Arduino programming and relatively
 simple microelectronics design. We have a working prototype that was made by hand. It is likely time
@@ -39,7 +41,7 @@ width="400">
 IMG-2511
 </a> 
 
-Our previous design use a "casette" which is bolted to the inside of the lid of a thermos bottle, shown below. Our circuit is on a breadboard, and we have not yet designed the enclosure for the electronics integrated into the cap or as a holder for the bottle. We use a 3D printed bracket to hold the Thernos bottle. We believe this is the most compact design which will be thermally efficient.
+Our previous design use a "casette" which is bolted to the inside of the lid of a thermos bottle, shown below. Our circuit is on a breadboard, and we have not yet designed the enclosure for the electronics integrated into the cap or as a holder for the bottle. We use a 3D printed bracket to hold the Thermos bottle. We believe this is the most compact design which will be thermally efficient.
 
 ## Fundamental Modularity: The 6-wire appliance
 
@@ -57,7 +59,7 @@ The "appliance" needs only 6 wires:
 2. +12V PWR (the heating elements requires approximately 12V power.)
 3. HEAT ON (Vin)
 4. +5V (for the thermometer).
-5. SIG -- data from the digial "one-wire" format
+5. SIG -- data from the digital "one-wire" format
 6. UNK - a final wire is included for future functionality that is unknown right now.
 
 These (esp. the power) should probably be rated for 2 amps, but in practice 1 amp is probably good enough.
@@ -65,8 +67,7 @@ These (esp. the power) should probably be rated for 2 amps, but in practice 1 am
 We have not yet chosen the connector, but we would like the connector to be of minimal width, so,
 for example, a 3x2 JST layout would be better than 6 pins in line.
 
-
-### Previous designThermos Bottle in Bracekt With Battery in Place
+### Previous Design Thermos Bottle in Bracekt With Battery in Place
 <a
 href="./moonrat/3D_printed_part_pictures/6C0C779D-602B-4875-BB12-1951AA8B21C5.jpg"><img
 src="./moonrat/3D_printed_part_pictures/6C0C779D-602B-4875-BB12-1951AA8B21C5.jpg"
