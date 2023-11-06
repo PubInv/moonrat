@@ -6,6 +6,8 @@ View both schematic and PCB files with Kicanvas
 |-------------------------	|-------------------------------------------------------------------------------------------------	|---	|
 | Schematic 	|[Schematic](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmaster%2FmoonratII%2FmoonratII%2FmoonratII.kicad_sch)
 | PCB        	|[PCB](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmaster%2FmoonratII%2FmoonratII%2FmoonratII.kicad_pcb)|   	|
+|PCB in 3D on 20231106 | ![image](https://github.com/PubInv/moonrat/assets/5836181/62b05cd6-e633-4a1b-b7f7-aae3d4fab606) |  |
+
 
 
 ## Some Stale Screen Shots
