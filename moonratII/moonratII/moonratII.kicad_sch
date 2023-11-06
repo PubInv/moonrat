@@ -2506,7 +2506,6 @@
     (uuid ff9540f5-05b9-41be-99c2-88a460a29afe)
   )
 
-  (no_connect (at 68.58 100.33) (uuid 138ec12c-ce11-4c20-8fb2-e0262b499d1b))
   (no_connect (at 73.66 80.01) (uuid 35f9df0f-3914-4145-a9ac-5d6dcbb109f2))
   (no_connect (at 73.66 82.55) (uuid 35f9df0f-3914-4145-a9ac-5d6dcbb109f3))
   (no_connect (at 73.66 85.09) (uuid 35f9df0f-3914-4145-a9ac-5d6dcbb109f4))
@@ -7796,14 +7795,14 @@
     (property "Distributor 2 PN" "https://www.amazon.com/gp/product/B08R8X2WWL/ref=ox_sc_act_title_1?smid=A39S0U3UP1U7UG&psc=1" (at 30.48 101.6 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid af74934e-96f6-4236-868d-90dbf0e6a36d))
-    (pin "2" (uuid 464f1a43-d984-4162-a1f6-842c047a7e9d))
-    (pin "3" (uuid 726d2c65-cf62-43e6-8fde-c3a35e055bc6))
-    (pin "4" (uuid 97ae5471-a697-40b6-a74e-966e4a3d412c))
-    (pin "5" (uuid e0afbe5d-8b19-4f13-ba3b-4b8622f5b871))
-    (pin "6" (uuid 8ea78b27-e57a-4834-a2a3-f4e4f8671a59))
-    (pin "7" (uuid dbe1cc97-5ae7-4677-bfe8-f1bd6704b302))
-    (pin "8" (uuid da5d7896-1028-4deb-9933-2d1c430821b5))
+    (pin "1" (uuid 5b63efc4-5eda-48cd-91a9-94c358dd1a35))
+    (pin "2" (uuid 2f70062a-e7c5-4e9f-9cb3-298c14b6537a))
+    (pin "3" (uuid 17646e49-62c1-4a12-877e-956805fe915e))
+    (pin "4" (uuid be73c599-df9f-426e-9874-5b6df3735c76))
+    (pin "5" (uuid 42a4047d-72ec-4f9f-8b28-656e3a557336))
+    (pin "6" (uuid 112cb5cb-2859-4df1-83a6-146d6ac57fcf))
+    (pin "7" (uuid 14c14a8a-60ad-4097-b86d-42ddd23ddd41))
+    (pin "8" (uuid 0ebafb59-32a4-49fd-b2b0-554c424f21f1))
     (instances
       (project "moonratII"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
