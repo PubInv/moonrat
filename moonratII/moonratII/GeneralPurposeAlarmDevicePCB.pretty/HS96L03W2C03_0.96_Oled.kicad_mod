@@ -61,4 +61,49 @@
   (pad "6" thru_hole circle (at 11.65 -11.9) (size 3 3) (drill 2) (layers "*.Cu" "*.Mask") (tstamp 702d383f-f0bf-4959-ac14-b276ba3b6d4e))
   (pad "7" thru_hole circle (at -11.65 11.9) (size 3 3) (drill 2) (layers "*.Cu" "*.Mask") (tstamp 8ca7cb61-8dc8-4d35-ac79-d8fccdd6c54e))
   (pad "8" thru_hole circle (at 11.65 11.9) (size 3 3) (drill 2) (layers "*.Cu" "*.Mask") (tstamp a900eeb2-c6bb-4f72-9fa6-600378b21a6f))
+  (model "${KIPRJMOD}/parts/Pantalla OLED 0.96'' 128x64.stp"
+    (offset (xyz 0 0 3))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "${KIPRJMOD}/parts/homemade_2mmx3mmx3mmSpacer-PartBody.step"
+    (offset (xyz 11.5 11.75 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "${KIPRJMOD}/parts/homemade_2mmx3mmx3mmSpacer-PartBody.step"
+    (offset (xyz -11.5 11.75 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "${KIPRJMOD}/parts/homemade_2mmx3mmx3mmSpacer-PartBody.step"
+    (offset (xyz -11.5 -11.75 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "${KIPRJMOD}/parts/homemade_2mmx3mmx3mmSpacer-PartBody.step"
+    (offset (xyz 11.5 -11.75 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "${KIPRJMOD}/parts/1.7x10mm_96773A639_JIS Steel Pan Head Screws.STEP"
+    (offset (xyz 11.6 11.8 4.2))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "${KIPRJMOD}/parts/1.7x10mm_96773A639_JIS Steel Pan Head Screws.STEP"
+    (offset (xyz 11.6 -11.8 4.2))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "${KIPRJMOD}/parts/1.7x10mm_96773A639_JIS Steel Pan Head Screws.STEP"
+    (offset (xyz -11.6 -11.8 4.2))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "${KIPRJMOD}/parts/1.7x10mm_96773A639_JIS Steel Pan Head Screws.STEP"
+    (offset (xyz -11.6 11.8 4.2))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
 )

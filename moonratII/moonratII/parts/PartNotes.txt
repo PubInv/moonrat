@@ -18,3 +18,12 @@ https://grabcad.com/library/pantalla-oled-0-96-128x64-1
 
 File: OLED Display 0.96_.step from
 https://grabcad.com/library/0-96-oled-display-module-new-1
+
+Pantella OLED Display from
+https://grabcad.com/library/pantalla-oled-0-96-128x64-1
+
+
+1.7 mm screws
+https://www.mcmaster.com/products/screws/jis-steel-pan-head-screws/thread-size~m1-7/length~6-mm/?s=screws
+
+2x3x3 mm spacer made in FreeCAD.
