@@ -8361,7 +8361,7 @@
     (property "Value" "HS96L03W2C03_0.96_Oled" (at 31.115 91.44 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "GeneralPurposeAlarmDevicePCB:HS96L03W2C03_0.96_Oled" (at 30.48 101.6 0)
+    (property "Footprint" "GeneralPurposeAlarmDevicePCB:OLED_HS96L03W2C03_0.96_WithNuts" (at 30.48 101.6 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 30.48 101.6 0)
