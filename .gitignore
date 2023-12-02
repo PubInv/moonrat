@@ -10,6 +10,7 @@
 *-backups
 *.kicad_prl
 *.sch-bak
+*.kicad_sch.lck
 *~
 *.*#
 _autosave-*
@@ -33,3 +34,6 @@ fp-info-cache
 
 # Some Files from the assembly process not needed.
 AssemblyPICS/
+
+# MAC
+*.DS_Store
