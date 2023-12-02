@@ -34,3 +34,6 @@ fp-info-cache
 
 # Some Files from the assembly process not needed.
 AssemblyPICS/
+
+# MAC
+*.DS_Store
