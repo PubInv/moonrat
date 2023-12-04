@@ -1,4 +1,4 @@
-# Start of An Enclosure for the <oonratII Controller Assembly
+# Start of An Enclosure for the MoonratII Controller Assembly
 
 Designed in Free CAD V0.19
 ![image](https://github.com/PubInv/moonrat/assets/5836181/5df6ff7b-ca3f-4c3e-a1fe-eaae7c9bca92)
