@@ -3,6 +3,8 @@ Journal of tests for assemblies of December 2023.
 PCB assembly by JLCPCB with some finish work in Maraland.  
 Five Assemblies assigned SN 1-5.  
 
+## Update 20230123 -> Link to the Moonrat II Wokwi simulator: 
+https://wokwi.com/projects/384727010846638081
 
 ## Resources
 12V power supply with current monitor. Color the plug Red. 
