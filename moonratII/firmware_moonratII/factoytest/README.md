@@ -1,4 +1,4 @@
-# Factoy test firmware for MoonRat II 
+# Factory test firmware for MoonRat II 
 
 Firmware for the Control module used to test the control module and the heater
 
@@ -21,4 +21,5 @@ Test for shorts
 * Other
 
 ## Write Test Procedures for use of this firmware(s)
+
 
