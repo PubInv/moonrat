@@ -1,44 +1,56 @@
 # Factory Test Plan, MoonRat V1, Printed Wiring Assembly
-Journal of tests for assemblies of December 2023.  
-PCB assembly by JLCPCB with some finish work in Maraland.  
-Five Assemblies assigned SN 1-5.  
+Journal of tests for assemblies of silk screen 20231120.  
+PCB assembly by JLCPCB with some finish work in Connecticut.  
+
+Five Assemblies assigned SN 1-5.  Lable with sharpie.  
+![image](https://github.com/PubInv/moonrat/assets/5836181/55aeb627-2a82-43cc-8342-174519147171)
+
 
 ## Update 20230123 -> Link to the Moonrat II Wokwi simulator: 
-https://wokwi.com/projects/384727010846638081
+https://wokwi.com/projects/384727010846638081  
+_TODO: get up to date from Horacio_
 
 ## Resources
-12V power supply with current monitor. Color the plug Red. 
-Multi meter to measure voltage and resistance.  (Actual Multimeter (EMCO DMR-3800) )  
-PC with Arduino IDE to connect to USB programing port of Due  
+12V @ 1.5 A power supply. Color the plug Red. 
+Multi meter to measure voltage and resistance.  (Actual Multimeter: AstroiAI  DM6000AR )  
+PC with Arduino IDE to connect to USB programing port of UNO.
 Firmware: https://github.com/PubInv/NASA-MCOG/tree/develop/elec/Control%20Board/Control_1v1/FactoryTest  
 Arduino Sketches: 
-1. DueWithThreeSSRs
-2. GraphicsTest
+1. Foo
+2. Bar
 
 ## Test Procedure
 ### Before Test, Finish Assembly
 Photos of received assemblies at: ??????
-Install on these units the feed through headers for the UNO connections which make this assembly become a shield for a UNO.
 
-Color the connector J11, +12VIn red with a sharpie.
+These tests make sure we can plug the device into power with out letting out magic smoke.
+**Check polarity on:**
+1. Buzzer
+2. D1
+3. Connectors: J5, J6, J9, J10, J11
+4. U1
 
+Install M2x6 screws at the four corners of the OLED. Manufacturier:  ________,  Partnumber: ____________, Steel Pan Head Phillips Screw M2 x 0.4 mm Thread, 6 mm Long
+
+De-panalize the Heater from the Controller.  Place the Controller over a hard surface. Hold it. Hold it down against the hard surface. Press the Heater side down to break it clear.
+
+Install (Solder) the feed through headers for the UNO connections which make this assembly become a shield for a UNO.
 
 ### Unpowered Test of PWA.
-These tests make sure we can plug the device into power with out letting out magic smoke.
+
 
 **Summary and data capture table**
 
-Tester Name ____ F. Lee Erickson ________________
-Date of Test _____ 20231026 _____________________
+Tester Name ____ Melanie Laporte ________________
+Date of Test _____ 20220126 _____________________
 
-| Test ID 	| Test Name       	| Setup                                          	| Test Location 	| Requirements    	| Results SN 9 	| Results SN 10 	| Results SN 11 	| Results SN 12 	| Results SN 13 	|
+| Test ID 	| Test Name       	| Setup                                          	| Test Location 	| Requirements    	| Results SN 1 	| Results SN 2 	| Results SN 3 	| Results SN 4 	| Results SN  	|
 |--------:	|-----------------	|------------------------------------------------	|---------------	|-----------------	|--------------	|---------------	|---------------	|---------------	|---------------	|
 |       1 	| Inspection      	| Inspect correct orientation on polarized parts 	|               	|                 	|      D1 and D2 Probably backwards. |               	|               	|               	|               	|
-|       2 	| +24In In No Short 	| Set ohm meter 20M. Com to GND                  	| TP20 (J12 Pin 1)   	|  > 10K 	|  34.6K  	|  34.6K        	|     34.5K  	|  34.6K       	|               	|
-|       3 	| +12In In No Short 	| Set ohm meter 20M. Com to GND                  	| TP 2 (J11 Pin 1) |   > 10K 	 |    39.8K |  39.9K      	|   39.8K         |   39.8k      	|               	|
-|       4 	| 5VHEAD net      	| Set ohm meter 20M. Com to GND                  	| J8 Pin 1 | Open or > 1 Meg 	|     Open |       Open   	|      Open     	|      Open   	|               	|
-|       5 	| +5V net         	| Set ohm meter 20M. Com to GND                  	| J3 Pin 4 | Open or > 1 Meg 	|     12.1 Meg |      Open   	|        Open 	| 2.4K (Issue #126 https://github.com/PubInv/NASA-MCOG/issues/126) |       	|
-|       6 	| +3.3V net       	| Set ohm meter 20M. Com to GND                  	| J3 Pin 5 | Open or > 1 Meg 	|   11.7 Meg |         Open    	|         Open     	|         Open     	|               	|
+|       3 	| +12In In No Short 	| Set ohm meter 20M. Com to GND                  	| J1 pin 1 to GND |   > 100K 	 |   Open  |  Open      	|   Open         |   Open      	|    Open           	|
+|       4 	| NA     	| Set ohm meter 20M. Com to GND                  	| J8 Pin 1 | Open or > 1 Meg 	|     Open |       Open   	|      Open     	|      Open   	|               	|
+|       5 	| NA     	| Set ohm meter 20M. Com to GND                  	| J3 Pin 4 | Open or > 1 Meg 	|     12.1 Meg |      Open   	|        Open 	|  foo |       	|
+|       6 	| NA     	| Set ohm meter 20M. Com to GND                  	| J3 Pin 5 | Open or > 1 Meg 	|   11.7 Meg |         Open    	|         Open     	|         Open     	|               	|
 
 
 
