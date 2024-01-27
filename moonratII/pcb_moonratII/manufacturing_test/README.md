@@ -26,7 +26,10 @@ Photos of received assemblies at: ??????
 These tests make sure we can plug the device into power with out letting out magic smoke.
 **Check polarity on:**
 1. Buzzer
-2. D1
+2. D1  Look for the laser mark across the part. This is the Cathode.
+![image](https://github.com/PubInv/moonrat/assets/5836181/e7f7f59b-3af6-4b98-8371-8dd43a3b12aa)
+
+
 3. Connectors: J5, J6, J9, J10, J11
 4. U1
 
