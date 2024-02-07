@@ -487,6 +487,10 @@
       {
         "netclass": "Heater",
         "pattern": "/VCC"
+      },
+      {
+        "netclass": "Heater",
+        "pattern": "/VCC_RAW"
       }
     ]
   },
