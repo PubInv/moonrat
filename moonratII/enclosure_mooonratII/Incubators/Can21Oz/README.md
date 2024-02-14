@@ -1,6 +1,6 @@
 # Can21Oz "Incubator"
-This "incubator" is more like a hot water bath.
-NEED PHOTO
+This "incubator" is more like a hot water bath.  
+![image](https://github.com/PubInv/moonrat/assets/5836181/0e5a92aa-5a8e-4679-949f-f9b827926b7d)  
 
 ### Construction
 It is fabricated out of a 21oz can which held fruit.  
