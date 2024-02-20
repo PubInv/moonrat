@@ -1,6 +1,3 @@
-# Factory test firmware for MoonRat II 
-
-Firmware for the Control module used to test the control module and the heater
 
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -13,6 +10,7 @@ Firmware for the Control module used to test the control module and the heater
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 const int sensorPin = A0;
+float pipi = 0.02;
 float temperaturaActual;
 
 const int numPoints = 60;
@@ -23,6 +21,7 @@ const int barWidth = SCREEN_WIDTH / numPoints;
 #define BUTTON_UP 6
 #define BUTTON_DOWN 7
 #define PWM_OUT 9
+//#define PWM_OUT A2
 
 int selectedOption = 0;
 int tempMaxOptions[] = {23, 35, 37, 41.5};
@@ -120,6 +119,8 @@ void setup() {
   pinMode(BUTTON_SELECT, INPUT_PULLUP);
   pinMode(BUTTON_UP, INPUT_PULLUP);
   pinMode(BUTTON_DOWN, INPUT_PULLUP);
+
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -185,11 +186,9 @@ void configurarTemperaturaMaxima() {
 void mostrarGraficoTemperatura() {
   while (true)
   {
-    int sensorValue = analogRead(sensorPin);
-    //float voltage = sensorValue * 5.0 / 1023.0;
-    //temperaturaActual = (voltage - 0.5) * 100;
-    temperaturaActual = sensorValue * 50.0 / 1023.0;
-
+    int Volt = analogRead(sensorPin);
+    temperaturaActual = Volt * 250.0 / 1023.0;
+    
 
     for (int i = 0; i < numPoints - 1; i++)
     {
@@ -235,11 +234,13 @@ void mostrarGraficoTemperatura() {
   display.display();
 
   if (temperaturaActual > tempMax) {
-    digitalWrite(PWM_OUT, LOW);
+   // digitalWrite(PWM_OUT, LOW);
+    analogWrite(PWM_OUT, 0);
   } 
   else {
     // Encender el LED si la temperatura es menor o igual que la temperatura máxima
-    digitalWrite(PWM_OUT, HIGH);
+   // digitalWrite(PWM_OUT, HIGH);
+    analogWrite(PWM_OUT, 255);
   }
   // Esperar 1 segundo
   delay(1000);
@@ -249,26 +250,3 @@ void mostrarGraficoTemperatura() {
   // Restaurar la pantalla después de salir del bucle
   displayMenu();
 }
-
-
-## Some test conditions
-Test with out the heater assembly  
-Test with heater assembly  
-Test for missing parts  
-Test for shorts  
-
-## Functional test of the 
-* Display
-* Up button
-* Down button
-* Enter button 
-* Buzzer
-* Temprature device connected
-* Temprare device reading
-* Current sink switch
-* Heater heats
-* Other
-
-## Write Test Procedures for use of this firmware(s)
-
-
