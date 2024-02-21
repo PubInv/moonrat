@@ -150,19 +150,23 @@ void displayMenu() {
 }
 
 void checkButtons() {
-  if (digitalRead(BUTTON_SELECT) == LOW) {
+  // 
+  if (digitalRead(BUTTON_SELECT) == HIGH) {
+    Serial.println(F("BUTTON SELECT PUSHED!"));
     tempMax = tempMaxOptions[selectedOption];
     configurarTemperaturaMaxima();
     delay(200); // Debouncing
   }
 
-  if (digitalRead(BUTTON_UP) == LOW) {
+  if (digitalRead(BUTTON_UP) == HIGH) {
+    Serial.println(F("BUTTON UP PUSHED!"));
     selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
     delay(200); // Debouncing
     displayMenu();
   }
 
-  if (digitalRead(BUTTON_DOWN) == LOW) {
+  if (digitalRead(BUTTON_DOWN) == HIGH) {
+    Serial.println(F("BUTTON DOWN PUSHED!"));
     selectedOption = (selectedOption + 1) % totalOptions;
     delay(200); // Debouncing
     displayMenu();
