@@ -1,4 +1,6 @@
-//Wokwi version: V10 (https://wokwi.com/projects/390933163302682625)
+# Factory test firmware for MoonRat II 
+
+Firmware for the Control module used to test the control module and the heater
 
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -11,10 +13,7 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 const int sensorPin = A0;
-int HEATER_PWM = 10;
-int buzzerPin = 9;
 float temperaturaActual;
-
 
 const int numPoints = 60;
 float temperaturaHistorial[numPoints] = {0};
@@ -23,11 +22,12 @@ const int barWidth = SCREEN_WIDTH / numPoints;
 #define BUTTON_SELECT 5
 #define BUTTON_UP 6
 #define BUTTON_DOWN 7
+#define PWM_OUT 9
 
 int selectedOption = 0;
 int tempMaxOptions[] = {23, 35, 37, 41.5};
 int tempMin = 0;
-int tempMax = 0;
+int tempMax;
 int totalOptions = 4; // Cambia esto al número total de opciones en tu menú
 
 
@@ -99,12 +99,8 @@ static const unsigned char PROGMEM image_data_Saraarray[] = {
 };
 
 void setup() {
-  pinMode(buzzerPin, OUTPUT);
-  analogWrite(buzzerPin, 50);
-  delay(500);
-  analogWrite(buzzerPin,0);
-  delay(100);
   Serial.begin(9600);
+  Serial.println(F("Hello!"));
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("Error al iniciar el OLED"));
     for (;;)
@@ -118,13 +114,9 @@ void setup() {
   // Display static text
   display.drawBitmap(0, 0, image_data_Saraarray, 128, 64, 1);
   display.display();
-  delay(1500);
+  delay(1000);
   display.clearDisplay();
-  display.setCursor(10, 10);
-  display.println(F("Version/Wokwi: V10"));
-  display.display();
-  delay(2500);
-  display.clearDisplay();
+
   pinMode(BUTTON_SELECT, INPUT_PULLUP);
   pinMode(BUTTON_UP, INPUT_PULLUP);
   pinMode(BUTTON_DOWN, INPUT_PULLUP);
@@ -133,13 +125,71 @@ void setup() {
 void loop() {
   displayMenu();
   checkButtons();
-  configurarTemperaturaMaxima();
+}
+
+void displayMenu() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println(F("SELECT SAMPLE"));
+  display.setCursor(10, 12);
+  display.println(F("Yeast and mold"));
+  display.setCursor(10, 24);
+  display.println(F("Coliform"));
+  display.setCursor(10, 36);
+  display.println(F("Env. listeria"));
+  display.setCursor(10, 48);
+  display.println(F("Salmonella Express"));
   
+
+  int circleY = 15 + selectedOption * 12; // Posición del círculo relleno
+  display.fillCircle(5, circleY, 3, SSD1306_WHITE);
+    display.display();
+}
+
+void checkButtons() {
+  if (digitalRead(BUTTON_SELECT) == LOW) {
+    tempMax = tempMaxOptions[selectedOption];
+    configurarTemperaturaMaxima();
+    delay(200); // Debouncing
+  }
+
+  if (digitalRead(BUTTON_UP) == LOW) {
+    selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
+    delay(200); // Debouncing
+    displayMenu();
+  }
+
+  if (digitalRead(BUTTON_DOWN) == LOW) {
+    selectedOption = (selectedOption + 1) % totalOptions;
+    delay(200); // Debouncing
+    displayMenu();
+  }
+}
+
+void configurarTemperaturaMaxima() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.print("Target Temp.");
+  display.setCursor(0, 16);
+  display.print(tempMax);
+  display.println("C");
+  display.display();
+  delay(1000);
+  mostrarGraficoTemperatura();
+}
+
+void mostrarGraficoTemperatura() {
   while (true)
   {
-    int Volt = analogRead(sensorPin);
-    temperaturaActual = Volt * 250.0 / 1023.0;
-    
+    int sensorValue = analogRead(sensorPin);
+    //float voltage = sensorValue * 5.0 / 1023.0;
+    //temperaturaActual = (voltage - 0.5) * 100;
+    temperaturaActual = sensorValue * 50.0 / 1023.0;
+
 
     for (int i = 0; i < numPoints - 1; i++)
     {
@@ -181,73 +231,44 @@ void loop() {
   display.print("Min: ");
   display.print(tempMin);
   display.print("C");
+
   display.display();
+
   if (temperaturaActual > tempMax) {
-  // digitalWrite(PWM_OUT, LOW);
-  analogWrite(HEATER_PWM, 0);
+    digitalWrite(PWM_OUT, LOW);
   } 
   else {
-  analogWrite(HEATER_PWM, 255);
+    // Encender el LED si la temperatura es menor o igual que la temperatura máxima
+    digitalWrite(PWM_OUT, HIGH);
   }
+  // Esperar 1 segundo
   delay(1000);
 }
+
+
+  // Restaurar la pantalla después de salir del bucle
   displayMenu();
 }
 
-void displayMenu() {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-  display.println(F("SELECT SAMPLE"));
-  display.setCursor(10, 12);
-  display.println(F("Yeast and mold"));
-  display.setCursor(10, 24);
-  display.println(F("Coliform"));
-  display.setCursor(10, 36);
-  display.println(F("Env. listeria"));
-  display.setCursor(10, 48);
-  display.println(F("Salmonella Express"));
-  
 
-  int circleY = 15 + selectedOption * 12; // Posición del círculo relleno
-  display.fillCircle(5, circleY, 3, SSD1306_WHITE);
-    display.display();
-}
+## Some test conditions
+Test with out the heater assembly  
+Test with heater assembly  
+Test for missing parts  
+Test for shorts  
 
-void checkButtons() {
-  while (tempMax == 0){
-  if (digitalRead(BUTTON_SELECT) == HIGH) {
-    Serial.println(F("BUTTON SELECT PUSHED!"));
-    tempMax = tempMaxOptions[selectedOption];
-    delay(200); // Debouncing
-  }
+## Functional test of the 
+* Display
+* Up button
+* Down button
+* Enter button 
+* Buzzer
+* Temprature device connected
+* Temprare device reading
+* Current sink switch
+* Heater heats
+* Other
 
-  if (digitalRead(BUTTON_UP) == HIGH) {
-    Serial.println(F("BUTTON UP PUSHED!"));
-    selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
-    delay(200); // Debouncing
-    displayMenu();
-  }
+## Write Test Procedures for use of this firmware(s)
 
-  if (digitalRead(BUTTON_DOWN) == HIGH) {
-    Serial.println(F("BUTTON DOWN PUSHED!"));
-    selectedOption = (selectedOption + 1) % totalOptions;
-    delay(200); // Debouncing
-    displayMenu();
-  }
-  }
-}
 
-void configurarTemperaturaMaxima() {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-  display.print("Target Temp.");
-  display.setCursor(0, 16);
-  display.print(tempMax);
-  display.println("C");
-  display.display();
-  delay(1000);
-}
