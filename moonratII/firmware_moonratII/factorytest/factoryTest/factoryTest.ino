@@ -18,7 +18,8 @@ const int barWidth = SCREEN_WIDTH / numPoints;
 #define BUTTON_SELECT 5
 #define BUTTON_UP 6
 #define BUTTON_DOWN 7
-#define PWM_OUT 9
+#define HEATER_PWM 8
+#define BUZZER_OUT 9
 
 int selectedOption = 0;
 int tempMaxOptions[] = {23, 35, 37, 41.5};
@@ -116,6 +117,9 @@ void setup() {
   pinMode(BUTTON_SELECT, INPUT_PULLUP);
   pinMode(BUTTON_UP, INPUT_PULLUP);
   pinMode(BUTTON_DOWN, INPUT_PULLUP);
+
+  pinMode(BUZZER_OUT,OUTPUT);
+  pinMode(HEATER_PWM,OUTPUT);
 }
 
 void loop() {
@@ -145,19 +149,21 @@ void displayMenu() {
 }
 
 void checkButtons() {
-  if (digitalRead(BUTTON_SELECT) == LOW) {
+  if (digitalRead(BUTTON_SELECT) == HIGH) {
     tempMax = tempMaxOptions[selectedOption];
     configurarTemperaturaMaxima();
+    digitalWrite(HEATER_PWM, HIGH);
     delay(200); // Debouncing
+    digitalWrite(HEATER_PWM, LOW);
   }
 
-  if (digitalRead(BUTTON_UP) == LOW) {
+  if (digitalRead(BUTTON_UP) == HIGH) {
     selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
     delay(200); // Debouncing
     displayMenu();
   }
 
-  if (digitalRead(BUTTON_DOWN) == LOW) {
+  if (digitalRead(BUTTON_DOWN) == HIGH) {
     selectedOption = (selectedOption + 1) % totalOptions;
     delay(200); // Debouncing
     displayMenu();
@@ -231,11 +237,11 @@ void mostrarGraficoTemperatura() {
   display.display();
 
   if (temperaturaActual > tempMax) {
-    digitalWrite(PWM_OUT, LOW);
+    digitalWrite(HEATER_PWM, LOW);
   } 
   else {
     // Encender el LED si la temperatura es menor o igual que la temperatura máxima
-    digitalWrite(PWM_OUT, HIGH);
+   digitalWrite(HEATER_PWM, HIGH);
   }
   // Esperar 1 segundo
   delay(1000);

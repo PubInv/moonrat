@@ -20,7 +20,9 @@ const int barWidth = SCREEN_WIDTH / numPoints;
 #define BUTTON_SELECT 5
 #define BUTTON_UP 6
 #define BUTTON_DOWN 7
-#define PWM_OUT 9
+
+#define HEATER_PWM 8
+#define BUZZER_OUT 9
 //#define PWM_OUT A2
 
 int selectedOption = 0;
@@ -119,6 +121,9 @@ void setup() {
   pinMode(BUTTON_SELECT, INPUT_PULLUP);
   pinMode(BUTTON_UP, INPUT_PULLUP);
   pinMode(BUTTON_DOWN, INPUT_PULLUP);
+
+  pinMode(BUZZER_OUT,OUTPUT);
+  pinMode(HEATER_PWM,OUTPUT);
 
   Serial.begin(9600);
 }
@@ -239,12 +244,12 @@ void mostrarGraficoTemperatura() {
 
   if (temperaturaActual > tempMax) {
    // digitalWrite(PWM_OUT, LOW);
-    analogWrite(PWM_OUT, 0);
+    analogWrite(HEATER_PWM, 0);
   } 
   else {
     // Encender el LED si la temperatura es menor o igual que la temperatura máxima
-   // digitalWrite(PWM_OUT, HIGH);
-    analogWrite(PWM_OUT, 255);
+ //  digitalWrite(PWM_OUT, HIGH);
+    analogWrite(HEATER_PWM, 255);
   }
   // Esperar 1 segundo
   delay(1000);
