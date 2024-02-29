@@ -1,1 +1,0 @@
-# Factoy test firmware for MoonRat II 

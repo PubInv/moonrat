@@ -2,10 +2,13 @@
 
 
 View both schematic and PCB files with Kicanvas   
-| Description             	| LINK                                                                                                	|   	|
+| Description             	| LINK                                                                                                	| Note:  	|
 |-------------------------	|-------------------------------------------------------------------------------------------------	|---	|
-| Schematic 	|[Schematic](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmaster%2FmoonratII%2FmoonratII%2FmoonratII.kicad_sch)
-| PCB        	|[PCB](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmaster%2FmoonratII%2FmoonratII%2FmoonratII.kicad_pcb)|   	|
+| Schematic 	|[MoonRatII Schematic](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmain%2FmoonratII%2Fpcb_moonratII%2FmoonratII.kicad_sch) | |
+| PCB        	|[MoonRatII PCB](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2Fmoonrat%2Fblob%2Fmain%2FmoonratII%2Fpcb_moonratII%2FmoonratII.kicad_pcb0)|   	|
+
+
+
 
 
 ## Some Stale Screen Shots
