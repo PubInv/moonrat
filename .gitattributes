@@ -1,0 +1,10 @@
+# Created by Lee Erickson
+# 
+
+### KiCad ###
+
+*.kicad_pro -text
+*.kicad_sch -text
+*.kicad_pcb -text
+*.kicad_sym -text
+
