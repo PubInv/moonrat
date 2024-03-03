@@ -9,7 +9,7 @@ Conn_02x05_Odd_Even,J5,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,"2.54mm St
 Screw_Terminal_01x06,J6,"GeneralPurposeAlarmDevicePCB:1x6P 20A -40℃~+105℃ 300V Green 12~30 Straight pin 5.08mm 2.5 1 6 Plugin,P=5.08mm Screw terminal ROHS","1x6P -40℃~+105℃ 8A 130V Green 18~26 Straight 2.54mm 1 1 6 Plugin,P=2.54mm Screw terminal ROHS",C474924
 Screw_Terminal_01x06,J9,"GeneralPurposeAlarmDevicePCB:1x6P 20A -40℃~+105℃ 300V Green 12~30 Straight pin 5.08mm 2.5 1 6 Plugin,P=5.08mm Screw terminal ROHS","1x6P -40℃~+105℃ 8A 130V Green 18~26 Straight 2.54mm 1 1 6 Plugin,P=2.54mm Screw terminal ROHS",C474924
 Conn_02x05_Odd_Even,J10,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,"2.54mm Straight 2x5P 5 Push - Pull 2.54mm 2 Plugin,P=2.54mm IDC Connectors ROHS",C5665
-Screw_Terminal_01x02,J11,TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal,"1x2P 20A -40℃~+105℃ 300V Green 12~30 Straight pin 5.08mm 2.5 1 2 Plugin,P=5.08mm Screw terminal ROHS",C2915639
+Screw_Terminal_01x02,J11,TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal,"1x2P 6A 150V Green 18~26 Straight 2.54mm 1 1 2 Plugin,P=2.54mm Screw terminal ROHS ",C557685 
 SMD_round_nut_M2*4*5+1.5,MF4,TH162050CTJ,,C3020130
 SMD_round_nut_M2*4*5+1.5,MF5,TH162050CTJ,,C3020130
 SMD_round_nut_M2*4*5+1.5,MF6,TH162050CTJ,,C3020130
