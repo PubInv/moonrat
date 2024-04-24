@@ -66,7 +66,7 @@ Horacio Garcia
 Silvia Castillas    
 [Melanie Laporte ](https://github.com/MelanieLaporte)  
 [F. Lee Erickson](https://github.com/ForrestErickson)  
-[Robert Read of Public Invention](https://github.com/PubInv/)  
+[Robert L. Read of Public Invention](https://github.com/PubInv/)  
 
 <hr>
 <h6><i> Updated by F. Lee Erickson, 20240424</i></h6>
