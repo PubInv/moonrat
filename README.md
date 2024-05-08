@@ -61,13 +61,19 @@ Incubator [https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf](http
 Thanks to Dr. Sabia Abidi of Rice University for input and references.
 
 ## MoonRatII Team
-Harshit Kumar  
-Enrique Ruiz   
-Horacio Garcia   
-Silvia Castillas    
-[Melanie Laporte ](https://github.com/MelanieLaporte)  
+[Melanie Laporte](https://github.com/MelanieLaporte)  
+
+[Silvia Castillas](https://github.com/SilviaKarbid)  
+
+[Harshit Kumar](https://github.com/harshit9602)
+
+[Enrique Ruiz](https://github.com/kurama79) 
+
+[Horacio Garcia](https://github.com/HJGV05) 
+
 [F. Lee Erickson](https://github.com/ForrestErickson)  
-[Robert L. Read of Public Invention](https://github.com/PubInv/)  
+
+[Robert L. Read of Public Invention](https://github.com/PubInv/) 
 
 <hr>
 <h6><i> Updated by F. Lee Erickson, 20240424</i></h6>
