@@ -5,9 +5,10 @@ Aliases used by other developers include Moonrat, Rice MiniCubator, and Rice Pet
 Visit the Legacy folder (above) for the work of volunteers prior to 2023 and the hand built prototype.  
 
 # Status, April 2024  
-The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 1 for use by the USA team.  
-The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 2 for use by  Mexico team. 
-Enclosure design for the Controller Assembly is underway.  
+The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 1 PWB for use by the USA team.  
+The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 2 PWB for use by  Mexico team. 
+Enclosure design for the Controller Assembly is underway. 
+Rev 3 PWB TBA. 
 
 # Current Design Summary
 In one schematic and PCB, we have developed a "Control Assembly" and a "Heater Assembly".  
