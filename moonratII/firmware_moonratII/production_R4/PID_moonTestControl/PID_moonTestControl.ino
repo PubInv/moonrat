@@ -14,6 +14,7 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // PID variables
+#define DESIRED_TEMP 25
 float Kp = 5.5;
 float Ki = 3.7;
 float Kd = 0.0;
