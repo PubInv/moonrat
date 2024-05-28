@@ -18,20 +18,25 @@ a=100;
 r=1; //size
 
 //Defines the spacing of the holes
-s=6; //space
+hole_radius = 3;
+// s should be at least twice the hole_radius!
+s=10; //space
 
-t=t_plate+1; //thickness or depth of the holes
+t=t_plate*3; //thickness or depth of the holes
+
 
 
 module arrayOfCylinders(r=1,s=6,t=2) {
   q = floor(a/2/s);
     for (x=[-q:q])
       for (y=[-q:q])
-        translate([x*s,y*s,r/2])
+        translate([x*s,y*s,0])
           cylinder(h=t, r=r, ,center=true);
 }
 
-// difference(){
-// cylinder(h=t_plate, r=(d_paper)/2, center=true);
-// array();
-// }
+r=(d_paper)/2;
+t=4;  
+difference(){
+ cylinder(h=t_plate, r=(d_paper)/2, center=true);
+ arrayOfCylinders(hole_radius,s,t);
+ }
