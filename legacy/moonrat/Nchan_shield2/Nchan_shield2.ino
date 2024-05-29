@@ -57,14 +57,18 @@
 // #include <Adafruit_GrayOLED.h>
 #include <gfxfont.h>
 #include <Adafruit_GFX.h>
-#include <Adafruit_SPITFT.h>
-#include <Adafruit_SPITFT_Macros.h>
+// #include <Adafruit_SPITFT.h>
+// #include <Adafruit_SPITFT_Macros.h>
 #include <Adafruit_SSD1306.h>
 #include <splash.h>
 // EEPROM for arc32 - Version: Latest
 #include <EEPROM.h>
 #include <SPI.h>
 #include <Wire.h>
+#include <DailyStruggleButton.h>
+
+
+
 // For our temperature sensor
 
 // This hardware uses a "onewire" digital temperature sensor
@@ -102,6 +106,9 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 #define BTN_SELECT 5
 #define BTN_UP 6
 #define BTN_DOWN 7
+// DailyStruggleButton dnButton;
+// DailyStruggleButton upButton;
+// DailyStruggleButton selectButton;
 
 #define BZR_PIN 9
 
@@ -109,11 +116,11 @@ Adafruit_SSD1306 display(WIDTH, HEIGHT, &Wire, OLED_RESET);
 #define TEMP_PIN A0  //This is the Arduino Pin that will read the sensor output
 int sensorInput;    //The variable we will use to store the sensor input
 
-#define MAX_TEMPERATURE_C 40
+#define MAX_TEMPERATURE_C 42
 
 // #define USE_DEBUGGING
-// #define USE_DEBUGGING 1
-// #define USE_LOW_TEMP 1
+#define USE_DEBUGGING 1
+#define USE_LOW_TEMP 1
 #ifdef USE_LOW_TEMP
 uint16_t targetTemperatureC = 30;// Celcius
 #else
@@ -214,16 +221,22 @@ int xaxisright = 128 - 24;
 //menu variables
 int menuSelection = 0;
 bool inMainMenu = true;
-bool up ;
-bool down ;
-bool sel ;
+bool up = false ;
+bool down = false;
+bool sel = false;
 
-const int BAUD_RATE = 9600;
+// for debouncing
+bool up_pressed = false;
+bool dn_pressed = false;
+bool sel_pressed = false;
+
+const int BAUD_RATE = 19200;
 
 //eeprom variables
 // This basically implements a ring buffer...
 // NOTE: I treat the EEPROM as 16-bit words.
 #define TARGET_TEMP_ADDRESS 511
+// #define TARGET_TEMP_ADDRESS 211
 // Because we keep the "INDEX" at location, we chave to be careful
 // about our accounting and our meaning.
 // INDEX is the number of samples we have at any point in time.
@@ -231,6 +244,7 @@ const int BAUD_RATE = 9600;
 // in which a sample is not stored.
 #define INDEX_ADDRESS 0 //location of index tracker in EEPROM
 #define MAX_SAMPLES 509 //maximum number of samples that we can store in EEPROM
+// #define MAX_SAMPLES 109 //maximum number of samples that we can store in EEPROM
 uint16_t value1;//first two bits of eeprom storage
 uint16_t value2;//last bits of EEprom
 
@@ -240,7 +254,6 @@ bool incubating = true;
 bool entryFlag = false; //set to true when data should be put in EEPROM ie every 5 minutes
 int ticksSinceHeat = 0;
 int b = 1; //initialize serial print index
-
 
 void enter_warm_up_phase() {
   // These are the "balance" points
@@ -430,6 +443,7 @@ void showMenu() {
   //menu option for detailed graph
   display.println(F("Graph 1"));
   display.setCursor(LEFT_MARGIN, SPLIT + 2 * LINE_HEIGHT);
+
   //menu option for graph over 48 hours
 //  display.println(F("Graph 2"));
 //  display.setCursor(LEFT_MARGIN, SPLIT + 3 * LINE_HEIGHT);
@@ -441,9 +455,11 @@ void showMenu() {
   } else {
     display.println(F("Start"));
   }
+
   //print cursor
   display.setCursor(0, SPLIT + menuSelection * LINE_HEIGHT);
   display.fillCircle(3, SPLIT + menuSelection * LINE_HEIGHT + 3, 3, SSD1306_WHITE);
+
   display.display();
 }
 
@@ -535,7 +551,7 @@ void setHeatPWM(double intended_df) {
     intended_df = 0.0;
   }
   uint32_t tm = millis();
-  weighted_voltage_ms += ((double) current_PWM / 255.0)* (tm - time_of_last_PWM);
+  // _voltage_ms += ((double) current_PWM / 255.0)* (tm - time_of_last_PWM);
   const int pwm = (int) intended_df;
   analogWrite(HEAT_PIN, pwm);
   Serial.print(F("Set Heat PWM :"));
@@ -558,11 +574,7 @@ void getTimeString(char *buff) {
   sprintf(buff, "%02d:%02d:%02d", hours, mins, secs);
 
 }
-//Turn on buzzer at an interval of 20 seconds
-void buzz() {
-  digitalWrite(BZR_PIN, HIGH);
-  delay(20);
-}
+
 //creates a whole number
 uint16_t floatToSixteen(float flt) {
   uint16_t out = round(flt * 100);
@@ -635,6 +647,9 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(BAUD_RATE); //Start the Serial Port at 9600 baud (default)
   delay(500);
+
+  //local_ptr_to_serial = &Serial;
+
   //  while (! Serial); // Wait untilSerial is ready
   Serial.println(F("Enter u, d, s"));
 
@@ -733,11 +748,53 @@ double read_temp() {
 #define PERIOD_TO_CHECK_TEMP_MS 5000
 uint32_t last_temp_check_ms = 0;
 bool returnToMain = false;
+#define LOOP_PERIOD 250
+#define BUTTON_POLL_PERIOD 0
+uint32_t last_loop_run = 0;
 void loop() {
-  delay(100);
+  delay(BUTTON_POLL_PERIOD);
 
+  bool sel_button = digitalRead(BTN_SELECT);
+  bool up_button = digitalRead(BTN_UP);
+  bool dn_button = digitalRead(BTN_DOWN);
+  sel_pressed |= sel_button;
+  up_pressed |= up_button;
+  dn_pressed |= dn_button;
+  // This is meant to catch the release of the button!
+  sel = sel_pressed && !sel_button;
+  down = dn_pressed && !dn_button;
+  up = up_pressed && !up_button;
+  if (sel) sel_pressed = false;
+  if (down) dn_pressed = false;
+  if (up) up_pressed = false;
+  
+  // Serial.println("buttons:");
+  //  Serial.print(dn_button);
+  // Serial.print(F(" "));
+  // Serial.print(up_button);
+  // Serial.print(F(" "));
+  // Serial.println(sel_button);
+
+  //   Serial.println("presses:");
+  //  Serial.print(dn_pressed);
+  // Serial.print(F(" "));
+  // Serial.print(up_pressed);
+  // Serial.print(F(" "));
+  // Serial.println(sel_pressed);
+  
+  // Serial.print(down);
+  // Serial.print(F(" "));
+  // Serial.print(up);
+  // Serial.print(F(" "));
+  // Serial.println(sel);
 
   uint32_t loop_start = millis();
+  if (!((sel || up  || down) ||
+      (loop_start - last_loop_run > LOOP_PERIOD))) {
+        return;
+  }
+
+
   // Test reading the buttons...
 //  if (LOG_LEVEL >= LOG_VERBOSE) {
 //    Serial.print(F("Incubating: "));
@@ -759,9 +816,10 @@ void loop() {
     sel = (T == 's');
     dumpdata = (T == 'x');
   } else {
-    sel = digitalRead(BTN_SELECT);
-    up = digitalRead(BTN_UP);
-    down = digitalRead(BTN_DOWN);
+ //   Serial.println(F("loop AAA")); 
+    // sel = digitalRead(BTN_SELECT);
+    // up = digitalRead(BTN_UP);
+    // down = digitalRead(BTN_DOWN);
   }
 
   if (dumpdata) {
@@ -781,22 +839,29 @@ void loop() {
   int multiple = 0;
   if (!inMainMenu && sel) {
     returnToMain = true;
+    sel = false;
   }
-
+  // Serial.println(F("loop ZZZ")); 
   //controls menu selection
   if (inMainMenu) {
     //read buttons and menu
     if (up && menuSelection > 0) {
       menuSelection--;
+      up = false;
     }
     else if (down && menuSelection < 3) {
       menuSelection++;
+      down = false;
     }
     else if (sel) {
       inMainMenu = false;
+      sel = false;
     } 
+ //   Serial.println(F("loop PPP 1")); 
     showMenu();
+ //   Serial.println(F("loop PPP 2")); 
   }  else {
+  //    Serial.println(F("loop RRR")); 
        switch (menuSelection) {
         case TEMPERATURE_M :
            showCurStatus(temperatureC, duty_factor());
@@ -836,11 +901,19 @@ void loop() {
         }
           break;
       }
+  //    Serial.println(F("loop MMM")); 
       if (returnToMain) {
         returnToMain = false;
         inMainMenu = true;
+        sel = false;
       }
+  //    Serial.println(F("loop NNN"));
     }
+
+  sel = false;
+  up = false;
+  down = false;
+  //Serial.println(F("loop BBB")); 
   // We have to process menu changes without delay to have
   // a good user experience; but reading the temperature can
   // be delayed.
@@ -851,18 +924,18 @@ void loop() {
   last_temp_check_ms = loop_start;
 
   temperatureC = read_temp();
-  if (LOG_LEVEL >= LOG_DEBUG) {
-    Serial.print(F("Temp (C): "));
-    Serial.println(temperatureC);
-    if (LOG_LEVEL >= LOG_VERBOSE ) {
-      Serial.print(F("Target Temp (C): "));
-      Serial.println(targetTemperatureC);
-      Serial.print(F("Time spent incubating (s):"));
-      Serial.println(((float) time_incubating()) / 1000.0);
-      Serial.print(F("Time spent heating (s):"));
-      Serial.println(((float) time_heating()) / 1000.0);
-    }
-  }
+  // if (LOG_LEVEL >= LOG_DEBUG) {
+  //   Serial.print(F("Temp (C): "));
+  //   Serial.println(temperatureC);
+  //   if (LOG_LEVEL >= LOG_VERBOSE ) {
+  //     Serial.print(F("Target Temp (C): "));
+  //     Serial.println(targetTemperatureC);
+  //     Serial.print(F("Time spent incubating (s):"));
+  //     Serial.println(((float) time_incubating()) / 1000.0);
+  //     Serial.print(F("Time spent heating (s):"));
+  //     Serial.println(((float) time_heating()) / 1000.0);
+  //   }
+  // }
 // Test warm_up_phase or not...
   if ((temperatureC < (targetTemperatureC - WARM_UP_TEMP_DIFF_C))
     && !warm_up_phase)
@@ -963,7 +1036,6 @@ void loop() {
   // and I don't have a buzzer installed!
   // I think we need a new state to represent incubation ended..
   if (incubating && (timern % 60 == 0)) {
-    //buzz();
     //Serial.println(float(timerpulse/countery));
   }
 
