@@ -16,12 +16,16 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // I/0 VARIABLES
+// NOTE: Rob thinks this is a TMP36
 const int sensorPin = A0; //TMP37 SOC pin
 #define HEATER_PIN  10 //Heater (termopad) pin
 #define BUZZER_PIN  9 // Buzzer pin
 #define BUTTON_SELECT 5 //Button = SELECT pin
 #define BUTTON_UP 7 //Button =  UP pin
 #define BUTTON_DOWN 6 //Button = DOWN pin
+#define TRIGGER_PIN 11 // used to set a time signal for triggering oscilloscope
+
+const int DEBUG_TEMP = 1;
 float CurrentTemp;
 float OldErrorInput = 0.0;
 float calibration;
@@ -33,7 +37,10 @@ const int barWidth = SCREEN_WIDTH / numPoints;
 
 // MENU VARIABLES
 int selectedOption = 0;
-int tempMaxOptions[] = {29, 35, 37, 41.5};
+// WARNING! FIX!
+// This code does not compile (at least in IDE 2.3.2). I will ask Horacio about this...
+// int tempMaxOptions[] = {29, 35, 37, 41.5};
+int tempMaxOptions[] = {29, 35, 37, 41};
 int timeMaxOptions[] = {12, 24, 36, 48};
 int tempMin = 0;
 int tempMax = 0;
@@ -53,12 +60,14 @@ float FilteredTemp = 0.0;
 
 // TIMER VARIABLES
 unsigned long timeNow = 0;
-unsigned long timeLast = 0;
+// unsigned long timeLast = 0;
 int startingHour = 0;
 int seconds = 0;
 int secondOld = 0;
 int minutes = 0;
 int hours = startingHour;
+
+int secondsLastDisplay = 0;
 
 // Fuzzy
 Fuzzy *fuzzy = new Fuzzy();
@@ -177,8 +186,8 @@ long readVcc() {
 void setup() {
 
 #if defined(R4)
-  analogReadResolution(10);
-  analogReference(AR_DEFAULT);
+ analogReadResolution(10);
+ analogReference(AR_DEFAULT);
 #else
   analogReference(DEFAULT);
 #endif
@@ -191,12 +200,14 @@ void setup() {
   analogWrite(BUZZER_PIN,0);
   delay(100);
   Serial.begin(9600);
+  delay(1000);
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("Error while initializing OLED"));
     for (;;)
-      ;
+      Serial.println(F("Error while initializing OLED"));
   }
   delay(100);
+  Serial.println("successfully started OLED");
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -299,78 +310,63 @@ void setup() {
   fuzzy->addFuzzyRule(fuzzyRule03);
 }
 
-
-void loop() {
-  tempMax = 0;
-  timeMax = 0;
-  seconds = 0;
-  minutes = 0;
-  hours = 0;
-  int flag = 0;
-  int exit = 0;
-  delay(1000);
-  displayTempMenu();
-  checkTempButtons();
-  selectedOption = 0;
-  displayTimeMenu();
-  checkTimeButtons();
-  setMaxTemp();
-  timeLast = millis()/1000;
-  while (flag == 0)
-  {
-    if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DOWN) == HIGH) && (digitalRead(BUTTON_SELECT) == HIGH))
-      {
-        flag = 1;
-      }
-    Serial.println(timeMax);
-    while((hours >= timeMax) && exit == 0)
-      {
-        display.clearDisplay();
-        display.setTextSize(1);
-        display.setTextColor(SSD1306_WHITE);
-        display.setCursor(10, 8);
-        display.println(F("INCUBTATION TIME"));
-        display.setCursor(30, 17);
-        display.println(F("COMPLETED!"));
-        display.setCursor(18, 30);
-        display.println(F("TO EXIT, PRESS"));
-        display.setCursor(38, 39);
-        display.println(F("UP/DOWN"));
-        display.setCursor(18, 48);
-        display.println(F("SIMULTANEOUSLY"));
-        display.display();
-        analogWrite(BUZZER_PIN, 100); //Put to 100 after tests
-        delay(100);
-        analogWrite(BUZZER_PIN,0);
-        delay(100);
-        flag = 1;
-        if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DOWN) == HIGH))
-        {
-          exit = 1;
-        }
-      }
-    timeNow = millis()/1000; // the number of milliseconds that have passed since boot
-    seconds = timeNow - timeLast;
-
-    if(seconds - secondOld != 0)
-    {
-      CurrentTemp = (analogRead(sensorPin) *4.98*50.0)/1024.0; //T6G SOC based on TMP37 Sensor
+void readTempAndUpdateFiler() {
+      digitalWrite(TRIGGER_PIN,HIGH);
+      digitalWrite(TRIGGER_PIN,LOW);
+      int reading0 = analogRead(sensorPin); 
+      delay(90);
+      int reading1 = analogRead(sensorPin);
+//      Serial.print("reading0: "); Serial.println(reading0);
+//      Serial.print("reading1: "); Serial.println(reading1);
+      int reading = reading1;
+      Serial.println();
+      Serial.print("reading: "); Serial.println(reading);
+      // NOte: This is a TMP36, not a TMP37
+  //    CurrentTemp = (reading1 *4.98*50.0)/1024.0; //T6G SOC based on TMP37 Sensor
       // Kalman Filter
+      // ROB Treating this math based on a TMP36
+      if (DEBUG_TEMP) {
+
+         //getting the voltage reading from the temperature sensor
+ 
+ // converting that reading to voltage, for 3.3v arduino use 3.3
+        float voltage = reading1 * 5.0;
+        voltage /= 1024.0; 
+ 
+ // print out the voltage
+  //      Serial.print("volts: "); Serial.println(voltage);
+ 
+ // now print out the temperature
+        float temperatureC = (voltage - 0.5) * 100 ;  //converting from 10 mv per degree wit 500 mV offset
+                                               //to degrees ((voltage - 500mV) times 100)
+        Serial.print(temperatureC); Serial.println(" degrees C");
+//         Serial.print("temp:");
+//         Serial.println(CurrentTemp);
+
+//  // now convert to Fahrenheit
+//         float temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
+//         Serial.print(temperatureF); Serial.println(" degrees F");
+//         // Using Different math:
+//         Serial.print("final: "); 
+        CurrentTemp = temperatureC;
+//        Serial.println(CurrentTemp); 
+      }
       Pc = P + Q;
       G = Pc/(Pc + R);
       P = (1-G) * Pc;
       Xp = FilteredTemp;
       Zp = Xp;
       FilteredTemp = G*(CurrentTemp-Zp)+Xp;    
-
+      //  Serial.print("filter: "); 
+      //  Serial.println(FilteredTemp); 
       for (int i = 0; i < numPoints - 1; i++)
       {
         TempHistory[i] = TempHistory[i + 1];
       }
-
-      TempHistory[numPoints - 1] = FilteredTemp;
-
-      display.clearDisplay();
+      TempHistory[numPoints - 1] = FilteredTemp;  
+}
+void renderDisplay() {
+    display.clearDisplay();
       display.setTextSize(1);
       display.setTextColor(SSD1306_WHITE);
       display.setCursor(0, 2);
@@ -427,20 +423,106 @@ void loop() {
     display.print("PWM:");
     display.print(int(round(OutputFreq)));
     display.display();
-  }
-  if (seconds == 60)
-{
-  timeLast = timeNow;
-  minutes = minutes + 1; 
 }
-if (minutes == 60)
-{
+int renderDisplay_bool = 0;
+void loop() {
+  // delay(1000);
+  // myReadTemp();
+  // return;
+  Serial.print("in loop!");
+  tempMax = 0;
+  timeMax = 0;
+  seconds = 0;
   minutes = 0;
-  hours = hours + 1; 
-}
-secondOld = seconds;
-}
-  //displayTempMenu();
+  hours = 0;
+  int flag = 0;
+  int exit = 0;
+  delay(1000);
+  displayTempMenu();
+  checkTempButtons();
+  selectedOption = 0;
+  displayTimeMenu();
+  checkTimeButtons();
+  setMaxTemp();
+  // timeLast = millis()/1000;
+  //     Serial.print("timelLast: ");
+  //   Serial.println(timeLast);
+  // renderDisplay_bool = (((int)timeLast) % 10) == 0;
+  // if (renderDisplay_bool) {
+  //   Serial.print("renderDisplay: ");
+  //   Serial.println(renderDisplay_bool);
+  // }
+  while (flag == 0)
+  {
+    if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DOWN) == HIGH) && (digitalRead(BUTTON_SELECT) == HIGH))
+      {
+        flag = 1;
+      }
+   // Serial.println("about to print timeMax");
+  //  Serial.println(timeMax);
+    while((hours >= timeMax) && exit == 0)
+      {
+        display.clearDisplay();
+        display.setTextSize(1);
+        display.setTextColor(SSD1306_WHITE);
+        display.setCursor(10, 8);
+        display.println(F("INCUBTATION TIME"));
+        display.setCursor(30, 17);
+        display.println(F("COMPLETED!"));
+        display.setCursor(18, 30);
+        display.println(F("TO EXIT, PRESS"));
+        display.setCursor(38, 39);
+        display.println(F("UP/DOWN"));
+        display.setCursor(18, 48);
+        display.println(F("SIMULTANEOUSLY"));
+        display.display();
+        analogWrite(BUZZER_PIN, 100); //Put to 100 after tests
+        delay(100);
+        analogWrite(BUZZER_PIN,0);
+        delay(100);
+        flag = 1;
+        if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DOWN) == HIGH))
+        {
+          exit = 1;
+        }
+      }
+    
+    delay(1000);
+    timeNow = (millis()/1000); // the number of milliseconds that have passed since boot
+    seconds = timeNow;
+
+    int secondsToUpdateTemp = 2;
+    int secondsToUpdateDisplay = 10; 
+    assert(secondsToUpdateDisplay > secondsToUpdateTemp);
+    Serial.print(" S: ");
+    Serial.println(seconds);
+    Serial.print(" SO: ");
+    Serial.println(secondOld);
+
+    if((seconds - secondOld) >= secondsToUpdateTemp) // This occurs one per second....
+    {
+      readTempAndUpdateFiler(); 
+      renderDisplay_bool = (seconds - secondsLastDisplay) > secondsToUpdateDisplay;
+      if (renderDisplay_bool) {
+        Serial.print("renderDisplay: ");
+        Serial.println(renderDisplay_bool);
+      }   
+      if (renderDisplay_bool) {
+        renderDisplay();
+        secondsLastDisplay = seconds;
+      } else {
+      //  display.clearDisplay();
+      //  display.display();
+      //  display.clearDisplay();
+      //  display.display();
+      //  display.clearDisplay();
+      //  display.display();
+      }
+      secondOld = seconds; // This is actually the number of times this can
+    }
+    minutes = seconds / 60;
+    hours = minutes / 60;
+  }
 }
 
 void displayTempMenu() {
