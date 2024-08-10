@@ -3,6 +3,8 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <Fuzzy.h>
+#include <Arduino.h>
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -10,9 +12,9 @@
 #define OLED_RESET -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-const int sensorPin = A0;
+const int SENSOR_PIN = A0;
 int HEATER_PWM = 10;
-int buzzerPin = 9;
+int BUZZER_PIN = 9;
 float temperaturaActual;
 
 
@@ -99,12 +101,12 @@ static const unsigned char PROGMEM image_data_Saraarray[] = {
 };
 
 void setup() {
-  pinMode(buzzerPin, OUTPUT);
-  analogWrite(buzzerPin, 50);
+  pinMode(BUZZER_PIN, OUTPUT);
+  analogWrite(BUZZER_PIN, 50);
   delay(500);
-  analogWrite(buzzerPin,0);
+  analogWrite(BUZZER_PIN,0);
   delay(100);
-  Serial.begin(9600);
+  Serial.begin(115200);
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("Error al iniciar el OLED"));
     for (;;)
@@ -137,7 +139,7 @@ void loop() {
   
   while (true)
   {
-    int Volt = analogRead(sensorPin);
+    int Volt = analogRead(SENSOR_PIN);
     temperaturaActual = Volt * 250.0 / 1023.0;
     
 
