@@ -20,20 +20,27 @@ int TRIGGER_PIN = 11;
 int DEBUG_TEMP = 1;
 float temperaturaActual;
 
+#define BAUD_RATE 115200
+const char* VERSION  = "0.1.1";
+const char* PROG_NAME = "Moonrat";
 
 const int numPoints = 60;
 float temperaturaHistorial[numPoints] = {0};
 const int barWidth = SCREEN_WIDTH / numPoints;
 
 #define BUTTON_SELECT 5
-#define BUTTON_UP 6
-#define BUTTON_DOWN 7
+#define BUTTON_UP 7
+#define BUTTON_DOWN 6
 
 int selectedOption = 0;
-int tempMaxOptions[] = {23, 35, 37, 41.5};
+int tempMaxOptions[] = {23, 35, 37, 41};
+int timeMaxOptions[] = {12, 24, 36, 48};
 int tempMin = 0;
 int tempMax = 0;
-int totalOptions = 4; // Cambia esto al número total de opciones en tu menú
+int timeMin = 0;
+int timeMax = 0;
+int totalOptions = 4; // Change this to the total number of options in the menu
+
 
 
 static const unsigned char PROGMEM image_data_Saraarray[] = {
@@ -103,19 +110,7 @@ static const unsigned char PROGMEM image_data_Saraarray[] = {
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-void setup() {
-  pinMode(BUZZER_PIN, OUTPUT);
-  analogWrite(BUZZER_PIN, 50);
-  delay(500);
-  analogWrite(BUZZER_PIN,0);
-  delay(100);
-  Serial.begin(115200);
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println(F("Error al iniciar el OLED"));
-    for (;;)
-      ;
-  }
-  delay(100);
+void splashLCD(Adafruit_SSD1306 &display) {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -123,18 +118,26 @@ void setup() {
   // Display static text
   display.drawBitmap(0, 0, image_data_Saraarray, 128, 64, 1);
   display.display();
-  delay(1500);
-  display.clearDisplay();
-  display.setCursor(10, 10);
-  display.println(F("Version/Wokwi: V10"));
-  display.display();
-  delay(2500);
-  display.clearDisplay();
-  pinMode(BUTTON_SELECT, INPUT_PULLUP);
-  pinMode(BUTTON_UP, INPUT_PULLUP);
-  pinMode(BUTTON_DOWN, INPUT_PULLUP);
 }
+
+void splashVersionLCD(Adafruit_SSD1306 &display) {
+  display.clearDisplay();
+  display.setCursor(0, 10);
+  display.println(F("Program:"));
+  display.println(PROG_NAME);
+  display.println(F("Version:"));
+  display.println(VERSION);
+  display.display();
+}
+// void displayAndConfigure() {
+//   displayMenu();
+//   checkButtons();
+//   configurarTemperaturaMaxima();
+// }
+
+
 float readTempAndUpdateFiler() {
+  // These are toggled to allow an oscilloscope trigger if you want to look at this.
       digitalWrite(TRIGGER_PIN,HIGH);
       digitalWrite(TRIGGER_PIN,LOW);
       int reading0 = analogRead(SENSOR_PIN); 
@@ -145,10 +148,6 @@ float readTempAndUpdateFiler() {
       int reading = reading1;
       Serial.println();
       Serial.print("reading: "); Serial.println(reading);
-      // NOte: This is a TMP36, not a TMP37
-  //    CurrentTemp = (reading1 *4.98*50.0)/1024.0; //T6G SOC based on TMP37 Sensor
-      // Kalman Filter
-      // ROB Treating this math based on a TMP36
       float temperatureC;
       float temperature;
       if (DEBUG_TEMP) {
@@ -157,11 +156,7 @@ float readTempAndUpdateFiler() {
         // converting that reading to voltage, for 3.3v arduino use 3.3
         float voltage = reading1 * 5.0;
         voltage /= 1024.0; 
- 
- // print out the voltage
-  //      Serial.print("volts: "); Serial.println(voltage);
- 
- // now print out the temperature
+        // This is the TMP36 formula
         temperatureC = (voltage - 0.5) * 100 ;  //converting from 10 mv per degree wit 500 mV offset
                                                //to degrees ((voltage - 500mV) times 100)
         Serial.print(temperatureC); Serial.println(" degrees C");
@@ -169,45 +164,162 @@ float readTempAndUpdateFiler() {
 //        Serial.println(CurrentTemp); 
       }
       return temperature;
-      // Pc = P + Q;
-      // G = Pc/(Pc + R);
-      // P = (1-G) * Pc;
-      // Xp = FilteredTemp;
-      // Zp = Xp;
-      // FilteredTemp = G*(CurrentTemp-Zp)+Xp;    
-      // //  Serial.print("filter: "); 
-      // //  Serial.println(FilteredTemp); 
-      // for (int i = 0; i < numPoints - 1; i++)
-      // {
-      //   TempHistory[i] = TempHistory[i + 1];
-      // }
-      // TempHistory[numPoints - 1] = FilteredTemp;  
 }
-void loop() {
-  displayMenu();
-  checkButtons();
-  configurarTemperaturaMaxima();
+
+
+void displayTempMenu() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println(F("SELECT SAMPLE"));
+  display.setCursor(10, 12);
+  display.println(F("23C (Yeast & mold)"));
+  display.setCursor(10, 24);
+  display.println(F("35C (Coliform)"));
+  display.setCursor(10, 36);
+  display.println(F("37C (Env. listeria)"));
+  display.setCursor(10, 48);
+  display.println(F("41C (Salmonella Expr.)"));
   
-  while (true)
-  {
-    // int Volt = analogRead(SENSOR_PIN);
-    // temperaturaActual = Volt * 250.0 / 1023.0;
-    temperaturaActual = readTempAndUpdateFiler();
 
-    for (int i = 0; i < numPoints - 1; i++)
-    {
-      temperaturaHistorial[i] = temperaturaHistorial[i + 1];
-    }
+  int circleY = 15 + selectedOption * 12; // Posición del círculo relleno
+  display.fillCircle(5, circleY, 3, SSD1306_WHITE);
+    display.display();
+}
 
-    temperaturaHistorial[numPoints - 1] = temperaturaActual;
+void checkTimeButtons() {
+  while (timeMax == 0){
+  if (digitalRead(BUTTON_SELECT) == HIGH) {
+    Serial.println(F("BUTTON SELECT PUSHED!"));
+    timeMax = int(timeMaxOptions[selectedOption]);
+    delay(200); // Debouncing
+  }
 
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setTextColor(SSD1306_WHITE);
-    display.setCursor(0, 0);
-    display.print("Temp: ");
-    display.print(temperaturaActual);
-    display.println(" C");
+  if (digitalRead(BUTTON_UP) == HIGH) {
+    Serial.println(F("BUTTON UP PUSHED!"));
+    selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
+    delay(200); // Debouncing
+    displayTimeMenu();
+  }
+
+  if (digitalRead(BUTTON_DOWN) == HIGH) {
+    Serial.println(F("BUTTON DOWN PUSHED!"));
+    selectedOption = (selectedOption + 1) % totalOptions;
+    delay(200); // Debouncing
+    displayTimeMenu();
+  }
+  }
+}
+
+void displayTimeMenu() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println(F("SELECT INC TIME:"));
+  display.setCursor(10, 12);
+  display.println(F("12 HR"));
+  display.setCursor(10, 24);
+  display.println(F("24 HR"));
+  display.setCursor(10, 36);
+  display.println(F("36 HR"));
+  display.setCursor(10, 48);
+  display.println(F("48 HR"));
+  
+  int circleY = 15 + selectedOption * 12; // Position of filled circle
+  display.fillCircle(5, circleY, 3, SSD1306_WHITE);
+  display.display();
+}
+
+void checkTempButtons() {
+  while (tempMax == 0){
+  if (digitalRead(BUTTON_SELECT) == HIGH) {
+    Serial.println(F("BUTTON SELECT PUSHED!"));
+    tempMax = tempMaxOptions[selectedOption];
+    delay(200); // Debouncing
+  }
+
+  if (digitalRead(BUTTON_UP) == HIGH) {
+    Serial.println(F("BUTTON UP PUSHED!"));
+    selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
+    delay(200); // Debouncing
+    displayTempMenu();
+  }
+
+  if (digitalRead(BUTTON_DOWN) == HIGH) {
+    Serial.println(F("BUTTON DOWN PUSHED!"));
+    selectedOption = (selectedOption + 1) % totalOptions;
+    delay(200); // Debouncing
+    displayTempMenu();
+  }
+  }
+}
+void displayExitScreen() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(10, 8);
+  display.println(F("INCUBTATION TIME"));
+  display.setCursor(30, 17);
+  display.println(F("COMPLETED!"));
+  display.setCursor(18, 30);
+  display.println(F("TO EXIT, PRESS"));
+  display.setCursor(38, 39);
+  display.println(F("UP/DOWN"));
+  display.setCursor(18, 48);
+  display.println(F("SIMULTANEOUSLY"));
+  display.display();
+
+}
+void configurarTemperaturaMaxima() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.print("Target Temp.");
+  display.setCursor(0, 16);
+  display.print(tempMax);
+  display.println("C");
+  display.display();
+  delay(1000);
+}
+void setMaxTemp() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.print("Target Temp.");
+  display.setCursor(0, 16);
+  display.print(tempMax);
+  display.println("C");
+  display.setCursor(0, 32);
+  display.print("Inc Time");
+  display.setCursor(0, 48);
+  display.print(timeMax);
+  display.println("H");
+  display.display();
+  delay(2000);
+}
+
+void menuSelections() {
+  tempMax = 0;
+  timeMax = 0;
+  displayTempMenu();
+  checkTempButtons();
+  selectedOption = 0;
+  displayTimeMenu();
+  checkTimeButtons();
+  setMaxTemp();
+}
+void updateDisplay() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.print("Temp: ");
+  display.print(temperaturaActual);
+  display.println(" C");
     
 // Mostrar la gráfica de temperatura en el resto de la pantalla
   for (int i = 0; i < numPoints; i++) {
@@ -235,72 +347,63 @@ void loop() {
   display.print(tempMin);
   display.print("C");
   display.display();
+}
+void setup() {
+  pinMode(BUZZER_PIN, OUTPUT);
+  analogWrite(BUZZER_PIN, 50);
+  delay(500);
+  analogWrite(BUZZER_PIN,0);
+  delay(100);
+  Serial.begin(BAUD_RATE);
+  delay(1000);
+  while (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+      Serial.println(F("Error al iniciar el OLED"));;
+  }
+  delay(100);
+  splashLCD(display);
+  delay(1500);
+  splashVersionLCD(display);
+  delay(2500);
+  display.clearDisplay();
+  pinMode(BUTTON_SELECT, INPUT_PULLUP);
+  pinMode(BUTTON_UP, INPUT_PULLUP);
+  pinMode(BUTTON_DOWN, INPUT_PULLUP);
+
+  menuSelections();
+}
+void loop() {
+  int flag = 0;
+  while ((digitalRead(BUTTON_UP) == HIGH) || (digitalRead(BUTTON_DOWN) == HIGH) || (digitalRead(BUTTON_SELECT) == HIGH))
+      {
+        flag = 1;
+      } 
+   
+  if (flag) {
+    delay(100);
+    menuSelections();
+    return;
+  }
+  temperaturaActual = readTempAndUpdateFiler();
+
+  for (int i = 0; i < numPoints - 1; i++)
+  {
+    temperaturaHistorial[i] = temperaturaHistorial[i + 1];
+  }
+
+  temperaturaHistorial[numPoints - 1] = temperaturaActual;
+  updateDisplay();
+
+  const int DISABLE_HEATER = false;
   if (temperaturaActual > tempMax) {
   // digitalWrite(PWM_OUT, LOW);
   analogWrite(HEATER_PWM, 0);
   } 
   else {
-  analogWrite(HEATER_PWM, 255);
+    if (!DISABLE_HEATER)
+      analogWrite(HEATER_PWM, 255);
+    else 
+      analogWrite(HEATER_PWM,0);
   }
   delay(1000);
-}
-  displayMenu();
-}
-
-void displayMenu() {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-  display.println(F("SELECT SAMPLE"));
-  display.setCursor(10, 12);
-  display.println(F("Yeast and mold"));
-  display.setCursor(10, 24);
-  display.println(F("Coliform"));
-  display.setCursor(10, 36);
-  display.println(F("Env. listeria"));
-  display.setCursor(10, 48);
-  display.println(F("Salmonella Express"));
-  
-
-  int circleY = 15 + selectedOption * 12; // Posición del círculo relleno
-  display.fillCircle(5, circleY, 3, SSD1306_WHITE);
-    display.display();
-}
-
-void checkButtons() {
-  while (tempMax == 0){
-  if (digitalRead(BUTTON_SELECT) == HIGH) {
-    Serial.println(F("BUTTON SELECT PUSHED!"));
-    tempMax = tempMaxOptions[selectedOption];
-    delay(200); // Debouncing
-  }
-
-  if (digitalRead(BUTTON_UP) == HIGH) {
-    Serial.println(F("BUTTON UP PUSHED!"));
-    selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
-    delay(200); // Debouncing
-    displayMenu();
-  }
-
-  if (digitalRead(BUTTON_DOWN) == HIGH) {
-    Serial.println(F("BUTTON DOWN PUSHED!"));
-    selectedOption = (selectedOption + 1) % totalOptions;
-    delay(200); // Debouncing
-    displayMenu();
-  }
-  }
-}
-
-void configurarTemperaturaMaxima() {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-  display.print("Target Temp.");
-  display.setCursor(0, 16);
-  display.print(tempMax);
-  display.println("C");
-  display.display();
-  delay(1000);
+//  displayMenu();
 }
