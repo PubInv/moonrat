@@ -3,7 +3,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <Fuzzy.h>
+// #include <Fuzzy.h>
 #include <Arduino.h>
 #include <PID_v1.h>
 
@@ -41,6 +41,23 @@ int timeMin = 0;
 int timeMax = 0;
 int totalOptions = 4; // Change this to the total number of options in the menu
 
+// I don't know why, but this seems to trip over a compiler bug!
+// int heaterDutyCyclePWM = 0;
+
+
+// TIMER VARIABLES
+unsigned long timeNow = 0;
+// unsigned long timeLast = 0;
+int startingHour = 0;
+int seconds = 0;
+int secondsSinceTempUpdate = 0;
+int minutes = 0;
+int hours = startingHour;
+
+int secondsLastDisplay = 0;
+
+int secondsToUpdateTemp = 2;
+int secondsToUpdateDisplay = 10; 
 
 
 static const unsigned char PROGMEM image_data_Saraarray[] = {
@@ -373,6 +390,7 @@ void setup() {
 }
 void loop() {
   int flag = 0;
+  int heaterDutyCyclePWM = 0;
   while ((digitalRead(BUTTON_UP) == HIGH) || (digitalRead(BUTTON_DOWN) == HIGH) || (digitalRead(BUTTON_SELECT) == HIGH))
       {
         flag = 1;
@@ -394,16 +412,19 @@ void loop() {
   updateDisplay();
 
   const int DISABLE_HEATER = false;
-  if (temperaturaActual > tempMax) {
-  // digitalWrite(PWM_OUT, LOW);
-  analogWrite(HEATER_PWM, 0);
-  } 
-  else {
-    if (!DISABLE_HEATER)
-      analogWrite(HEATER_PWM, 255);
-    else 
-      analogWrite(HEATER_PWM,0);
+  heaterDutyCyclePWM = (temperaturaActual > tempMax) ?  255 : 0;
+  // if (DISABLE_HEATER) heaterDutyCyclePWM = 0;
+//   if (temperaturaActual > tempMax) {
+//     heaterDutyCyclePWM = 255;
+//  //   analogWrite(HEATER_PWM, heaterDutyCyclePWM);
+//   } else {
+//     heaterDutyCyclePWM = 0;
+//   //  analogWrite(HEATER_PWM, heaterDutyCyclePWM);
+//   }
+  if (DISABLE_HEATER) {
+    heaterDutyCyclePWM = 0;
   }
+  analogWrite(HEATER_PWM, heaterDutyCyclePWM);
   delay(1000);
 //  displayMenu();
 }
