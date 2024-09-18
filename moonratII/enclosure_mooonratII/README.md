@@ -15,6 +15,15 @@ Here are locations for most components which involve the enclosure as of the ord
 
 # August 2024
 
+<a
+href="./Enclosure_Assy202409.png"><img style="border:5px double black"
+src="./Enclosure_Assy202409.png "
+alt="Enclosure with PCB in FreeCAD"
+width="400">  
+***Enclosure with PCB in FreeCAD A2Plus workbench***
+</a>
+ 
+ 
 Below are the photos of my attempt to construct a system to take to Tanzania.
 
 Note there are several changes to the system that Silvia made that this has taught me:
