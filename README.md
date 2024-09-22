@@ -4,6 +4,10 @@ Aliases used by other developers include Moonrat, Rice MiniCubator, and Rice Pet
 **MoonratII** is the development effort of 2023.  
 Visit the Legacy folder (above) for the work of volunteers prior to 2023 and the hand built prototype.  
 
+# Status, September 2024  
+Prototypes of the MoonratII were field tested in two locations - the Galapagos Islands by researcher Auja TK and in Tanzania by Dr. Robert Read. 
+A HardwareX scientific research paper is slated for October 2024 publication.
+
 # Status, April 2024  
 The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 1 PWB for use by the USA team.  
 The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 2 PWB for use by  Mexico team. 
