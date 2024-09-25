@@ -8,9 +8,7 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-// Set controller type here
-//#define R3 //Uncomment for Arduino UNO R3
-#define R4 //Uncomment for Arduino UNO R4
+// #define KALMAN // Uncomment to use the Kalman Filter
 
 //* Define control technique 
 //#define FUZZY
@@ -49,15 +47,17 @@ int timeMin = 0;
 int timeMax = 0;
 int totalOptions = 4; // Change this to the total number of options in the menu
 
-// KALMAN FILTER VARIABLES
-float Q = 1E-9;       // Process variance
-float R = 1.12E-5;     // Reading variance
-float Pc = 0.0;
-float G = 0.0;
-float P = 1.0;
-float Xp = 0.0;
-float Zp = 0.0;
-float FilteredTemp = 0.0;
+#ifdef KALMAN
+  // KALMAN FILTER VARIABLES
+  float Q = 1E-9;       // Process variance
+  float R = 1.12E-5;     // Reading variance
+  float Pc = 0.0;
+  float G = 0.0;
+  float P = 1.0;
+  float Xp = 0.0;
+  float Zp = 0.0;
+  float FilteredTemp = 0.0;
+#endif
 
 // TIMER VARIABLES
 unsigned long timeNow = 0;
@@ -172,43 +172,7 @@ static const unsigned char PROGMEM image_data_Saraarray[] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-/*
-long readVcc() {
-//  FUNCTION FOR ADC AND REFERENCE SETTING
-#ifdef R3 //Configuration for Arduino UNO R3
-  ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
-  delay(2);  // Awaiting reference stability
-  ADCSRA |= _BV(ADSC);  // Init ADC conversion
-  while (bit_is_set(ADCSRA, ADSC));
-
-  // Read ADC value
-  uint8_t low = ADCL;
-  uint8_t high = ADCH;
-  long result = (high << 8) | low;
-
-  // Vcc in mv
-  long vcc = 1126400L / ADC;  // Uses 1.1 * 1024 * 1000
-
-#elif defined(R4) //Configuration for Arduino UNO R4
-  analogReference(AR_DEFAULT);  // Internal reference
-  delay(10);  // Awaiting reference stability
-  float sensorValue = map(analogReference(), 0, 5.0, 0, 255.0);  // Internal reference mapping
-  long vcc = (1000 * 1.1 * 1023) / sensorValue;
-
-#else
-#error Serial.println("Unsupported board selection.");
-#endif
-  return vcc;
-}*/
-
 void setup() {
-
-  #if defined(R4)
-    analogReadResolution(10);
-    analogReference(AR_DEFAULT);
-  #else
-    analogReference(DEFAULT);
-  #endif
 
   pinMode(HEATER_PIN, OUTPUT);
   digitalWrite(HEATER_PIN, LOW);
@@ -396,15 +360,22 @@ void loop() {
       //* New sensor...
       sensor.requestTemperatures();
       CurrentTemp = sensor.getTempCByIndex(0);
+
+      #if defined(KALMAN)
       
-      // Kalman Filter
-      // Pc = P + Q;
-      // G = Pc/(Pc + R);
-      // P = (1-G) * Pc;
-      // Xp = FilteredTemp;
-      // Zp = Xp;
-      // FilteredTemp = G*(CurrentTemp-Zp)+Xp;
-      FilteredTemp = CurrentTemp;
+        // Kalman Filter
+        // Pc = P + Q;
+        // G = Pc/(Pc + R);
+        // P = (1-G) * Pc;
+        // Xp = FilteredTemp;
+        // Zp = Xp;
+        // FilteredTemp = G*(CurrentTemp-Zp)+Xp;
+      
+      #else
+      
+        FilteredTemp = CurrentTemp;
+      
+      #endif
 
       for (int i = 0; i < numPoints - 1; i++)
       {
