@@ -31,6 +31,7 @@ OneWire ourWire(A0);
 float CurrentTemp;
 float OldErrorInput = 0.0;
 float calibration;
+float FilteredTemp = 0.0;
 
 // GRAPH VARIABLES
 const int numPoints = 60;
@@ -91,9 +92,9 @@ int hours = startingHour;
 
 #ifdef PID_
   //* PID controller
-  float Kp = 5.5;
-  float Ki = 3.7;
-  float Kd = 0.0;
+  float Kp = 312.7907;
+  float Ki = 520.0;
+  float Kd = 230.0;
   double setPoint; // Desired reference for the controller
   double contolInput; // Sensor's information in voltage
   double controlOutput; // Control's output signal
@@ -364,12 +365,12 @@ void loop() {
       #if defined(KALMAN)
       
         // Kalman Filter
-        // Pc = P + Q;
-        // G = Pc/(Pc + R);
-        // P = (1-G) * Pc;
-        // Xp = FilteredTemp;
-        // Zp = Xp;
-        // FilteredTemp = G*(CurrentTemp-Zp)+Xp;
+        Pc = P + Q;
+        G = Pc/(Pc + R);
+        P = (1-G) * Pc;
+        Xp = FilteredTemp;
+        Zp = Xp;
+        FilteredTemp = G*(CurrentTemp-Zp)+Xp;
       
       #else
       
@@ -455,9 +456,11 @@ void loop() {
 
       Serial.println("");
       analogWrite(HEATER_PIN, int(round(controlOutput)));
+      // analogWrite(HEATER_PIN, 52); // PID Tunning mode
       display.setCursor(0, SCREEN_HEIGHT-8); // Position adjustment for Min legend
       display.print("PWM:");
       display.print(int(round(controlOutput)));
+      // display.print(52); // PID Tunning mode
       display.display();
 
     #endif
