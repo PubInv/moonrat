@@ -81,3 +81,13 @@ The theoretical current through the 6.2 Ω heating pad would be:
 $I = \frac{V}{R} = \frac{12 \, V}{6.2 \, \Omega} \approx 1.94 \, A$
 
 Given that your actual measurement is **510 mA**, it is evident that the heating pad is not operating at full power continuously. This could be due to **pulse-width modulation (PWM)** control or system logic designed to maintain a stable temperature without overheating.
+
+# Some plots
+## Battery Full 
+![alt text](battery_full.png)
+## Heating Pad at 100%
+![alt text](heatpad100.png)
+## Heating Pad at 0%
+![alt text](heatpad0.png)
+## Average
+![alt text](average.png)
