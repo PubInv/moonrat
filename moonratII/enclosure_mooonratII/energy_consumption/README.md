@@ -91,3 +91,5 @@ Given that your actual measurement is **510 mA**, it is evident that the heating
 ![alt text](heatpad0.png)
 ## Average
 ![alt text](average.png)
+## All
+![alt text](all.png)
