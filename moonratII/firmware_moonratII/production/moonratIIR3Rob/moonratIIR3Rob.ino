@@ -412,7 +412,7 @@ void loop() {
   updateDisplay();
 
   const int DISABLE_HEATER = false;
-  heaterDutyCyclePWM = (temperaturaActual > tempMax) ?  255 : 0;
+  heaterDutyCyclePWM = (temperaturaActual > tempMax) ?  0 : 255;
   // if (DISABLE_HEATER) heaterDutyCyclePWM = 0;
 //   if (temperaturaActual > tempMax) {
 //     heaterDutyCyclePWM = 255;
@@ -425,6 +425,7 @@ void loop() {
     heaterDutyCyclePWM = 0;
   }
   analogWrite(HEATER_PWM, heaterDutyCyclePWM);
+  Serial.println(heaterDutyCyclePWM);
   delay(1000);
 //  displayMenu();
 }

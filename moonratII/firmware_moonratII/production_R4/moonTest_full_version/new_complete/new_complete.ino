@@ -40,7 +40,7 @@ const int barWidth = SCREEN_WIDTH / numPoints;
 
 // MENU VARIABLES
 int selectedOption = 0;
-int tempMaxOptions[] = {29, 35, 37, 41.5};
+int tempMaxOptions[] = {29, 35, 37, 41};
 int timeMaxOptions[] = {12, 24, 36, 48};
 int tempMin = 0;
 int tempMax = 0;
@@ -303,6 +303,7 @@ void setup() {
 }
 
 void loop() {
+  Serial.println(F("Loop"));
 
   tempMax = 0;
   timeMax = 0;
@@ -325,7 +326,6 @@ void loop() {
       {
         flag = 1;
       }
-    Serial.println(timeMax);
     while((hours >= timeMax) && exit == 0)
       {
         display.clearDisplay();
@@ -361,7 +361,9 @@ void loop() {
       //* New sensor...
       sensor.requestTemperatures();
       CurrentTemp = sensor.getTempCByIndex(0);
-
+      Serial.println("CurrentTemp: ");
+      Serial.println(CurrentTemp);
+      Serial.println("\n");
       #if defined(KALMAN)
       
         // Kalman Filter
