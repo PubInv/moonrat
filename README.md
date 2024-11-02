@@ -64,7 +64,7 @@ Incubator [https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf](http
 ## Acknowledgements
 Thanks to Dr. Sabia Abidi of Rice University for input and references.
 
-## MoonRatII Team
+## MoonratII Team
 [Melanie Laporte](https://github.com/MelanieLaporte)  
 
 [Silvia Castillas](https://github.com/SilviaKarbid)  
