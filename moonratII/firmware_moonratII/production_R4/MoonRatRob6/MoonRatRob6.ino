@@ -110,6 +110,13 @@ int timeMin = 0;
 int timeMax = 0;
 int totalOptions = 4; // Change this to the total number of options in the menu
 
+extern bool currently_heating;
+extern uint32_t time_incubation_started_ms;
+extern uint32_t time_heater_turned_on_ms;
+extern uint32_t time_spent_heating_ms;
+extern uint32_t time_spent_incubating_ms;
+extern uint32_t time_of_last_entry;
+
 // KALMAN FILTER VARIABLES
 float Q = 1E-9;       // Process variance
 float R = 1.12E-5;     // Reading variance
@@ -143,8 +150,6 @@ int secondsLastDisplay = 0;
 
 int secondsToUpdateTemp = 2;
 int secondsToUpdateDisplay = 10; 
-
-
 
 #if defined(STRATEGY_PID)
   //* PID controller
@@ -829,7 +834,8 @@ void loop() {
   checkTimeExpired();
   timeNow = (millis()/1000); // the number of milliseconds that have passed since boot
   seconds = timeNow;
-
+  uint32_t time_now_ms = millis();
+  uint32_t time_since_last_entry = time_now_ms - time_of_last_entry;
     // assert(secondsToUpdateDisplay > secondsToUpdateTemp);
   if((seconds - secondsSinceTempUpdate) >= secondsToUpdateTemp) // This occurs one per second....
   {
@@ -855,7 +861,7 @@ void loop() {
       outputPWM = thermostatPWM();
 #endif
 
-    setHeatPWM(int(round(outputPWM)));  
+      setHeatPWM(int(round(outputPWM)));  
 //     analogWrite(HEATER_PIN, int(round(outputPWM)));
       Serial.print("Heater PWM: ");
       Serial.print((float) outputPWM * 100.0 / 256.0);
@@ -869,6 +875,12 @@ void loop() {
       uint16_t index = getIndex();
       showGraph(index);
 
+      if (time_since_last_entry > DATA_RECORD_PERIOD) {
+          //  entryFlag = false;
+          Serial.println(F("Writing New Entry"));
+          writeNewEntry(CurrentTemp);
+          time_of_last_entry = time_now_ms;
+        }
  //     renderDisplay();
       secondsLastDisplay = seconds;
     } else {

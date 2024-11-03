@@ -48,6 +48,8 @@ uint32_t time_of_last_entry = 0;
 // once the begin is done.
 unsigned long BASE_DATA_RECORD_PERIOD = 600000;
 
+// Don't USE_DEBUGGING in production!
+#define USE_DEBUGGING 1
 // For DEBUGGING, we may use a faster rate, of every 10 seconds
 #ifdef USE_DEBUGGING
 unsigned long DATA_RECORD_PERIOD = (BASE_DATA_RECORD_PERIOD / 60);
