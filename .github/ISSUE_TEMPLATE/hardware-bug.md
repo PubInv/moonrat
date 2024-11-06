@@ -1,5 +1,5 @@
 ---
-name: Hardware-bug
+name: Hardware bug
 about: Prompting the user to capture the situation for when a hardware bug is detected.
 title: ''
 labels: ''
