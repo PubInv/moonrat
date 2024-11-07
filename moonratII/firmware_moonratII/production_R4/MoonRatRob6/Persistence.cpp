@@ -87,6 +87,9 @@ int b = 1;  //initialize serial print index
 
 
 // EEPROM FUNCTIONS --------------------------------------------------
+
+
+
 //creates a whole number
 uint16_t floatToSixteen(float flt) {
   uint16_t out = round(flt * 100);
@@ -116,7 +119,7 @@ uint16_t rom_read16(uint16_t address) {
 }
 
 uint16_t getIndex() {
-  rom_read16(INDEX_ADDRESS);
+  return rom_read16(INDEX_ADDRESS);
 }
 /*
    Marks the EEPROM as empty by clearing the first address

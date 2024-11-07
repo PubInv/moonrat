@@ -16,6 +16,7 @@
 
 extern unsigned long BASE_DATA_RECORD_PERIOD;
 extern unsigned long DATA_RECORD_PERIOD;
+extern bool incubating;
 
 uint16_t getIndex();
 
@@ -42,6 +43,8 @@ void rom_reset();
 
 //gets the contents of the EEPROM at each indec
 float readIndex(int index);
+
+uint16_t getIndex();
 
 // here we dump to the serial port for debugging and checking
 void dumpData();

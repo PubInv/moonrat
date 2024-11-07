@@ -18,6 +18,7 @@
 // #define STRATEGY_THERMOSTAT 1
 // #define STRATEGY_PID 2
 #define STRATEGY_FUZZY 3
+
 #if defined(STRATEGY_FUZZY)
 #include <Fuzzy.h>
 #endif
@@ -66,6 +67,7 @@ int HEATER_PIN = 10; //Heater (termopad) pin
 #define BUTTON_DOWN 6 //Button = DOWN pin
 #define TRIGGER_PIN 11 // used to set a time signal for triggering oscilloscope
 
+
 int LOG_VERBOSE = 5;
 int LOG_DEBUG   = 4;
 int LOG_WARNING = 3;
@@ -77,16 +79,52 @@ int LOG_LEVEL   = 5;
 
 const int DEBUG_TEMP = 1;
 
+// These are Menu items
+#define TEMPERATURE_M 0
+#define GRAPH_1_M 1
+#define SET_TEMP_M 2
+#define STOP_M 3
+
 
 #define MAX_TEMPERATURE_C 42.0
 
-
-// #define USE_LOW_TEMP 1
 #ifdef USE_LOW_TEMP
 float targetTemperatureC = 30.0;  // Celcius
 #else
 float targetTemperatureC = 35.0;  // Celcius
 #endif
+
+int rawTemp = 0;
+float temperatureC;  //The variable we will use to store temperature in degrees.
+
+
+
+
+// Variables to represent the state of the machine
+// BASIC_STATE (this is different from the GUI State)
+#define PREPARING 0
+#define INCUBATING 1
+#define FINISHED 2
+int basic_state = INCUBATING;
+
+// When Incubating, when are in two modes: warm-up phase or balance phase.
+// The warm-up phase occurs when you we are first turned on or badly too cool.
+// the balance phase is when we want slow stable mainteance of the target temperature.
+// I am aribritraily defining warm-up phase as 4C below target phase.
+#define WARM_UP_TEMP_DIFF_C 4.0
+int warm_up_phase = true;
+
+//menu variables
+int menuSelection = 0;
+bool inMainMenu = true;
+bool up = false;
+bool down = false;
+bool sel = false;
+
+// for debouncing
+bool up_pressed = false;
+bool dn_pressed = false;
+bool sel_pressed = false;
 
 float CurrentTemp;
 float OldErrorInput = 0.0;
@@ -267,6 +305,43 @@ static const unsigned char PROGMEM image_data_Saraarray[] = {
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
+double read_temp() {
+  sensor.requestTemperatures();  // Send the command to get temperatures
+  // After we got the temperatures, we can print them here.
+  // We use the function ByIndex, and as an example get the temperature from the first sensor only.
+  float tempC = sensor.getTempCByIndex(0);
+
+  // Check if reading was successful
+  if (tempC != DEVICE_DISCONNECTED_C) {
+    //    Serial.print(F("Temperature for the device 1 (index 0) is: "));
+    //   Serial.println(tempC);
+  } else {
+    Serial.println(F("Error: Could not read temperature data"));
+  }
+  return tempC;
+}
+
+void showCurStatus(float temp, float duty_factor) {
+  display.clearDisplay();  //removes current plots
+  display.setCursor(0, 0);
+  display.setTextSize(1);
+  display.print(F("T (C):"));
+  display.println(temp);
+  display.print(F("F (%):"));
+  display.println(duty_factor * 100);
+  display.display();
+}
+
+void showSetTempMenu(float target) {
+  display.clearDisplay();  //removes current plots
+  display.setCursor(0, 0);
+  display.setTextSize(1);
+  display.println(F("Up (U) to increase,"));
+  display.println(F("Dn (D) to decrease,"));
+  display.print(F("T (C):"));
+  display.println(target);
+  display.display();
+}
 
 
 void showGraph(int eeindex) {
@@ -333,7 +408,7 @@ void showGraph(int eeindex) {
   float middle = meanTemp - (float)graphMinTemp;
   int j = 0;
 
-  Serial.println(F("start, eeindex"));
+  Serial.println(F("start, 0"));
   Serial.println(startIndex);
   Serial.println(eeindex);
   for (int i = startIndex; i < eeindex; i++) {
@@ -351,63 +426,6 @@ void showGraph(int eeindex) {
   display.display();
   Serial.println(F("display done"));
 }
-
-// void renderDisplay() {
-//     Serial.println("begin render-display");
-//     display.clearDisplay();
-//         display.display();
-//     Serial.println("begin render-display");
-//       display.setTextSize(1);
-//       display.setTextColor(SSD1306_WHITE);
-//       display.setCursor(0, 2);
-//       display.print("Temp:");
-//       display.print(FilteredTemp);
-//       display.println("C ");
-
-//     // Show the horizontal lines for maximum and minimum temperatures.
-//     int yMax = map(tempMax, 0, 45, 0, 14);
-//     int yMin = map(tempMin, 0, 45, 50, 0);
-//     //display.drawFastHLine(0, yMax, SCREEN_WIDTH, SSD1306_WHITE);
-//     display.drawLine(0, 10, SCREEN_WIDTH, 10, SSD1306_WHITE);
-//     //display.drawFastHLine(0, yMin, SCREEN_WIDTH, SSD1306_WHITE);
-//     display.drawLine(0, 54, SCREEN_WIDTH, 54, SSD1306_WHITE);
-
-//  // Display temperature graph on the rest of the screen
-//     // for (int i = 0; i < numPoints; i++) {
-//     //   int x = i * barWidth;
-//     //   int barHeight = map(TempHistory[i], 0, 50, 0, 44);
-//     //   //display.fillRect(x, SCREEN_HEIGHT - barHeight, barWidth, barHeight-14, SSD1306_WHITE);
-//     //   display.fillRect(x, 54 - barHeight, barWidth, barHeight, SSD1306_WHITE);
-//     //   //display.fillRect(x, 32 , 1, 6, SSD1306_WHITE);
-//     // }
-
-//     // Show the maximum and minimum temperature label
-//     display.setTextSize(1);
-//     display.setTextColor(SSD1306_WHITE);
-//     display.setCursor(74, 2); // Position adjustment for Max legend
-//     display.print("Goal:");
-//     display.print(tempMax);
-//     display.print("C");
-//     display.setCursor(45, SCREEN_HEIGHT-8);
-//     display.print("Timer:");
-//     display.print(hours);
-//     display.print(":");
-//     display.print(minutes);
-//     display.print(":");
-//     display.print(seconds);
-   
-
-//     // get entrances
-//     float ErrorInput = FilteredTemp-tempMax;
-//     float DiffErrorInput = ErrorInput - OldErrorInput;
-//     OldErrorInput = ErrorInput;
-
-//     display.setCursor(0, SCREEN_HEIGHT-8); // Position adjustment for Min legend
-//     display.print("PWM:");
-//  //   display.print(int(round(OutputFreq)));
-//     Serial.println("done with render-display");
-//     display.display();
-// }
 
 
 void displayTempMenu() {
@@ -684,19 +702,6 @@ void setup() {
   display.display();
   delay(1500);
   display.clearDisplay();
-  display.setCursor(20, 10);
-  display.println(F("NOTE: TO RESET"));
-  display.setCursor(12, 20);
-  display.println(F("DURING INCUBATION,"));
-  display.setCursor(22, 30);
-  display.println(F("PRESS ALL THREE"));
-  display.setCursor(40, 40);
-  display.println(F("BUTTONS"));
-  display.setCursor(20, 50);
-  display.println(F("SIMULTANEOUSLY"));
-  display.display();
-  delay(3500);
-  display.clearDisplay();
   pinMode(BUTTON_SELECT, INPUT_PULLUP);
   pinMode(BUTTON_UP, INPUT_PULLUP);
   pinMode(BUTTON_DOWN, INPUT_PULLUP);
@@ -717,14 +722,6 @@ void setup() {
   hours = 0;
   int flag = 0;
   int exit = 0;
-  delay(1000);
-  displayTempMenu();
-  checkTempButtons();
-  selectedOption = 0;
-  displayTimeMenu();
-  checkTimeButtons();
-  setMaxTemp();
-
 
   Serial.println("Setup Done");
 }
@@ -784,11 +781,185 @@ void checkTimeExpired() {
     }
   }
 }
+
+/* Displays the menu.
+
+   Menu Options:
+   - Show Temperature : switches to temperature display mode
+   - Show Graph : switches to graph dispay mode
+   - Start/Stop : starts or stops data collection
+   - Set Target : sets the target incubation temperature
+   - Export : send temperature data through serial port to a pc
+   - Reset : resets temperature data
+*/
+void showMenu() {
+  display.setTextColor(SSD1306_WHITE);
+  display.clearDisplay();
+  //print title
+  display.setCursor(0, 0);
+  display.setTextSize(2);
+  display.print(F("Menu"));
+  display.setTextSize(1);
+  //displays time since incubation started
+  display.setCursor(56, 7);
+
+  // It's really useful to see the current temp at all times...
+  double curTemp = read_temp();
+  display.print(curTemp);
+  display.print(" ");
+  char currentTime[80];
+  // String currentTime =
+  getTimeString(currentTime);
+  // chop off the seconds...
+  currentTime[5] = '\0';
+  display.println(currentTime);
+  //menu option for current temperature
+  display.setTextSize(1);
+  display.setCursor(LEFT_MARGIN, SPLIT);
+  //menu option for current temperature
+  display.println(F("Temperature"));
+  display.setCursor(LEFT_MARGIN, SPLIT + LINE_HEIGHT);
+  //menu option for detailed graph
+  display.println(F("Graph 1"));
+  display.setCursor(LEFT_MARGIN, SPLIT + 2 * LINE_HEIGHT);
+
+  //menu option for graph over 48 hours
+  //  display.println(F("Graph 2"));
+  //  display.setCursor(LEFT_MARGIN, SPLIT + 3 * LINE_HEIGHT);
+  //menu option for entering the target temparature. Entered by clicking the up/down buttons
+  display.println(F("Set Temperature"));
+  display.setCursor(LEFT_MARGIN, SPLIT + 3 * LINE_HEIGHT);
+  if (incubating) {
+    display.println(F("Stop"));
+  } else {
+    display.println(F("Start"));
+  }
+
+  //print cursor
+  display.setCursor(0, SPLIT + menuSelection * LINE_HEIGHT);
+  display.fillCircle(3, SPLIT + menuSelection * LINE_HEIGHT + 3, 3, SSD1306_WHITE);
+
+  display.display();
+}
+
+
+#define BUTTON_POLL_PERIOD 0
+bool returnToMain = false;
+
+void processButtons() {
+
+  delay(BUTTON_POLL_PERIOD);
+
+  bool sel_button = digitalRead(BUTTON_SELECT);
+  bool up_button = digitalRead(BUTTON_UP);
+  bool dn_button = digitalRead(BUTTON_DOWN);
+  sel_pressed |= sel_button;
+  up_pressed |= up_button;
+  dn_pressed |= dn_button;
+  // This is meant to catch the release of the button!
+  sel = sel_pressed && !sel_button;
+  down = dn_pressed && !dn_button;
+  up = up_pressed && !up_button;
+  if (sel) sel_pressed = false;
+  if (down) dn_pressed = false;
+  if (up) up_pressed = false;
+  // I don't know what this is supposed to do...
+  int multiple = 0;
+  if (!inMainMenu && sel) {
+    returnToMain = true;
+    sel = false;
+  }
+  // Serial.println(F("loop ZZZ"));
+  //controls menu selection
+  if (inMainMenu) {
+    //read buttons and menu
+    if (up && menuSelection > 0) {
+      menuSelection--;
+      up = false;
+    } else if (down && menuSelection < 3) {
+      menuSelection++;
+      down = false;
+    } else if (sel) {
+      inMainMenu = false;
+      sel = false;
+    }
+    //   Serial.println(F("loop PPP 1"));
+    showMenu();
+    //   Serial.println(F("loop PPP 2"));
+  } else {
+    //    Serial.println(F("loop RRR"));
+    switch (menuSelection) {
+      case TEMPERATURE_M:
+        showCurStatus(temperatureC, duty_factor());
+        break;
+      case GRAPH_1_M:
+        {
+          uint16_t index = getIndex();
+          showGraph(index);
+        }
+        break;
+      case SET_TEMP_M:
+        {
+          // This is wrong; we whould be showing instructions
+          showSetTempMenu(targetTemperatureC);
+          if (up) {
+            if (targetTemperatureC > MAX_TEMPERATURE_C) {
+              targetTemperatureC = MAX_TEMPERATURE_C;
+            }
+            targetTemperatureC += 0.5;
+            setTargetTemp(targetTemperatureC);
+          }
+          if (down) {
+            targetTemperatureC -= 0.5;
+            setTargetTemp(targetTemperatureC);
+          }
+        }
+        break;
+      case STOP_M:
+        {
+          Serial.println(F("Toggling Incubation!"));
+          if (!incubating) {
+            // In this case, we want to restart the EEPROM...
+            rom_reset();
+            Serial.println(F("EEPROM RESET!"));
+          }
+          incubating = !incubating;
+          inMainMenu = true;
+        }
+        break;
+    }
+    //    Serial.println(F("loop MMM"));
+    if (returnToMain) {
+      returnToMain = false;
+      inMainMenu = true;
+      sel = false;
+    }
+    //    Serial.println(F("loop NNN"));
+  }
+
+  sel = false;
+  up = false;
+  down = false;
+  //Serial.println(F("loop BBB"));
+  // We have to process menu changes without delay to have
+  // a good user experience; but reading the temperature can
+  // be delayed.
+
+}
+
+uint32_t last_temp_check_ms = 0;
+#define PERIOD_TO_CHECK_TEMP_MS 5000
 void loop() {
   sensor.requestTemperatures();
-  CurrentTemp = sensor.getTempCByIndex(0);
+  CurrentTemp = read_temp();
   Serial.println("CurrentTemp: ");
   Serial.println(CurrentTemp);
+
+  processButtons();
+
+  uint32_t loop_start = millis(); 
+  if (loop_start < (last_temp_check_ms + PERIOD_TO_CHECK_TEMP_MS))
+    return;
 
   boolean dumpdata = false;
   boolean reset = false;
