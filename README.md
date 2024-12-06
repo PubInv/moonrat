@@ -9,6 +9,8 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 # Status, December 2024 
 A scientific research paper is tentatively scheduled for February 2025 in HardwareX.
 
+<img width="600" atl="image2" src="https://github.com/user-attachments/assets/9938efa9-ab3b-4dcc-90eb-8f2b81845910">
+
 # Status, September 2024  
 Prototypes of the MoonratII were field tested in two locations - the Galapagos Islands by researcher Auja Bywater and in Tanzania by Dr. Robert Read. The heater features the TMP36 low voltage temperature sensor. A HardwareX scientific research paper is slated for October 2024 publication.
 
