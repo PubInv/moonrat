@@ -4,12 +4,13 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 
 **MoonratII** development effort began in 2023.   
 
+
 ---
-
 # Status, December 2024 
-A scientific research paper is tentatively scheduled for February 2025 in HardwareX.
+TBA
 
-<img width="600" atl="image2" src="https://github.com/user-attachments/assets/9938efa9-ab3b-4dcc-90eb-8f2b81845910">
+# Status, November 2024 
+A scientific research paper is tentatively scheduled for February 2025 in HardwareX.
 
 # Status, September 2024  
 Prototypes of the MoonratII were field tested in two locations - the Galapagos Islands by researcher Auja Bywater and in Tanzania by Dr. Robert Read. The heater features the TMP36 low voltage temperature sensor. A HardwareX scientific research paper is slated for October 2024 publication.
@@ -22,6 +23,13 @@ In one schematic and PCB, we have developed a "Control Assembly" and a "Heater A
 - The Control Assembly will be in an enclosure detachable from the incubation chamber.  
 - The Heater Assembly will mounted internal to the incubation assembly under the unit top. Current to a heating pad or pads has changed from the previously used TMP36 low voltage temperature sensor to a digital temperature sensor. 
 - A rechargable battery with its recharging station will complete a MoonRatII incubator system.
+  
+### Image Gallery - Current FreeCAD Assembly Designs
+|A    |B    |C    |
+| --- | --- | --- |
+| <img width="300" atl="image1" src="https://github.com/user-attachments/assets/e7c12fc4-8284-4690-aac5-48fd973704af"> | <img width="300" atl="image2" src="https://github.com/user-attachments/assets/09263421-4ce9-420e-a656-ec62c1cdc5f2"> | <img width="300" atl="image4" src="https://github.com/user-attachments/assets/596ca510-e76f-4bca-a64a-ca0ef15ba3e8">|
+| <img width="300" atl="image5" src="https://github.com/user-attachments/assets/1494b485-7472-4db9-9431-564c4f7dbedf"> | <img width="300" atl="image6" src="https://github.com/user-attachments/assets/4dbd4b99-946e-4f79-9589-6b527d1ca0e3"> | <img width="300" atl="image7" src="https://github.com/user-attachments/assets/b570462b-f9e0-4349-9fd8-33f91ea28a3b"> |
+| <img width="300" atl="image8" src="https://github.com/user-attachments/assets/a76b752d-e472-4d29-aec0-d65051a0d5a1"> | <img width="200" atl="image9" src="https://github.com/user-attachments/assets/1ebdbb64-3320-4e3b-8af4-2a12f6a69f7d"> | <img width="300" atl="image10" src="https://github.com/user-attachments/assets/ffd1c814-bdfc-4d9a-a9ed-c0cb051c3e43"> |  
 
 ## 2023 MoonRatII Design
 ### Fundamental Modularity: The 6-wire appliance 
