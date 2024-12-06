@@ -1,22 +1,22 @@
 <h1 align="center">MooonRatII, A Tote-Size Portable Incubator for Rapid Field Work
 </h1>
 
-Aliases used by other developers include Moonrat, Rice MiniCubator, and Rice Petri FI.  
-**MoonratII** is the development effort of 2023.  
+Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy folder](https://github.com/PubInv/moonrat/tree/main/legacy) for the work of volunteers prior to December 2022 and the hand built prototype.
 
-***Visit the Legacy folder (above) for the work of volunteers prior to 2023 and the hand built prototype.***
+**MoonratII** development effort began in 2023.   
+
+---
 
 # Status, December 2024 
-The MoonRatII uses the same Rev 2 RWB but is updated with a digital temperature sensor instead of the TMP 36. That change has required an enclosure redesign - the heater controller is now located in a 3D printed cage under the top of the unit. 
+The MoonRatII prototype uses Rev 2 RWB but has been updated with a digital temperature sensor instead of the TMP36. That change has required an enclosure redesign - the heater controller is now located in a 3D printed cage under the top of the unit. A scientific research paper is tentatively scheduled for February 2025 in HardwareX.
 
 # Status, September 2024  
 Prototypes of the MoonratII were field tested in two locations - the Galapagos Islands by researcher Auja Bywater and in Tanzania by Dr. Robert Read. 
+
 A HardwareX scientific research paper is slated for October 2024 publication.
 
 # Status, April 2024  
-The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 1 PWB for use by the USA team.  
-The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 2 PWB for use by  the Mexico team. 
-Enclosure design for the Controller Assembly of Rev 3 PWB is underway TBA. 
+The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 1 PWB for use by the USA team and five Printed Circuit Assemblies (Control and Heater) of the Rev 2 PWB for use by  the Mexico team. Enclosure design for the Controller Assembly of Rev 3 PWB is underway TBA. 
 
 # Current Design Summary
 In one schematic and PCB, we have developed a "Control Assembly" and a "Heater Assembly".  
