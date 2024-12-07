@@ -67,6 +67,8 @@ portable incubator that the Armadillo, described [elsewhere](http://jhe.ewb.org.
 - Original Incubator Paper [http://jhe.ewb.org.au/index.php/jhe/article/view/127](http://jhe.ewb.org.au/index.php/jhe/article/view/127)
 - Construction of a Low-cost Mobile Incubator for Field and Laboratory Use [https://www.jove.com/t/58443/construction-low-cost-mobile-incubator-for-field-laboratory](https://www.jove.com/t/58443/construction-low-cost-mobile-incubator-for-field-laboratory)
 - Solar Powered Portable Culture Incubator [https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf](https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf)
+- World Health Organization
+- Fuzzy Logic - 
 
 ## Acknowledgements
 Thanks to [Dr. Sabia Abidi](https://profiles.rice.edu/faculty/sabia-abidi) of Rice University for input and references.
