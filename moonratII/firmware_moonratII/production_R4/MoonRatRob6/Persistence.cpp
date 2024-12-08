@@ -187,41 +187,6 @@ float duty_factor() {
 #endif
 }
 
-
-//turn the heating pad on
-void heatOFF() {
-  if (currently_heating) {
-    //  digitalWrite(HEATER_PIN, HIGH);
-#ifdef NCHAN_SHIELD
-    analogWrite(HEATER_PIN, 0);
-    // digitalWrite(HEATER_PIN, LOW);
-#else
-    Serial.println(F("not implemented heatsOFF"));
-#endif
-    if (LOG_LEVEL >= LOG_DEBUG) {
-      Serial.println(F("HEAT OFF!"));
-    }
-    currently_heating = false;
-    uint32_t time_now = millis();
-    time_spent_heating_ms += time_now - time_heater_turned_on_ms;
-  }
-}
-void heatON() {
-  if (!currently_heating) {
-    //  digitalWrite(HEATER_PIN, LOW);
-    analogWrite(HEATER_PIN, 255);
-
-    if (LOG_LEVEL >= LOG_DEBUG) {
-      Serial.println(F("HEAT ON!"));
-    }
-    time_heater_turned_on_ms = millis();
-    currently_heating = true;
-  }
-}
-// TODO: I would like to have a total measure of Joules here...
-// that requires us to keep track of the last time we changed
-// the pwn, track the pwm, and assume linearity.
-
 void setHeatPWM(double intended_df) {
   if (intended_df > 255.0) {
     Serial.println(F("excessive duty_factor: "));
@@ -236,8 +201,12 @@ void setHeatPWM(double intended_df) {
   uint32_t tm = millis();
   // _voltage_ms += ((double) current_PWM / 255.0)* (tm - time_of_last_PWM);
   const int pwm = (int)intended_df;
-  analogWrite(HEATER_PIN, pwm);
+// Now we must compute the fraction of the time of the last period that it 
+// the heater was on.
+  float time_of_last_period_ms = (tm - time_of_last_PWM);
+  time_heater_turned_on_ms += (unsigned long) (time_of_last_period_ms *  ((float) current_PWM / 255.0));
 
+  analogWrite(HEATER_PIN, pwm);
   time_of_last_PWM = tm;
   current_PWM = pwm;
   if (LOG_LEVEL >= LOG_MAJOR) {
@@ -245,6 +214,8 @@ void setHeatPWM(double intended_df) {
     Serial.println(pwm);
     Serial.print(F("Weighted Duty Factor :"));
     Serial.println(duty_factor());
+    Serial.print(F("Total (pro-rated) time on:"));
+    Serial.println(time_heater_turned_on_ms);
   }
 }
 

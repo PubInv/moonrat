@@ -56,8 +56,8 @@ uint32_t time_incubating();
 uint32_t time_heating();
 float duty_factor();
 //turn the heating pad on
-void heatOFF();
-void heatON(); 
+// void heatOFF();
+// void heatON(); 
 void setHeatPWM(double intended_df);
 void getTimeString(char* buff); 
 bool writeNewEntry(float data);

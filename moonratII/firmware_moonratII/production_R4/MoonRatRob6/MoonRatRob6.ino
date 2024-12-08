@@ -45,6 +45,10 @@
 //  #include <progmemAssert.h>
 #endif
 
+const int DEBUG = 2;
+
+const int DEBUG_BUTTONS = 0;
+
 #define BAUD_RATE 115200
 //OLED VARIABLES
 #define SCREEN_WIDTH 128
@@ -64,7 +68,7 @@ int HEATER_PIN = 10; //Heater (termopad) pin
 #define BUZZER_PIN  9 // Buzzer pin
 #define BUTTON_SELECT 5 //Button = SELECT pin
 #define BUTTON_UP 7 //Button =  UP pin
-#define BUTTON_DOWN 6 //Button = DOWN pin
+#define BUTTON_DN 6 //Button = DOWN pin
 #define TRIGGER_PIN 11 // used to set a time signal for triggering oscilloscope
 
 
@@ -115,16 +119,13 @@ int basic_state = INCUBATING;
 int warm_up_phase = true;
 
 //menu variables
-int menuSelection = 0;
-bool inMainMenu = true;
-bool up = false;
-bool down = false;
-bool sel = false;
 
 // for debouncing
 bool up_pressed = false;
 bool dn_pressed = false;
 bool sel_pressed = false;
+
+int menuSelection = 0;
 
 float CurrentTemp;
 float OldErrorInput = 0.0;
@@ -463,7 +464,7 @@ void checkTempButtons() {
     displayTempMenu();
   }
 
-  if (digitalRead(BUTTON_DOWN) == HIGH) {
+  if (digitalRead(BUTTON_DN) == HIGH) {
     Serial.println(F("BUTTON DOWN PUSHED!"));
     selectedOption = (selectedOption + 1) % totalOptions;
     delay(200); // Debouncing
@@ -492,29 +493,7 @@ void displayTimeMenu() {
   display.display();
 }
 
-void checkTimeButtons() {
-  while (timeMax == 0){
-  if (digitalRead(BUTTON_SELECT) == HIGH) {
-    Serial.println(F("BUTTON SELECT PUSHED!"));
-    timeMax = int(timeMaxOptions[selectedOption]);
-    delay(200); // Debouncing
-  }
 
-  if (digitalRead(BUTTON_UP) == HIGH) {
-    Serial.println(F("BUTTON UP PUSHED!"));
-    selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
-    delay(200); // Debouncing
-    displayTimeMenu();
-  }
-
-  if (digitalRead(BUTTON_DOWN) == HIGH) {
-    Serial.println(F("BUTTON DOWN PUSHED!"));
-    selectedOption = (selectedOption + 1) % totalOptions;
-    delay(200); // Debouncing
-    displayTimeMenu();
-  }
-  }
-}
 
 void setMaxTemp() {
   display.clearDisplay();
@@ -704,7 +683,7 @@ void setup() {
   display.clearDisplay();
   pinMode(BUTTON_SELECT, INPUT_PULLUP);
   pinMode(BUTTON_UP, INPUT_PULLUP);
-  pinMode(BUTTON_DOWN, INPUT_PULLUP);
+  pinMode(BUTTON_DN, INPUT_PULLUP);
 
 
 #if defined(STRATEGY_FUZZY)
@@ -775,7 +754,7 @@ void checkTimeExpired() {
     delay(100);
     analogWrite(BUZZER_PIN,0);
     delay(100);
-    if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DOWN) == HIGH))
+    if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH))
     {
       exit_flag = 1;
     }
@@ -845,43 +824,61 @@ void showMenu() {
 
 #define BUTTON_POLL_PERIOD 0
 bool returnToMain = false;
+bool inMainMenu = true;
 
 void processButtons() {
+  {
+    bool up = false;
+    bool dn = false;
+    bool sel = false;
 
-  delay(BUTTON_POLL_PERIOD);
+    delay(BUTTON_POLL_PERIOD);
+    bool sel_button = digitalRead(BUTTON_SELECT);
+    bool up_button = digitalRead(BUTTON_UP);
+    bool dn_button = digitalRead(BUTTON_DN);
+    sel_pressed |= sel_button;
+    up_pressed |= up_button;
+    dn_pressed |= dn_button;
+    // This is meant to catch the release of the button!
+    sel = sel_pressed && !sel_button;
+    dn = dn_pressed && !dn_button;
+    up = up_pressed && !up_button;
+    if (sel) sel_pressed = false;
+    if (dn) dn_pressed = false;
+    if (up) up_pressed = false;
+  }
 
-  bool sel_button = digitalRead(BUTTON_SELECT);
-  bool up_button = digitalRead(BUTTON_UP);
-  bool dn_button = digitalRead(BUTTON_DOWN);
-  sel_pressed |= sel_button;
-  up_pressed |= up_button;
-  dn_pressed |= dn_button;
-  // This is meant to catch the release of the button!
-  sel = sel_pressed && !sel_button;
-  down = dn_pressed && !dn_button;
-  up = up_pressed && !up_button;
-  if (sel) sel_pressed = false;
-  if (down) dn_pressed = false;
-  if (up) up_pressed = false;
+  if (!up_pressed && !dn_pressed && !sel_pressed)
+    return;
+
+  if (DEBUG_BUTTONS > 0) {
+    Serial.print("processButttons: ");
+    Serial.print(sel_pressed);
+    Serial.print(" ");
+    Serial.print(up_pressed);
+    Serial.print(" ");
+    Serial.println(dn_pressed);
+  }
   // I don't know what this is supposed to do...
   int multiple = 0;
-  if (!inMainMenu && sel) {
+  if (!inMainMenu && sel_pressed) {
     returnToMain = true;
-    sel = false;
+    sel_pressed = false;
   }
-  // Serial.println(F("loop ZZZ"));
+
+
   //controls menu selection
   if (inMainMenu) {
     //read buttons and menu
-    if (up && menuSelection > 0) {
+    if (up_pressed && menuSelection > 0) {
       menuSelection--;
-      up = false;
-    } else if (down && menuSelection < 3) {
+      up_pressed = false;
+    } else if (dn_pressed && menuSelection < 3) {
       menuSelection++;
-      down = false;
-    } else if (sel) {
+      dn_pressed = false;
+    } else if (sel_pressed) {
       inMainMenu = false;
-      sel = false;
+      sel_pressed = false;
     }
     //   Serial.println(F("loop PPP 1"));
     showMenu();
@@ -902,14 +899,14 @@ void processButtons() {
         {
           // This is wrong; we whould be showing instructions
           showSetTempMenu(targetTemperatureC);
-          if (up) {
+          if (up_pressed) {
             if (targetTemperatureC > MAX_TEMPERATURE_C) {
               targetTemperatureC = MAX_TEMPERATURE_C;
             }
             targetTemperatureC += 0.5;
             setTargetTemp(targetTemperatureC);
           }
-          if (down) {
+          if (dn_pressed) {
             targetTemperatureC -= 0.5;
             setTargetTemp(targetTemperatureC);
           }
@@ -932,14 +929,14 @@ void processButtons() {
     if (returnToMain) {
       returnToMain = false;
       inMainMenu = true;
-      sel = false;
+      sel_pressed = false;
     }
     //    Serial.println(F("loop NNN"));
   }
 
-  sel = false;
-  up = false;
-  down = false;
+  sel_pressed = false;
+  up_pressed = false;
+  dn_pressed = false;
   //Serial.println(F("loop BBB"));
   // We have to process menu changes without delay to have
   // a good user experience; but reading the temperature can
@@ -950,11 +947,6 @@ void processButtons() {
 uint32_t last_temp_check_ms = 0;
 #define PERIOD_TO_CHECK_TEMP_MS 5000
 void loop() {
-  sensor.requestTemperatures();
-  CurrentTemp = read_temp();
-  Serial.println("CurrentTemp: ");
-  Serial.println(CurrentTemp);
-
   processButtons();
 
   uint32_t loop_start = millis(); 
@@ -967,7 +959,6 @@ void loop() {
   char T;
   if (Serial.available()) {
     T = Serial.read();  //getting string input in varaible "T"
-
     Serial.print(F("T ="));
     Serial.println(T);
     dumpdata = (T == 'x');
@@ -981,13 +972,7 @@ void loop() {
     Serial.println(F("reset ROM INDEX"));
     rom_reset();
   }
-
-#if defined(KALMAN)
-  FilteredTemp = kalmanFilter(CurrentTemp,FilteredTemp);
-#else
-  FilteredTemp = CurrentTemp;
-#endif
-
+ 
   if (exit_flag) {
     Serial.println("INCUBATION DONE.");
     return;
@@ -995,7 +980,7 @@ void loop() {
 
   selectedOption = 0;
 
-  if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DOWN) == HIGH) && (digitalRead(BUTTON_SELECT) == HIGH))
+  if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH) && (digitalRead(BUTTON_SELECT) == HIGH))
   {
       exit_flag = 1;
       Serial.println("Because 3 buttons were put at once, this incubation is cancelled.");
@@ -1011,12 +996,17 @@ void loop() {
   if((seconds - secondsSinceTempUpdate) >= secondsToUpdateTemp) // This occurs one per second....
   {
       Serial.println("Updating Temp");
-// // This should be replaced with a RingBuffer style implementation....
-//     for (int i = 0; i < numPoints - 1; i++)
-//     {
-//       TempHistory[i] = TempHistory[i + 1];
-//     }
-//     TempHistory[numPoints - 1] = FilteredTemp;
+
+    Serial.println("Reading Temp: ");
+    sensor.requestTemperatures();
+    CurrentTemp = read_temp();
+    Serial.println("CurrentTemp: ");
+    Serial.println(CurrentTemp);
+#if defined(KALMAN)
+    FilteredTemp = kalmanFilter(CurrentTemp,FilteredTemp);
+#else
+    FilteredTemp = CurrentTemp;
+#endif
     renderDisplay_bool = (seconds - secondsLastDisplay) > secondsToUpdateDisplay;
     if (renderDisplay_bool) {
 
@@ -1033,7 +1023,6 @@ void loop() {
 #endif
 
       setHeatPWM(int(round(outputPWM)));  
-//     analogWrite(HEATER_PIN, int(round(outputPWM)));
       Serial.print("Heater PWM: ");
       Serial.print((float) outputPWM * 100.0 / 256.0);
       Serial.println("%");
@@ -1052,10 +1041,8 @@ void loop() {
           writeNewEntry(CurrentTemp);
           time_of_last_entry = time_now_ms;
         }
- //     renderDisplay();
       secondsLastDisplay = seconds;
-    } else {
-    }
+    } 
     secondsSinceTempUpdate = seconds; // This is actually the number of times this can
   }
   minutes = seconds / 60;
