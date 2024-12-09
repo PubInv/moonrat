@@ -1,33 +1,44 @@
-# MooonRatII, A Tote-Size Portable Incubator for Rapid Field Work
+<h1 align="center">MooonRatII, A Tote-Size Portable Incubator for Rapid Field Work</h1>
 
-Aliases used by other developers include Moonrat, Rice MiniCubator, and Rice Petri FI.  
-**MoonratII** is the development effort of 2023.  
-Visit the Legacy folder (above) for the work of volunteers prior to 2023 and the hand built prototype.  
+Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy](https://github.com/PubInv/moonrat/tree/main/legacy) folder for the work of volunteers prior to December 2022 and the hand built prototype.
+
+**MoonratII** development effort began in 2023.   
+
+
+---
+# Status, December 2024 
+TBA
+
+# Status, November 2024 
+A scientific research paper is tentatively scheduled for February 2025 in the HardwareX journal.
 
 # Status, September 2024  
-Prototypes of the MoonratII were field tested in two locations - the Galapagos Islands by researcher Auja TK and in Tanzania by Dr. Robert Read. 
-A HardwareX scientific research paper is slated for October 2024 publication.
+Prototypes of the MoonratII were field tested in two locations - the Galapagos Islands by researcher Auja Bywater and in Tanzania by Dr. Robert Read. The heater features the TMP36 low voltage temperature sensor. A HardwareX scientific research paper is slated for October 2024 publication.
 
 # Status, April 2024  
-The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 1 PWB for use by the USA team.  
-The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 2 PWB for use by  Mexico team. 
-Enclosure design for the Controller Assembly is underway. 
-Rev 3 PWB TBA. 
+The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 1 PWB for use by the USA team and five Printed Circuit Assemblies (Control and Heater) of the Rev 2 PWB for use by  the Mexico team. Enclosure design for the Controller Assembly of Rev 3 PWB is underway TBA. 
 
 # Current Design Summary
 In one schematic and PCB, we have developed a "Control Assembly" and a "Heater Assembly".  
-The Control Assembly will be in an enclosure detachable from the incubation chamber.  
-The Heater Assembly will be mounted internal to the incubation assembly and in addition to providing current to a heating pad or pads has a PCB mounted temperature sensor.  
-A third component, a rechargeable battery with its recharging station, will complete a MoonRatII incubator system.
+- The Control Assembly will be in an enclosure detachable from the incubation chamber.  
+- The Heater Assembly will mounted internal to the incubation assembly under the unit top. Current to a heating pad or pads has changed from the previously used TMP36 low voltage temperature sensor to a digital temperature sensor. 
+- A rechargable battery with its recharging station will complete a MoonRatII incubator system.
+  
+### Image Gallery - Current FreeCAD Assembly Designs
+|A    |B    |C    |
+| --- | --- | --- |
+| <img width="300" atl="image1" src="https://github.com/user-attachments/assets/e7c12fc4-8284-4690-aac5-48fd973704af"> | <img width="300" atl="image2" src="https://github.com/user-attachments/assets/09263421-4ce9-420e-a656-ec62c1cdc5f2"> | <img width="300" atl="image4" src="https://github.com/user-attachments/assets/596ca510-e76f-4bca-a64a-ca0ef15ba3e8">|
+| <img width="300" atl="image5" src="https://github.com/user-attachments/assets/1494b485-7472-4db9-9431-564c4f7dbedf"> | <img width="300" atl="image6" src="https://github.com/user-attachments/assets/4dbd4b99-946e-4f79-9589-6b527d1ca0e3"> | <img width="300" atl="image7" src="https://github.com/user-attachments/assets/b570462b-f9e0-4349-9fd8-33f91ea28a3b"> |
+| <img width="300" atl="image8" src="https://github.com/user-attachments/assets/a76b752d-e472-4d29-aec0-d65051a0d5a1"> | <img width="200" atl="image9" src="https://github.com/user-attachments/assets/1ebdbb64-3320-4e3b-8af4-2a12f6a69f7d"> | <img width="300" atl="image10" src="https://github.com/user-attachments/assets/ffd1c814-bdfc-4d9a-a9ed-c0cb051c3e43"> |  
 
 ## 2023 MoonRatII Design
 ### Fundamental Modularity: The 6-wire appliance 
 The connections from the controller to the heater needs only 6 wires:
-1. GND (ground, nominally voltage 0.)
-2. +12V PWR (the heating elements requires approximately 12V power.)
-3. HEAT ON (Vin)
+1. GND (ground, nominally voltage 0).
+2. +12V PWR (the heating elements requires approximately 12V power).
+3. HEAT ON (Vin).
 4. +5V (for the thermometer).
-5. SIG -- data from the digital "one-wire" format
+5. SIG - data from the digital "one-wire" format.
 6. UNK - a final wire is included for future functionality that is unknown right now.  It is connected as a redundant ground in Rev 1 and Rev 2.
 
 These (esp. the power) should probably be rated for 2 amps, but in practice 1 amp is probably good enough.
@@ -47,24 +58,26 @@ By building a small, portable, intelligent incubator that can maintain constant 
 performed "in the field" without having access to a electric grid power.
 
 ## Origin
-
 This is an offshoot of the [Rapid E. coli project](https://github.com/PubInv/rapid-e-coli). It is an attempt to build a better, smaller, more intelligent
 portable incubator that the Armadillo, described [elsewhere](http://jhe.ewb.org.au/index.php/jhe/article/view/127) and buildable from an [instructable](https://www.instructables.com/id/Portable-Petrifilm-Incubator-for-Inexpensive-In-Fi/).
 
 ## References (Incomplete)
-
-1. Petrifilms: [https://www.3m.com/3M/en_US/company-us/all-3m-products/~/ECOLICT-3M-Petrifilm-E-coli-Coliform-Count-Plates/?N=5002385+3293785155&rt=rud](https://www.3m.com/3M/en_US/company-us/all-3m-products/~/ECOLICT-3M-Petrifilm-E-coli-Coliform-Count-Plates/?N=5002385+3293785155&rt=rud)
-1. EPA Guidelines: [https://19january2017snapshot.epa.gov/sites/production/files/2015-11/documents/drinking_water_sample_collection.pdf](https://19january2017snapshot.epa.gov/sites/production/files/2015-11/documents/drinking_water_sample_collection.pdf)
-1. Original Incubator Paper - [http://jhe.ewb.org.au/index.php/jhe/article/view/127](http://jhe.ewb.org.au/index.php/jhe/article/view/127)
-1. Construction of a Low-cost Mobile Incubator for Field and Laboratory Use [https://www.jove.com/t/58443/construction-low-cost-mobile-incubator-for-field-laboratory](https://www.jove.com/t/58443/construction-low-cost-mobile-incubator-for-field-laboratory)
-1. Solar Powered Portable Culture
-Incubator [https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf](https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf)
-
+- Petrifilms [https://www.3m.com/3M/en_US/company-us/all-3m-products/~/ECOLICT-3M-Petrifilm-E-coli-Coliform-Count-Plates/?N=5002385+3293785155&rt=rud](https://www.3m.com/3M/en_US/company-us/all-3m-products/~/ECOLICT-3M-Petrifilm-E-coli-Coliform-Count-Plates/?N=5002385+3293785155&rt=rud)
+- EPA Guidelines [https://19january2017snapshot.epa.gov/sites/production/files/2015-11/documents/drinking_water_sample_collection.pdf](https://19january2017snapshot.epa.gov/sites/production/files/2015-11/documents/drinking_water_sample_collection.pdf)
+- Original Incubator Paper [http://jhe.ewb.org.au/index.php/jhe/article/view/127](http://jhe.ewb.org.au/index.php/jhe/article/view/127)
+- Construction of a Low-cost Mobile Incubator for Field and Laboratory Use [https://www.jove.com/t/58443/construction-low-cost-mobile-incubator-for-field-laboratory](https://www.jove.com/t/58443/construction-low-cost-mobile-incubator-for-field-laboratory)
+- Solar Powered Portable Culture Incubator [https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf](https://www.jscimedcentral.com/Pediatrics/pediatrics-3-1063.pdf)
+- World Health Organization
+- Fuzzy Logic - 
 
 ## Acknowledgements
-Thanks to Dr. Sabia Abidi of Rice University for input and references.
+Thanks to [Dr. Sabia Abidi](https://profiles.rice.edu/faculty/sabia-abidi) of Rice University for input and references.
 
 ## MoonratII Team
+[Robert L. Read - Founder of Public Invention](https://github.com/PubInv/) 
+
+[F. Lee Erickson](https://github.com/ForrestErickson)
+
 [Melanie Laporte](https://github.com/MelanieLaporte)  
 
 [Silvia Castillas](https://github.com/SilviaKarbid)  
@@ -75,10 +88,6 @@ Thanks to Dr. Sabia Abidi of Rice University for input and references.
 
 [Horacio Garcia](https://github.com/HJGV05) 
 
-[F. Lee Erickson](https://github.com/ForrestErickson)  
-
-[Robert L. Read of Public Invention](https://github.com/PubInv/) 
-
 <hr>
-<h6><i> Updated by F. Lee Erickson, 20240424</i></h6>
+<h6><i> Updated by Melanie Laporte, 20240512</i></h6>
 
