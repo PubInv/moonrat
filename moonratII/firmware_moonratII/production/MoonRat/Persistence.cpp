@@ -53,9 +53,9 @@ unsigned long BASE_DATA_RECORD_PERIOD_S = 48 * 60 * 60 / (MAX_SAMPLES -1);
 unsigned long BASE_DATA_RECORD_PERIOD_MS = BASE_DATA_RECORD_PERIOD_S * 1000;
 
 // Don't USE_DEBUGGING in production!
-#define USE_DEBUGGING 1
+// #define USE_DEBUGGING_SPEE 0
 // For DEBUGGING, we may use a faster rate, of every 10 seconds
-#ifdef USE_DEBUGGING
+#ifdef USE_DEBUGGING_SPEED
 unsigned long DATA_RECORD_PERIOD = (BASE_DATA_RECORD_PERIOD_MS / 60);
 #else
 unsigned long DATA_RECORD_PERIOD = BASE_DATA_RECORD_PERIOD_MS;
@@ -65,8 +65,6 @@ unsigned long DATA_RECORD_PERIOD = BASE_DATA_RECORD_PERIOD_MS;
 //time variables
 #define FIVE_MINUTES 300000
 
-// #define FORTYEIGHT_HOURS 172860000  //forty eight hours
-// #define TICK_LENGTH 125
 //graph variables
 int graphTimeLength = 24;  //2 hours long bexause plotting every 5 mins
 /*graphTimeLength2=511;*/

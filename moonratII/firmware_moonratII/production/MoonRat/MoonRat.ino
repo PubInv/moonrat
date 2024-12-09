@@ -829,7 +829,9 @@ void showMenu() {
 
 #define BUTTON_POLL_PERIOD 0
 bool returnToMain = false;
+// replace this with an enum
 bool inMainMenu = true;
+bool showingGraph = false;
 
 
 bool sel_pressed = false;
@@ -873,16 +875,13 @@ void processButtons() {
   }
   // I don't know what this is supposed to do...
   int multiple = 0;
-  Serial.println("inMainMenu");
-  Serial.println(inMainMenu);
   if (!inMainMenu && sel) {
-    returnToMain = true;
+    inMainMenu = true;
+    showingGraph = false;
     showMenu();
-    sel = false;
+    Serial.println("returned to Menu");
+    return;
   }
-  Serial.print("sel: ");
-  Serial.println(sel);
-  delay(100);
 
   if (!up && !dn && !sel)
     return;
@@ -907,7 +906,11 @@ void processButtons() {
   if (!inMainMenu) {
     if (sel || up || dn) {
       inMainMenu = true;
+      showingGraph = false;
       showMenu();
+      sel = false;
+      up = false;
+      dn = false;
       return;
     }
   }
@@ -924,12 +927,16 @@ void processButtons() {
           Serial.println("showing graph");
           showGraph(index);
           inMainMenu = false;
+          showingGraph = true;
+          Serial.println("returned to Graph");
         }
         break;
       case SET_TEMP_M:
         {
           // This is wrong; we whould be showing instructions
           showSetTempMenu(targetTemperatureC);
+          inMainMenu = false;
+          showingGraph = false;
           if (up) {
             if (targetTemperatureC > MAX_TEMPERATURE_C) {
               targetTemperatureC = MAX_TEMPERATURE_C;
@@ -954,17 +961,11 @@ void processButtons() {
  //         }
           incubating = !incubating;
           inMainMenu = true;
+          showingGraph = false;
         }
         break;
     }
-    //    Serial.println(F("loop MMM"));
-    if (returnToMain) {
-      returnToMain = false;
-      inMainMenu = true;
-      sel = false;
-    }
     //    Serial.println(F("loop NNN"));
-    sel = false;
   }
 
   //Serial.println(F("loop BBB"));
@@ -1024,12 +1025,8 @@ void loop() {
     // assert(secondsToUpdateDisplay > secondsToUpdateTemp);
   if((seconds - secondsSinceTempUpdate) >= secondsToUpdateTemp) // This occurs one per second....
   {
-    Serial.println("Updating Temp");
-    Serial.println("Reading Temp: ");
     sensor.requestTemperatures();
     CurrentTemp = read_temp();
-    Serial.println("CurrentTemp: ");
-    Serial.println(CurrentTemp);
 #if defined(KALMAN)
     FilteredTemp = kalmanFilter(CurrentTemp,FilteredTemp);
 #else
@@ -1050,17 +1047,18 @@ void loop() {
 #endif
 
       setHeatPWM(int(round(outputPWM)));  
-      Serial.print("Heater PWM: ");
-      Serial.print((float) outputPWM * 100.0 / 256.0);
-      Serial.println("%");
-      display.setCursor(0, SCREEN_HEIGHT-8); // Position adjustment for Min legend
-      display.print("PWM:");
-      display.print(int(round(outputPWM)));
-      display.display();
-      Serial.print("renderDisplay: ");
-
-      uint16_t index = getIndex();
-      showGraph(index);
+      // Serial.print("Heater PWM: ");
+      // Serial. print((float) outputPWM * 100.0 / 256.0);
+      // Serial.println("%");
+      // display.setCursor(0, SCREEN_HEIGHT-8); // Position adjustment for Min legend
+      // display.print("PWM:");
+      // display.print(int(round(outputPWM)));
+      // display.display();
+      // Serial.print("renderDisplay: ");
+      if (showingGraph) {
+        uint16_t index  = getIndex();
+        showGraph(index);
+      }
 
       if (time_since_last_entry > DATA_RECORD_PERIOD) {
           //  entryFlag = false;
