@@ -15,9 +15,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // Define control strategy 
-// #define STRATEGY_THERMOSTAT 1
+#define STRATEGY_THERMOSTAT 1
 // #define STRATEGY_PID 2
-#define STRATEGY_FUZZY 3
+// #define STRATEGY_FUZZY 3
 
 #if defined(STRATEGY_FUZZY)
 #include <Fuzzy.h>
@@ -71,7 +71,7 @@ int HEATER_PIN = 10; //Heater (termopad) pin
 #define BUTTON_UP 7 //Button =  UP pin
 #define BUTTON_DN 6 //Button = DOWN pin
 #define TRIGGER_PIN 11 // used to set a time signal for triggering oscilloscope
-
+#define DEBOUNCING_TIME_MS 100
 
 int LOG_VERBOSE = 5;
 int LOG_DEBUG   = 4;
@@ -120,7 +120,7 @@ int warm_up_phase = true;
 
 int menuSelection = 0;
 
-float CurrentTemp;
+float CurrentTempC;
 float OldErrorInput = 0.0;
 float calibration;
 
@@ -160,14 +160,14 @@ float Xp = 0.0;
 float Zp = 0.0;
 float FilteredTemp = 0.0;
 
-float computeKalmanFilter(float currentTemp,float filteredTemp) {
+float computeKalmanFilter(float currentTempC,float filteredTemp) {
       // Kalman Filter
       Pc = P + Q;
       G = Pc/(Pc + R);
       P = (1-G) * Pc;
       Xp = filteredTemp;
       Zp = Xp;
-      return G*(currentTemp-Zp)+Xp;
+      return G*(currentTempC-Zp)+Xp;
 }
 
 // TIMER VARIABLES
@@ -300,7 +300,7 @@ static const unsigned char PROGMEM image_data_Saraarray[] = {
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-double read_temp() {
+double read_tempC() {
   sensor.requestTemperatures();  // Send the command to get temperatures
   // After we got the temperatures, we can print them here.
   // We use the function ByIndex, and as an example get the temperature from the first sensor only.
@@ -336,10 +336,20 @@ void showCurStatus(float temp) {
   display.print(F("T (C):"));
   display.println(temp);
   display.print(F("Power (WattHours):"));
-  display.println(wattHours());
+    float avg_watts = 0.0;
+  display.println(wattHours(avg_watts));
   display.display();
 }
 
+void showReport(float temp) {
+  Serial.print(F("Temp : "));
+  Serial.println(temp);
+  Serial.print(F("Power (WattHours): "));
+  float avg_watts = 0.0;
+  Serial.println(wattHours(avg_watts));
+  Serial.print(F("Average Watts: "));
+  Serial.println(avg_watts);
+}
 void showSetTempMenu(float target) {
   display.clearDisplay();  //removes current plots
   display.setCursor(0, 0);
@@ -382,15 +392,14 @@ void showGraph(int eeindex) {
   float maxTempToGraph = -1.0;
   float minTempToGraph = 5000.0;
   for (int i = startIndex; i < eeindex; i++) {
-    float currentTemp = readIndex(i);
-    minTempToGraph = min(minTempToGraph, currentTemp);
-    maxTempToGraph = max(maxTempToGraph, currentTemp);
+    float cTempC = readIndex(i);
+    minTempToGraph = min(minTempToGraph, cTempC);
+    maxTempToGraph = max(maxTempToGraph, cTempC);
   }
 
   int graphMaxTemp = ceil(maxTempToGraph);
   int graphMinTemp = floor(minTempToGraph);
 
-  Serial.print(F("graph midpoint ")); 
   display.clearDisplay();
   display.setTextSize(2);
   display.setCursor(0, 0);
@@ -416,12 +425,9 @@ void showGraph(int eeindex) {
   float middle = meanTemp - (float)graphMinTemp;
   int j = 0;
 
-  Serial.println(F("start, 0"));
-  Serial.println(startIndex);
-  Serial.println(eeindex);
   for (int i = startIndex; i < eeindex; i++) {
-    float currentTemp = readIndex(i);
-    float ypos = (currentTemp - graphMinTemp);
+    float cTempC = readIndex(i);
+    float ypos = (cTempC - graphMinTemp);
 
     int x = LEFT_MARGIN + j;
     int y = (64 - (scale * ypos));
@@ -432,7 +438,6 @@ void showGraph(int eeindex) {
   }  
 
   display.display();
-  Serial.println(F("display done"));
 }
 
 
@@ -461,20 +466,20 @@ void checkTempButtons() {
   if (digitalRead(BUTTON_SELECT) == HIGH) {
     Serial.println(F("BUTTON SELECT PUSHED!"));
     tempMax = tempMaxOptions[selectedOption];
-    delay(200); // Debouncing
+    delay(DEBOUNCING_TIME_MS); // Debouncing
   }
 
   if (digitalRead(BUTTON_UP) == HIGH) {
     Serial.println(F("BUTTON UP PUSHED!"));
     selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
-    delay(200); // Debouncing
+    delay(DEBOUNCING_TIME_MS); // Debouncing
     displayTempMenu();
   }
 
   if (digitalRead(BUTTON_DN) == HIGH) {
     Serial.println(F("BUTTON DOWN PUSHED!"));
     selectedOption = (selectedOption + 1) % totalOptions;
-    delay(200); // Debouncing
+    delay(DEBOUNCING_TIME_MS); // Debouncing
     displayTempMenu();
   }
   }
@@ -710,7 +715,7 @@ int renderDisplay_bool = 0;
 
 
 #if defined(STRATEGY_PID)
-int pidPWM() {
+float pidPWM_fraction() {
       //* PID
       setPoint = tempMax;
       contolInput = FilteredTemp;
@@ -722,7 +727,7 @@ int pidPWM() {
 #endif
 
 #if defined(STRATEGY_FUZZY)
-int fuzzyPWM() {
+float fuzzyPWM() {
       //* fuzzy
       // get entrances
       float ErrorInput = FilteredTemp-tempMax;
@@ -735,12 +740,13 @@ int fuzzyPWM() {
 }
 #endif
 
-#if defined(STRATEGY_TERMOSTAT)
-int thermostatPWM() {
-  if (curtemp > targetTemp) {
-    return 255;
+#if defined(STRATEGY_THERMOSTAT)
+float thermostatPWM_fraction() {
+  double curTemp = read_tempC();
+  if (curTemp < targetTemperatureC) {
+    return 1.0;
   } else {
-    return 0;
+    return 0.0;
   }
 }
 #endif
@@ -748,7 +754,6 @@ int thermostatPWM() {
 
 int exit_flag = 0;
 void checkTimeExpired() {
-
   if ((hours >= timeMax) && exit_flag == 0)
   {
     displayExitScreen();
@@ -788,8 +793,8 @@ void showMenu() {
   display.setCursor(56, 7);
 
   // It's really useful to see the current temp at all times...
-  double curTemp = read_temp();
-  display.print(curTemp);
+  double curTempC = read_tempC();
+  display.print(curTempC);
   display.print(" ");
   char currentTime[80];
   // String currentTime =
@@ -918,7 +923,7 @@ void processButtons() {
     Serial.println(F("loop RRR"));
     switch (menuSelection) {
       case TEMPERATURE_M:
-        showCurStatus(CurrentTemp);
+        showCurStatus(CurrentTempC);
         inMainMenu = false;
         break;
       case GRAPH_1_M:
@@ -976,7 +981,9 @@ void processButtons() {
 }
 
 uint32_t last_temp_check_ms = 0;
+uint32_t time_since_last_report_ms = 0;
 #define PERIOD_TO_CHECK_TEMP_MS 5000
+#define REPORT_PERIOD 5000
 void loop() {
   processButtons();
 
@@ -1026,27 +1033,26 @@ void loop() {
   if((seconds - secondsSinceTempUpdate) >= secondsToUpdateTemp) // This occurs one per second....
   {
     sensor.requestTemperatures();
-    CurrentTemp = read_temp();
+    CurrentTempC = read_tempC();
 #if defined(KALMAN)
-    FilteredTemp = kalmanFilter(CurrentTemp,FilteredTemp);
+    FilteredTemp = kalmanFilter(CurrentTempC,FilteredTemp);
 #else
-    FilteredTemp = CurrentTemp;
+    FilteredTemp = CurrentTempC;
 #endif
     renderDisplay_bool = (seconds - secondsLastDisplay) > secondsToUpdateDisplay;
     if (renderDisplay_bool) {
-      Serial.println("Updating Display");
-      float outputPWM;
+      float outputPWM_fraction;
 #if defined(STRATEGY_FUZZY)
-      outputPWM = fuzzyPWM();
+      outputPWM_fraction = fuzzyPWM();
 #endif
 #if defined(STRATEGY_PID)
-      outputPWM = pidPWM();
+      outputPWM_fraction = pidPWM_fraction();
 #endif
 #if defined(STRATEGY_THERMOSTAT)
-      outputPWM = thermostatPWM();
+      outputPWM_fraction = thermostatPWM_fraction();
 #endif
 
-      setHeatPWM(int(round(outputPWM)));  
+      setHeatPWM_fraction(int(round(outputPWM_fraction)));  
       // Serial.print("Heater PWM: ");
       // Serial. print((float) outputPWM * 100.0 / 256.0);
       // Serial.println("%");
@@ -1060,10 +1066,14 @@ void loop() {
         showGraph(index);
       }
 
+      if ((time_now_ms - time_since_last_report_ms) > REPORT_PERIOD) {
+        showReport(CurrentTempC);
+          time_since_last_report_ms = time_now_ms;
+        }
       if (time_since_last_entry > DATA_RECORD_PERIOD) {
           //  entryFlag = false;
           Serial.println(F("Writing New Entry"));
-          writeNewEntry(CurrentTemp);
+          writeNewEntry(CurrentTempC);
           time_of_last_entry = time_now_ms;
         }
       secondsLastDisplay = seconds;

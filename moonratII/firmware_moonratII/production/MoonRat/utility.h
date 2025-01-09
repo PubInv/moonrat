@@ -31,4 +31,6 @@
 #define RESISTANCE_OHMS 6.3
 #define POWER_WATTS (VOLTAGE_V * VOLTAGE_V / RESISTANCE_OHMS) 
 
+#define MS_TO_HOURS (1.0 / (1000.0 * 60.0 * 60.0))
+
 #endif
