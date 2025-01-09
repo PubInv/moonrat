@@ -1,4 +1,4 @@
-<h1 align="center">MooonRatII, A Tote-Size Portable Incubator for Rapid Field Work</h1>
+<h1 align="center">MoonRatII, A Tote-Size Portable Incubator for Rapid Field Work</h1>
 
 Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy](https://github.com/PubInv/moonrat/tree/main/legacy) folder for the work of volunteers prior to December 2022 and the hand built prototype.
 
@@ -6,11 +6,11 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 
 
 ---
-# Status, December 2024 
+# Status, January 2025 
 TBA
 
 # Status, November 2024 
-A scientific research paper is tentatively scheduled for February 2025 in the HardwareX journal.
+A scientific research paper is tentatively scheduled for March 2025 in the HardwareX journal.
 
 # Status, September 2024  
 Prototypes of the MoonratII were field tested in two locations - the Galapagos Islands by researcher Auja Bywater and in Tanzania by Dr. Robert Read. The heater features the TMP36 low voltage temperature sensor. A HardwareX scientific research paper is slated for October 2024 publication.
