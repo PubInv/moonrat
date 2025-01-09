@@ -199,8 +199,6 @@ void setHeatPWM_fraction(double df_fraction) {
   if (LOG_LEVEL >= LOG_MAJOR) {
     Serial.print(F("Set Heat PWM :"));
     Serial.println(pwm_255);
-    Serial.print(F("Total (pro-rated) time on:"));
-    Serial.println(time_heater_turned_on_ms);
   }
 }
 
@@ -246,8 +244,6 @@ void setTargetTemp(float temp) {
 }
 // return the number of watt hours used in the current incubation
 float wattHours(float& average_watts) {
-  Serial.println(F("DEBUGGING"));
-
   float time_on_hours =  MS_TO_HOURS * time_heater_turned_on_ms ;
   float time_incubating_hours = MS_TO_HOURS * time_incubating();
   float watt_hours = POWER_WATTS * time_on_hours;

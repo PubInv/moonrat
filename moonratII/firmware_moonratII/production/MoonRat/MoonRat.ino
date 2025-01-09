@@ -16,8 +16,8 @@
 
 // Define control strategy 
 // #define STRATEGY_THERMOSTAT 1
-#define STRATEGY_PID 2
-// #define STRATEGY_FUZZY 3
+// #define STRATEGY_PID 2
+#define STRATEGY_FUZZY 3
 
 #if defined(STRATEGY_FUZZY)
 #include <Fuzzy.h>
@@ -197,25 +197,7 @@ int secondsToUpdateDisplay = 10;
 
 #endif
 
-#if defined(STRATEGY_FUZZY)
-// fuzzy
-Fuzzy *fuzzy = new Fuzzy();
 
-// fuzzyInput(Error)
-FuzzySet *negative = new FuzzySet(-50, -50, -5,0);
-FuzzySet *zero = new FuzzySet(-3, 0, 0, 3);
-FuzzySet *positive = new FuzzySet(0, 5, 50, 50);
-
-// fuzzyInput(DiffError)
-FuzzySet *dnegative = new FuzzySet(-50, -50, -2, 0);
-FuzzySet *dzero = new FuzzySet(-1, 0, 0, 1);
-FuzzySet *dpositive = new FuzzySet(0, 2, 50, 50);
-
-// fuzzyOutput(Frequency)
-FuzzySet *fast = new FuzzySet(10, 200, 255, 255);
-FuzzySet *average = new FuzzySet(0, 5, 5, 20);
-FuzzySet *slow = new FuzzySet(0, 0, 1, 5);
-#endif
 
 //display variables
 #define WIDTH 128
@@ -545,7 +527,26 @@ void displayExitScreen() {
 
 }
 
+
 #if defined(STRATEGY_FUZZY)
+// fuzzy
+Fuzzy *fuzzy = new Fuzzy();
+
+// fuzzyInput(Error)
+FuzzySet *negative = new FuzzySet(-50, -50, -5,0);
+FuzzySet *zero = new FuzzySet(-3, 0, 0, 3);
+FuzzySet *positive = new FuzzySet(0, 5, 50, 50);
+
+// fuzzyInput(DiffError)
+FuzzySet *dnegative = new FuzzySet(-50, -50, -2, 0);
+FuzzySet *dzero = new FuzzySet(-1, 0, 0, 1);
+FuzzySet *dpositive = new FuzzySet(0, 2, 50, 50);
+
+// fuzzyOutput(Frequency)
+FuzzySet *fast = new FuzzySet(10, 200, 255, 255);
+FuzzySet *average = new FuzzySet(0, 5, 5, 20);
+FuzzySet *slow = new FuzzySet(0, 0, 1, 5);
+
 void setupFuzzy() {
  // fuzzyInput (Error)
   FuzzyInput *Error = new FuzzyInput(1);
@@ -733,7 +734,7 @@ float pidPWM_fraction(float curC) {
 #endif
 
 #if defined(STRATEGY_FUZZY)
-float fuzzyPWM(float curC) {
+float fuzzyPWM_fraction(float curC) {
       //* fuzzy
       // get entrances
       float ErrorInput = curC-targetTemperatureC;
@@ -742,7 +743,7 @@ float fuzzyPWM(float curC) {
       fuzzy->setInput(1, ErrorInput);
       fuzzy->setInput(2, DiffErrorInput);
       fuzzy->fuzzify();
-      return fuzzy->defuzzify(1);
+      return fuzzy->defuzzify(1) / 255.0;
 }
 #endif
 
@@ -1048,7 +1049,10 @@ void loop() {
     if (renderDisplay_bool) {
       float outputPWM_fraction;
 #if defined(STRATEGY_FUZZY)
-      outputPWM_fraction = fuzzyPWM(FilteredTemp);
+      outputPWM_fraction = fuzzyPWM_fraction(FilteredTemp);
+
+      Serial.print("fuzzyPWM Output: ");
+      Serial.println(outputPWM_fraction);
 #endif
 #if defined(STRATEGY_PID)
       outputPWM_fraction = pidPWM_fraction(FilteredTemp);
