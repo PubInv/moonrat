@@ -15,8 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // Define control strategy 
-#define STRATEGY_THERMOSTAT 1
-// #define STRATEGY_PID 2
+// #define STRATEGY_THERMOSTAT 1
+#define STRATEGY_PID 2
 // #define STRATEGY_FUZZY 3
 
 #if defined(STRATEGY_FUZZY)
@@ -190,10 +190,10 @@ int secondsToUpdateDisplay = 10;
   float Ki = 520.0;
   float Kd = 230.0;
   double setPoint; // Desired reference for the controller
-  double contolInput; // Sensor's information in voltage
+  double controlInput; // Sensor's information in voltage
   double controlOutput; // Control's output signal
 
-  PID moonPID(&contolInput, &controlOutput, &setPoint, Kp, Ki, Kd, DIRECT);
+  PID moonPID(&controlInput, &controlOutput, &setPoint, Kp, Ki, Kd, DIRECT);
 
 #endif
 
@@ -342,6 +342,9 @@ void showCurStatus(float temp) {
 }
 
 void showReport(float temp) {
+  Serial.print(F("Target (C) : "));
+  Serial.print(targetTemperatureC);
+  Serial.print(F(" "));
   Serial.print(F("Temp : "));
   Serial.println(temp);
   Serial.print(F("Power (WattHours): "));
@@ -715,22 +718,25 @@ int renderDisplay_bool = 0;
 
 
 #if defined(STRATEGY_PID)
-float pidPWM_fraction() {
+float pidPWM_fraction(float curC) {
       //* PID
-      setPoint = tempMax;
-      contolInput = FilteredTemp;
+      setPoint = targetTemperatureC;
+      controlInput = curC;
+      Serial.print("setPoint, controlInput: ");
+      Serial.println(setPoint);
+      Serial.println(controlInput);
       moonPID.Compute();
       Serial.print("PID controlOuput: ");
-      Serial.println(int(round(controlOutput)));
-   return controlOutput;
+      Serial.println(controlOutput);
+   return controlOutput / 255.0;
 }
 #endif
 
 #if defined(STRATEGY_FUZZY)
-float fuzzyPWM() {
+float fuzzyPWM(float curC) {
       //* fuzzy
       // get entrances
-      float ErrorInput = FilteredTemp-tempMax;
+      float ErrorInput = curC-targetTemperatureC;
       float DiffErrorInput = ErrorInput - OldErrorInput;
       OldErrorInput = ErrorInput;
       fuzzy->setInput(1, ErrorInput);
@@ -741,9 +747,8 @@ float fuzzyPWM() {
 #endif
 
 #if defined(STRATEGY_THERMOSTAT)
-float thermostatPWM_fraction() {
-  double curTemp = read_tempC();
-  if (curTemp < targetTemperatureC) {
+float thermostatPWM_fraction(curC) {
+  if (curC < targetTemperatureC) {
     return 1.0;
   } else {
     return 0.0;
@@ -1043,16 +1048,16 @@ void loop() {
     if (renderDisplay_bool) {
       float outputPWM_fraction;
 #if defined(STRATEGY_FUZZY)
-      outputPWM_fraction = fuzzyPWM();
+      outputPWM_fraction = fuzzyPWM(FilteredTemp);
 #endif
 #if defined(STRATEGY_PID)
-      outputPWM_fraction = pidPWM_fraction();
+      outputPWM_fraction = pidPWM_fraction(FilteredTemp);
 #endif
 #if defined(STRATEGY_THERMOSTAT)
-      outputPWM_fraction = thermostatPWM_fraction();
+      outputPWM_fraction = thermostatPWM_fraction(FilteredTemp);
 #endif
 
-      setHeatPWM_fraction(int(round(outputPWM_fraction)));  
+      setHeatPWM_fraction(outputPWM_fraction);  
       // Serial.print("Heater PWM: ");
       // Serial. print((float) outputPWM * 100.0 / 256.0);
       // Serial.println("%");
