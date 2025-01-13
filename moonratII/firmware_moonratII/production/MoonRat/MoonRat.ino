@@ -16,8 +16,8 @@
 
 // Define control strategy 
 // #define STRATEGY_THERMOSTAT 1
-// #define STRATEGY_PID 2
-#define STRATEGY_FUZZY 3
+#define STRATEGY_PID 2
+// #define STRATEGY_FUZZY 3
 
 #if defined(STRATEGY_FUZZY)
 #include <Fuzzy.h>
@@ -38,6 +38,7 @@
 #include <DallasTemperature.h>
 #include "Persistence.h"
 #include "utility.h"
+#include <DailyStruggleButton.h>
 
 // // Set controller type here
 // #define R3 //Uncomment for Arduino UNO R3
@@ -67,11 +68,37 @@ DallasTemperature sensor(&ourWire);
 // const int sensorPin = A0; //TMP37 SOC pin
 int HEATER_PIN = 10; //Heater (termopad) pin
 #define BUZZER_PIN  9 // Buzzer pin
-#define BUTTON_SELECT 5 //Button = SELECT pin
+#define BUTTON_SL 5 //Button = SELECT pin
 #define BUTTON_UP 7 //Button =  UP pin
 #define BUTTON_DN 6 //Button = DOWN pin
 #define TRIGGER_PIN 11 // used to set a time signal for triggering oscilloscope
 #define DEBOUNCING_TIME_MS 100
+
+DailyStruggleButton upButton;
+DailyStruggleButton dnButton;
+DailyStruggleButton slButton;
+
+
+bool returnToMain = false;
+// replace this with an enum
+bool inMainMenu = true;
+bool showingGraph = false;
+
+
+bool sel_pressed = false;
+bool up_pressed = false;
+bool dn_pressed = false;
+bool up = false;
+bool dn = false;
+bool sel = false;
+
+int menuSelection = 0;
+
+#define NUM_MENU_SELECTIONS 4
+
+
+
+
 
 int LOG_VERBOSE = 5;
 int LOG_DEBUG   = 4;
@@ -118,7 +145,7 @@ int warm_up_phase = true;
 
 //menu variables
 
-int menuSelection = 0;
+
 
 float CurrentTempC;
 float OldErrorInput = 0.0;
@@ -282,6 +309,13 @@ static const unsigned char PROGMEM image_data_Saraarray[] = {
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
+void fastBeep() {
+    analogWrite(BUZZER_PIN, 100); //Put to 100 after tests
+    delay(50);
+    analogWrite(BUZZER_PIN,0);
+}
+
+
 double read_tempC() {
   sensor.requestTemperatures();  // Send the command to get temperatures
   // After we got the temperatures, we can print them here.
@@ -344,6 +378,7 @@ void showSetTempMenu(float target) {
   display.print(F("T (C):"));
   display.println(target);
   display.display();
+  inMainMenu = false;
 }
 
 
@@ -423,6 +458,8 @@ void showGraph(int eeindex) {
   }  
 
   display.display();
+  inMainMenu = false;
+  showingGraph = true;
 }
 
 
@@ -444,31 +481,9 @@ void displayTempMenu() {
   int circleY = 15 + selectedOption * 12; // Position of filled circle
   display.fillCircle(5, circleY, 3, SSD1306_WHITE);
   display.display();
+  inMainMenu = false;
 }
 
-void checkTempButtons() {
-  while (tempMax == 0){
-  if (digitalRead(BUTTON_SELECT) == HIGH) {
-    Serial.println(F("BUTTON SELECT PUSHED!"));
-    tempMax = tempMaxOptions[selectedOption];
-    delay(DEBOUNCING_TIME_MS); // Debouncing
-  }
-
-  if (digitalRead(BUTTON_UP) == HIGH) {
-    Serial.println(F("BUTTON UP PUSHED!"));
-    selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
-    delay(DEBOUNCING_TIME_MS); // Debouncing
-    displayTempMenu();
-  }
-
-  if (digitalRead(BUTTON_DN) == HIGH) {
-    Serial.println(F("BUTTON DOWN PUSHED!"));
-    selectedOption = (selectedOption + 1) % totalOptions;
-    delay(DEBOUNCING_TIME_MS); // Debouncing
-    displayTempMenu();
-  }
-  }
-}
 
 void displayTimeMenu() {
   display.clearDisplay();
@@ -507,7 +522,6 @@ void setMaxTemp() {
   display.print(timeMax);
   display.println("C");
   display.display();
-  delay(1000);
 }
 void displayExitScreen() {
         display.clearDisplay();
@@ -634,6 +648,22 @@ void setupPID() {
 }
 #endif
 
+void upCallBack(byte buttonEvent);
+void dnCallBack(byte buttonEvent);
+void slCallBack(byte buttonEvent);
+
+
+void setupButtons() {
+  upButton.set(BUTTON_UP,upCallBack,INT_PULL_UP);
+  dnButton.set(BUTTON_DN,dnCallBack,INT_PULL_UP);
+  slButton.set(BUTTON_SL,slCallBack,INT_PULL_UP);
+
+#define DEBOUNCE_TIME_MS 200
+  upButton.setDebounceTime(DEBOUNCE_TIME_MS);
+  dnButton.setDebounceTime(DEBOUNCE_TIME_MS);
+  slButton.setDebounceTime(DEBOUNCE_TIME_MS);
+}
+
 void setup() {
   tempMax = 0;
   seconds = 0;
@@ -696,9 +726,9 @@ void setup() {
   display.display();
   delay(1500);
   display.clearDisplay();
-  pinMode(BUTTON_SELECT, INPUT_PULLUP);
-  pinMode(BUTTON_UP, INPUT_PULLUP);
-  pinMode(BUTTON_DN, INPUT_PULLUP);
+ // pinMode(BUTTON_SL, INPUT_PULLUP);
+ //  pinMode(BUTTON_UP, INPUT_PULLUP);
+ // pinMode(BUTTON_DN, INPUT_PULLUP);
 
 
 #if defined(STRATEGY_FUZZY)
@@ -710,10 +740,13 @@ void setup() {
 #endif
   serialSplash();
 
-  delay(1000);
+  setupButtons(); 
+
   showMenu();
 
+
   Serial.println("Setup Done");
+  delay(3000);
 }
 int renderDisplay_bool = 0;
 
@@ -835,155 +868,189 @@ void showMenu() {
   display.fillCircle(3, SPLIT + menuSelection * LINE_HEIGHT + 3, 3, SSD1306_WHITE);
 
   display.display();
+  inMainMenu = true;
 }
 
 
 #define BUTTON_POLL_PERIOD 0
-bool returnToMain = false;
-// replace this with an enum
-bool inMainMenu = true;
-bool showingGraph = false;
 
 
-bool sel_pressed = false;
-bool up_pressed = false;
-bool dn_pressed = false;
-bool up = false;
-bool dn = false;
-bool sel = false;
 
-void processButtons() {
-  delay(BUTTON_POLL_PERIOD);
-  bool sel_button = digitalRead(BUTTON_SELECT);
-  bool up_button = digitalRead(BUTTON_UP);
-  bool dn_button = digitalRead(BUTTON_DN);
 
-  sel_pressed |= sel_button;
-  up_pressed |= up_button;
-  dn_pressed |= dn_button;
-  // This is meant to catch the release of the button!
-  sel = sel_pressed && !sel_button;
-  dn = dn_pressed && !dn_button;
-  up = up_pressed && !up_button;
-  if (sel) sel_pressed = false;
-  if (dn) dn_pressed = false;
-  if (up) up_pressed = false;
+void upCallBack(byte buttonEvent) {
+  switch (buttonEvent){
+		case onPress:
+      Serial.println("UP onpress");
+			break;
+		case onRelease:
+      Serial.println("UP onRelease");
+        if (inMainMenu) {
+          if (menuSelection > 0) {  
+            menuSelection--;
+            fastBeep();
+            showMenu();
 
-  if (DEBUG_BUTTONS > 0) {
-    Serial.print("processButttons pressed: ");
-    Serial.print(sel_pressed);
-    Serial.print(" ");
-    Serial.print(up_pressed);
-    Serial.print(" ");
-    Serial.println(dn_pressed);
-    Serial.print("processButttons: ");
-    Serial.print(sel);
-    Serial.print(" ");
-    Serial.print(up);
-    Serial.print(" ");
-    Serial.println(dn);
-    delay(100);
-  }
-  // I don't know what this is supposed to do...
-  int multiple = 0;
-  if (!inMainMenu && sel) {
-    inMainMenu = true;
-    showingGraph = false;
-    showMenu();
-    Serial.println("returned to Menu");
-    return;
-  }
-
-  if (!up && !dn && !sel)
-    return;
-
-  Serial.println("menu selection");
-  Serial.println(menuSelection);
-  //controls menu selection
-  if (inMainMenu) {
-    //read buttons and menu
-    if (up && menuSelection > 0) {
-      menuSelection--;
-      up = false;
-      showMenu();
-      return;
-    } else if (dn && menuSelection < 3) {
-      menuSelection++;
-      dn = false;
-      showMenu();
-      return;
-    } 
-  }
-  if (!inMainMenu) {
-    if (sel || up || dn) {
-      inMainMenu = true;
-      showingGraph = false;
-      showMenu();
-      sel = false;
-      up = false;
-      dn = false;
-      return;
-    }
-  }
-  if (sel) {
-    Serial.println(F("loop RRR"));
-    switch (menuSelection) {
-      case TEMPERATURE_M:
-        showCurStatus(CurrentTempC);
-        inMainMenu = false;
-        break;
-      case GRAPH_1_M:
-        {
-          uint16_t index = getIndex();
-          Serial.println("showing graph");
-          showGraph(index);
-          inMainMenu = false;
-          showingGraph = true;
-          Serial.println("returned to Graph");
-        }
-        break;
-      case SET_TEMP_M:
-        {
-          // This is wrong; we whould be showing instructions
-          showSetTempMenu(targetTemperatureC);
-          inMainMenu = false;
-          showingGraph = false;
-          if (up) {
-            if (targetTemperatureC > MAX_TEMPERATURE_C) {
-              targetTemperatureC = MAX_TEMPERATURE_C;
-            }
-            targetTemperatureC += 0.5;
-            setTargetTemp(targetTemperatureC);
+          } else {
+            // We should make a beep here
           }
-          if (dn) {
+        } else {
+        switch (menuSelection) {
+          case TEMPERATURE_M:
+            showCurStatus(CurrentTempC);
+            inMainMenu = false;
+          break;
+          case GRAPH_1_M:
+          {
+            uint16_t index = getIndex();
+            Serial.println("showing graph");
+            showGraph(index);
+            inMainMenu = false;
+            showingGraph = true;
+            Serial.println("returned to Graph");
+          }
+          break;
+          case SET_TEMP_M:
+          {
+            inMainMenu = false;
+            showingGraph = false;
+              if (targetTemperatureC > MAX_TEMPERATURE_C) {
+                targetTemperatureC = MAX_TEMPERATURE_C;
+              }
+              targetTemperatureC += 0.5;
+              setTargetTemp(targetTemperatureC);
+            // This is wrong; we whould be showing instructions
+            showSetTempMenu(targetTemperatureC);
+          }
+          break;
+        }
+			break;
+	}
+  }
+}
+void dnCallBack(byte buttonEvent) {
+  switch (buttonEvent){
+		case onPress:
+      Serial.println("DN onpress");
+			break;
+		case onRelease:
+      Serial.println("DN onRelease");
+      if (inMainMenu) {
+        if (menuSelection < (NUM_MENU_SELECTIONS - 1)) {  
+          menuSelection++;
+          fastBeep();
+          showMenu();
+          Serial.println("Menu Selection Increased!");
+          Serial.println(menuSelection);
+        } else {
+          // We should make a beep here.
+          Serial.println("INTERNAL ERROR");
+        }
+      } else {
+       switch (menuSelection) {
+          case TEMPERATURE_M:
+            showCurStatus(CurrentTempC);
+            inMainMenu = false;
+          break;
+          case GRAPH_1_M:
+          {
+            uint16_t index = getIndex();
+            Serial.println("showing graph");
+            showGraph(index);
+            inMainMenu = false;
+            showingGraph = true;
+            Serial.println("returned to Graph");
+          }
+          break;
+          case SET_TEMP_M:
+          {
+            inMainMenu = false;
+            showingGraph = false;
             targetTemperatureC -= 0.5;
             setTargetTemp(targetTemperatureC);
+            // This is wrong; we whould be showing instructions
+            showSetTempMenu(targetTemperatureC);
           }
+          break;
         }
-        break;
-      case STOP_M:
-        {
-          Serial.println(F("Toggling Incubation!"));
- //         if (!incubating) {
-            // In this case, we want to restart the EEPROM...
+      }
+			break;
+	}
+}
+void slCallBack(byte buttonEvent) {
+  switch (buttonEvent){
+		case onPress:
+      Serial.println("SL onpress");
+			break;
+		case onRelease:
+      Serial.println("SL onRelease");
+      fastBeep();
+      Serial.println(inMainMenu);
+      if (!inMainMenu) {
+        switch (menuSelection) {
+          case TEMPERATURE_M:
+            showMenu();
+          break;
+          case GRAPH_1_M:
+          {
+            showMenu();
+          }
+          break;
+          case SET_TEMP_M:
+          {
+            showMenu();
+          }
+          break;
+          case STOP_M:
+          {
+            Serial.println(F("Toggling Incubation!"));
             rom_reset();
             Serial.println(F("EEPROM RESET!"));
             showMenu();
- //         }
-          incubating = !incubating;
-          inMainMenu = true;
-          showingGraph = false;
+            incubating = !incubating;
+            showingGraph = false;
+          }
+          break;
         }
-        break;
-    }
-    //    Serial.println(F("loop NNN"));
-  }
-
-  //Serial.println(F("loop BBB"));
-  // We have to process menu changes without delay to have
-  // a good user experience; but reading the temperature can
-  // be delayed.
-
+      } else {
+        switch (menuSelection) {
+          case TEMPERATURE_M:
+            showCurStatus(CurrentTempC);
+            inMainMenu = false;
+          break;
+          case GRAPH_1_M:
+          {
+            uint16_t index = getIndex();
+            Serial.println("showing graph");
+            showGraph(index);
+            inMainMenu = false;
+            showingGraph = true;
+            Serial.println("returned to Graph");
+            showMenu();
+          }
+          break;
+          case SET_TEMP_M:
+          {
+            // This is wrong; we whould be showing instructions
+            showSetTempMenu(targetTemperatureC);
+            inMainMenu = false;
+            showingGraph = false;
+          }
+          break;
+          case STOP_M:
+          {
+            Serial.println(F("Toggling Incubation!"));
+            rom_reset();
+            Serial.println(F("EEPROM RESET!"));
+            showMenu();
+            incubating = !incubating;
+            inMainMenu = true;
+            showingGraph = false;
+          }
+          break;
+        }
+      }
+			break;
+	}
 }
 
 uint32_t last_temp_check_ms = 0;
@@ -991,7 +1058,11 @@ uint32_t time_since_last_report_ms = 0;
 #define PERIOD_TO_CHECK_TEMP_MS 5000
 #define REPORT_PERIOD 5000
 void loop() {
-  processButtons();
+
+  upButton.poll();
+  dnButton.poll();
+  slButton.poll();
+//  processButtons();
 
   uint32_t loop_start = millis(); 
   if (loop_start < (last_temp_check_ms + PERIOD_TO_CHECK_TEMP_MS))
@@ -1023,12 +1094,12 @@ void loop() {
 
   selectedOption = 0;
 
-  if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH) && (digitalRead(BUTTON_SELECT) == HIGH))
-  {
-      exit_flag = 1;
-      Serial.println("Because 3 buttons were put at once, this incubation is cancelled.");
-      return;
-  }
+  // if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH) && (digitalRead(BUTTON_SL) == HIGH))
+  // {
+  //     exit_flag = 1;
+  //     Serial.println("Because 3 buttons were put at once, this incubation is cancelled.");
+  //     return;
+  // }
 
   checkTimeExpired();
   timeNow = (millis()/1000); // the number of milliseconds that have passed since boot
