@@ -6,8 +6,16 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 
 
 ---
-# Status, January 2025  
 
+# Status, January 2025  
+#### 2024 field testing resulted in changes to the unit:
+
+- Heater board redesign with a Dallas One wire digital temperature thermometer and a 4.7 ohm pull up resistor.
+- Design a universal heater board cage to secure the heater board beneath the container lid in any external enclosure.
+- Adjust top button spacing in KiCad.
+- Add bottom mounting holes to the enclosure.
+
+#### Preparing an update for project backers at Experiment.com.
 
 
 # Status, November 2024 
