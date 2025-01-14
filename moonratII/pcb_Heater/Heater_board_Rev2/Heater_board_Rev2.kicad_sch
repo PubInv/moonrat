@@ -2342,12 +2342,6 @@
 		(uuid "0e82233b-d845-4918-8d18-12a8d08cd23e")
 	)
 	(junction
-		(at 234.95 102.87)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "17240f42-a60a-4b41-9b89-c7a08905c5d6")
-	)
-	(junction
 		(at 203.2 144.78)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2443,6 +2437,12 @@
 		(color 0 0 0 0)
 		(uuid "efd3144f-450f-4aae-bc9f-efdcd14bb730")
 	)
+	(junction
+		(at 234.95 111.76)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fd600021-1215-4fc7-b4c6-0919e1413a8b")
+	)
 	(no_connect
 		(at 224.79 116.84)
 		(uuid "8206d844-b863-4228-a73e-1f78303809b0")
@@ -2526,16 +2526,6 @@
 			(type default)
 		)
 		(uuid "1d8a302a-82aa-4ea4-9f27-455002a3f4ef")
-	)
-	(wire
-		(pts
-			(xy 234.95 102.87) (xy 234.95 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1e2592ce-923e-4aa3-a71c-682c63a8a1c3")
 	)
 	(wire
 		(pts
@@ -2827,16 +2817,6 @@
 		)
 		(uuid "6ca13939-39b8-43bf-a58f-187915b0048b")
 	)
-	(wire
-		(pts
-			(xy 248.92 111.76) (xy 245.11 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6dd59f6e-362b-4117-b00f-6d6db2d0dcfe")
-	)
 	(polyline
 		(pts
 			(xy 257.81 68.58) (xy 257.81 153.67)
@@ -2929,7 +2909,7 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 121.92) (xy 234.95 128.27)
+			(xy 234.95 119.38) (xy 234.95 128.27)
 		)
 		(stroke
 			(width 0)
@@ -3029,6 +3009,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 111.76) (xy 234.95 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e921283-8930-41c8-8846-71e65cb2e4a9")
+	)
+	(wire
+		(pts
 			(xy 189.23 88.9) (xy 181.61 88.9)
 		)
 		(stroke
@@ -3106,6 +3096,26 @@
 			(type default)
 		)
 		(uuid "aab62fa3-1258-4f8f-83b1-16abc5a97a4a")
+	)
+	(wire
+		(pts
+			(xy 234.95 111.76) (xy 248.92 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae420424-c9df-4a91-8256-ad46ad34b6c8")
+	)
+	(wire
+		(pts
+			(xy 224.79 114.3) (xy 224.79 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aef7d169-3b99-4e90-b1fe-46b5e384e7e9")
 	)
 	(wire
 		(pts
@@ -5779,16 +5789,15 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 217.17 170.18 0)
+		(at 234.95 115.57 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ee2115f1-8d7b-4c1a-9998-1e65541455e6")
 		(property "Reference" "R1"
-			(at 219.71 168.9099 0)
+			(at 236.22 112.014 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5796,8 +5805,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "R"
-			(at 219.71 171.4499 0)
+		(property "Value" "4.7"
+			(at 237.49 116.8399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5805,8 +5814,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 215.392 170.18 90)
+		(property "Footprint" "/Users/melanielaporte/Desktop/4.7ohm C3473875 datasheet"
+			(at 233.172 115.57 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5815,7 +5824,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 217.17 170.18 0)
+			(at 234.95 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5824,7 +5833,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 217.17 170.18 0)
+			(at 234.95 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
