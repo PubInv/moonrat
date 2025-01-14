@@ -38,7 +38,9 @@
 #include <DallasTemperature.h>
 #include "Persistence.h"
 #include "utility.h"
-#include <DailyStruggleButton.h>
+
+#include <JC_Button.h>          // https://github.com/JChristensen/JC_Button
+
 
 // // Set controller type here
 // #define R3 //Uncomment for Arduino UNO R3
@@ -74,10 +76,13 @@ int HEATER_PIN = 10; //Heater (termopad) pin
 #define TRIGGER_PIN 11 // used to set a time signal for triggering oscilloscope
 #define DEBOUNCING_TIME_MS 100
 
-DailyStruggleButton upButton;
-DailyStruggleButton dnButton;
-DailyStruggleButton slButton;
+// DailyStruggleButton upButton;
+// DailyStruggleButton dnButton;
+// DailyStruggleButton slButton;
 
+Button upBtn(BUTTON_UP); 
+Button dnBtn(BUTTON_DN);
+Button slBtn(BUTTON_SL);
 
 bool returnToMain = false;
 // replace this with an enum
@@ -95,9 +100,6 @@ bool sel = false;
 int menuSelection = 0;
 
 #define NUM_MENU_SELECTIONS 4
-
-
-
 
 
 int LOG_VERBOSE = 5;
@@ -208,7 +210,7 @@ int hours = startingHour;
 
 int secondsLastDisplay = 0;
 
-int secondsToUpdateTemp = 2;
+int secondsToUpdateTemp = 10;
 int secondsToUpdateDisplay = 10; 
 
 #if defined(STRATEGY_PID)
@@ -654,14 +656,9 @@ void slCallBack(byte buttonEvent);
 
 
 void setupButtons() {
-  upButton.set(BUTTON_UP,upCallBack,INT_PULL_UP);
-  dnButton.set(BUTTON_DN,dnCallBack,INT_PULL_UP);
-  slButton.set(BUTTON_SL,slCallBack,INT_PULL_UP);
-
-#define DEBOUNCE_TIME_MS 200
-  upButton.setDebounceTime(DEBOUNCE_TIME_MS);
-  dnButton.setDebounceTime(DEBOUNCE_TIME_MS);
-  slButton.setDebounceTime(DEBOUNCE_TIME_MS);
+  upBtn.begin();
+  dnBtn.begin();
+  slBtn.begin();    
 }
 
 void setup() {
@@ -726,9 +723,10 @@ void setup() {
   display.display();
   delay(1500);
   display.clearDisplay();
- // pinMode(BUTTON_SL, INPUT_PULLUP);
- //  pinMode(BUTTON_UP, INPUT_PULLUP);
- // pinMode(BUTTON_DN, INPUT_PULLUP);
+
+  pinMode(BUTTON_SL, INPUT_PULLUP);
+  pinMode(BUTTON_UP, INPUT_PULLUP);
+  pinMode(BUTTON_DN, INPUT_PULLUP);
 
 
 #if defined(STRATEGY_FUZZY)
@@ -871,11 +869,10 @@ void showMenu() {
   inMainMenu = true;
 }
 
-
 #define BUTTON_POLL_PERIOD 0
 
-
-
+const int onPress = 1;
+const int onRelease = 2;
 
 void upCallBack(byte buttonEvent) {
   switch (buttonEvent){
@@ -967,7 +964,6 @@ void dnCallBack(byte buttonEvent) {
             showingGraph = false;
             targetTemperatureC -= 0.5;
             setTargetTemp(targetTemperatureC);
-            // This is wrong; we whould be showing instructions
             showSetTempMenu(targetTemperatureC);
           }
           break;
@@ -1057,12 +1053,37 @@ uint32_t last_temp_check_ms = 0;
 uint32_t time_since_last_report_ms = 0;
 #define PERIOD_TO_CHECK_TEMP_MS 5000
 #define REPORT_PERIOD 5000
+int n = 0;
 void loop() {
 
-  upButton.poll();
-  dnButton.poll();
-  slButton.poll();
-//  processButtons();
+    upBtn.read();            
+    if (upBtn.wasPressed())   
+    {
+        // Serial.print("UP BUTTON RELEASED: ");
+        // Serial.println(n++);
+        upCallBack(onRelease);
+    }
+    dnBtn.read();            
+    if (dnBtn.wasPressed())   
+    {
+        // Serial.print("DN BUTTON RELEASED: ");
+        // Serial.println(n++);
+        dnCallBack(onRelease);
+    }
+    slBtn.read();              
+    if (slBtn.wasPressed())    
+    {
+        // Serial.print("SL BUTTON RELEASED: ");
+        // Serial.println(n++);
+        slCallBack(onRelease);
+    }
+
+  if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH) && (digitalRead(BUTTON_SL) == HIGH))
+  {
+      exit_flag = 1;
+      Serial.println("Because 3 buttons were put at once, this incubation is cancelled.");
+      return;
+  }
 
   uint32_t loop_start = millis(); 
   if (loop_start < (last_temp_check_ms + PERIOD_TO_CHECK_TEMP_MS))
@@ -1094,23 +1115,17 @@ void loop() {
 
   selectedOption = 0;
 
-  // if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH) && (digitalRead(BUTTON_SL) == HIGH))
-  // {
-  //     exit_flag = 1;
-  //     Serial.println("Because 3 buttons were put at once, this incubation is cancelled.");
-  //     return;
-  // }
-
   checkTimeExpired();
   timeNow = (millis()/1000); // the number of milliseconds that have passed since boot
   seconds = timeNow;
   uint32_t time_now_ms = millis();
   uint32_t time_since_last_entry = time_now_ms - time_of_last_entry;
+
     // assert(secondsToUpdateDisplay > secondsToUpdateTemp);
   if((seconds - secondsSinceTempUpdate) >= secondsToUpdateTemp) // This occurs one per second....
   {
-    sensor.requestTemperatures();
-    CurrentTempC = read_tempC();
+      CurrentTempC = read_tempC();
+
 #if defined(KALMAN)
     FilteredTemp = kalmanFilter(CurrentTempC,FilteredTemp);
 #else
@@ -1133,14 +1148,6 @@ void loop() {
 #endif
 
       setHeatPWM_fraction(outputPWM_fraction);  
-      // Serial.print("Heater PWM: ");
-      // Serial. print((float) outputPWM * 100.0 / 256.0);
-      // Serial.println("%");
-      // display.setCursor(0, SCREEN_HEIGHT-8); // Position adjustment for Min legend
-      // display.print("PWM:");
-      // display.print(int(round(outputPWM)));
-      // display.display();
-      // Serial.print("renderDisplay: ");
       if (showingGraph) {
         uint16_t index  = getIndex();
         showGraph(index);
