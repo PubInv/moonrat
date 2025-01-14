@@ -39,7 +39,6 @@ bool heating = false;
 bool currently_heating = false;
 uint32_t time_incubation_started_ms = 0;
 uint32_t time_heater_turned_on_ms = 0;
-// uint32_t time_spent_heating_ms = 0;
 uint32_t time_spent_incubating_ms = 0;
 uint32_t time_of_last_entry = 0;
 
@@ -79,7 +78,7 @@ int graphTimeLength = 24;  //2 hours long bexause plotting every 5 mins
 // Our functions to read and write must remove the 0-indexed element
 // in which a sample is not stored.
 #define INDEX_ADDRESS 0  //location of index tracker in EEPROM
-#define MAX_SAMPLES 509  //maximum number of samples that we can store in EEPROM
+// #define MAX_SAMPLES 509  //maximum number of samples that we can store in EEPROM
 
 bool incubating = true;
 
@@ -170,37 +169,36 @@ uint32_t time_incubating() {
 }
 
 uint32_t time_of_last_PWM;
-int current_PWM;
+int current_PWM_255;
 double weighted_voltage_ms = 0.0;
 
 
-void setHeatPWM(double intended_df) {
-  if (intended_df > 255.0) {
+void setHeatPWM_fraction(double df_fraction) {
+  float intended_df_255 = 255.0 * df_fraction;
+  if (intended_df_255 > 255.0) {
     Serial.println(F("excessive duty_factor: "));
-    Serial.println(intended_df);
-    intended_df = 255.0;
+    Serial.println(intended_df_255);
+    intended_df_255 = 255.0;
   }
-  if (intended_df < 0.0) {
+  if ( intended_df_255 < 0.0) {
     Serial.println(F("negative duty_factor: "));
-    Serial.println(intended_df);
-    intended_df = 0.0;
+    Serial.println(intended_df_255);
+    intended_df_255 = 0.0;
   }
   uint32_t tm = millis();
   // _voltage_ms += ((double) current_PWM / 255.0)* (tm - time_of_last_PWM);
-  const int pwm = (int)intended_df;
+  const int pwm_255 = (int)intended_df_255;
 // Now we must compute the fraction of the time of the last period that it 
 // the heater was on.
   float time_of_last_period_ms = (tm - time_of_last_PWM);
-  time_heater_turned_on_ms += (unsigned long) (time_of_last_period_ms *  ((float) current_PWM / 255.0));
+  time_heater_turned_on_ms += (unsigned long) (time_of_last_period_ms *  ((float) current_PWM_255 / 255.0));
 
-  analogWrite(HEATER_PIN, pwm);
+  analogWrite(HEATER_PIN, pwm_255);
   time_of_last_PWM = tm;
-  current_PWM = pwm;
+  current_PWM_255 = pwm_255;
   if (LOG_LEVEL >= LOG_MAJOR) {
     Serial.print(F("Set Heat PWM :"));
-    Serial.println(pwm);
-    Serial.print(F("Total (pro-rated) time on:"));
-    Serial.println(time_heater_turned_on_ms);
+    Serial.println(pwm_255);
   }
 }
 
@@ -245,10 +243,10 @@ void setTargetTemp(float temp) {
   rom_write16(TARGET_TEMP_ADDRESS * 2, temp_i);
 }
 // return the number of watt hours used in the current incubation
-float wattHours() {
-  float resistance_ohms = RESISTANCE_OHMS;
-  float voltage_v = VOLTAGE_V ;
-  float power_w = POWER_WATTS;
-  float time_on_hours = 1000.0 * 60.0 * 60.0 * time_heater_turned_on_ms;
-  return power_w * time_on_hours;
+float wattHours(float& average_watts) {
+  float time_on_hours =  MS_TO_HOURS * time_heater_turned_on_ms ;
+  float time_incubating_hours = MS_TO_HOURS * time_incubating();
+  float watt_hours = POWER_WATTS * time_on_hours;
+  average_watts = watt_hours / time_incubating_hours;
+  return watt_hours;
 }

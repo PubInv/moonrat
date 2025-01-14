@@ -16,8 +16,8 @@
 
 // Define control strategy 
 // #define STRATEGY_THERMOSTAT 1
-// #define STRATEGY_PID 2
-#define STRATEGY_FUZZY 3
+#define STRATEGY_PID 2
+// #define STRATEGY_FUZZY 3
 
 #if defined(STRATEGY_FUZZY)
 #include <Fuzzy.h>
@@ -38,6 +38,7 @@
 #include <DallasTemperature.h>
 #include "Persistence.h"
 #include "utility.h"
+#include <DailyStruggleButton.h>
 
 // // Set controller type here
 // #define R3 //Uncomment for Arduino UNO R3
@@ -67,10 +68,36 @@ DallasTemperature sensor(&ourWire);
 // const int sensorPin = A0; //TMP37 SOC pin
 int HEATER_PIN = 10; //Heater (termopad) pin
 #define BUZZER_PIN  9 // Buzzer pin
-#define BUTTON_SELECT 5 //Button = SELECT pin
+#define BUTTON_SL 5 //Button = SELECT pin
 #define BUTTON_UP 7 //Button =  UP pin
 #define BUTTON_DN 6 //Button = DOWN pin
 #define TRIGGER_PIN 11 // used to set a time signal for triggering oscilloscope
+#define DEBOUNCING_TIME_MS 100
+
+DailyStruggleButton upButton;
+DailyStruggleButton dnButton;
+DailyStruggleButton slButton;
+
+
+bool returnToMain = false;
+// replace this with an enum
+bool inMainMenu = true;
+bool showingGraph = false;
+
+
+bool sel_pressed = false;
+bool up_pressed = false;
+bool dn_pressed = false;
+bool up = false;
+bool dn = false;
+bool sel = false;
+
+int menuSelection = 0;
+
+#define NUM_MENU_SELECTIONS 4
+
+
+
 
 
 int LOG_VERBOSE = 5;
@@ -118,9 +145,9 @@ int warm_up_phase = true;
 
 //menu variables
 
-int menuSelection = 0;
 
-float CurrentTemp;
+
+float CurrentTempC;
 float OldErrorInput = 0.0;
 float calibration;
 
@@ -160,14 +187,14 @@ float Xp = 0.0;
 float Zp = 0.0;
 float FilteredTemp = 0.0;
 
-float computeKalmanFilter(float currentTemp,float filteredTemp) {
+float computeKalmanFilter(float currentTempC,float filteredTemp) {
       // Kalman Filter
       Pc = P + Q;
       G = Pc/(Pc + R);
       P = (1-G) * Pc;
       Xp = filteredTemp;
       Zp = Xp;
-      return G*(currentTemp-Zp)+Xp;
+      return G*(currentTempC-Zp)+Xp;
 }
 
 // TIMER VARIABLES
@@ -190,32 +217,14 @@ int secondsToUpdateDisplay = 10;
   float Ki = 520.0;
   float Kd = 230.0;
   double setPoint; // Desired reference for the controller
-  double contolInput; // Sensor's information in voltage
+  double controlInput; // Sensor's information in voltage
   double controlOutput; // Control's output signal
 
-  PID moonPID(&contolInput, &controlOutput, &setPoint, Kp, Ki, Kd, DIRECT);
+  PID moonPID(&controlInput, &controlOutput, &setPoint, Kp, Ki, Kd, DIRECT);
 
 #endif
 
-#if defined(STRATEGY_FUZZY)
-// fuzzy
-Fuzzy *fuzzy = new Fuzzy();
 
-// fuzzyInput(Error)
-FuzzySet *negative = new FuzzySet(-50, -50, -5,0);
-FuzzySet *zero = new FuzzySet(-3, 0, 0, 3);
-FuzzySet *positive = new FuzzySet(0, 5, 50, 50);
-
-// fuzzyInput(DiffError)
-FuzzySet *dnegative = new FuzzySet(-50, -50, -2, 0);
-FuzzySet *dzero = new FuzzySet(-1, 0, 0, 1);
-FuzzySet *dpositive = new FuzzySet(0, 2, 50, 50);
-
-// fuzzyOutput(Frequency)
-FuzzySet *fast = new FuzzySet(10, 200, 255, 255);
-FuzzySet *average = new FuzzySet(0, 5, 5, 20);
-FuzzySet *slow = new FuzzySet(0, 0, 1, 5);
-#endif
 
 //display variables
 #define WIDTH 128
@@ -300,7 +309,14 @@ static const unsigned char PROGMEM image_data_Saraarray[] = {
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-double read_temp() {
+void fastBeep() {
+    analogWrite(BUZZER_PIN, 100); //Put to 100 after tests
+    delay(50);
+    analogWrite(BUZZER_PIN,0);
+}
+
+
+double read_tempC() {
   sensor.requestTemperatures();  // Send the command to get temperatures
   // After we got the temperatures, we can print them here.
   // We use the function ByIndex, and as an example get the temperature from the first sensor only.
@@ -336,10 +352,23 @@ void showCurStatus(float temp) {
   display.print(F("T (C):"));
   display.println(temp);
   display.print(F("Power (WattHours):"));
-  display.println(wattHours());
+    float avg_watts = 0.0;
+  display.println(wattHours(avg_watts));
   display.display();
 }
 
+void showReport(float temp) {
+  Serial.print(F("Target (C) : "));
+  Serial.print(targetTemperatureC);
+  Serial.print(F(" "));
+  Serial.print(F("Temp : "));
+  Serial.println(temp);
+  Serial.print(F("Power (WattHours): "));
+  float avg_watts = 0.0;
+  Serial.println(wattHours(avg_watts));
+  Serial.print(F("Average Watts: "));
+  Serial.println(avg_watts);
+}
 void showSetTempMenu(float target) {
   display.clearDisplay();  //removes current plots
   display.setCursor(0, 0);
@@ -349,6 +378,7 @@ void showSetTempMenu(float target) {
   display.print(F("T (C):"));
   display.println(target);
   display.display();
+  inMainMenu = false;
 }
 
 
@@ -382,15 +412,14 @@ void showGraph(int eeindex) {
   float maxTempToGraph = -1.0;
   float minTempToGraph = 5000.0;
   for (int i = startIndex; i < eeindex; i++) {
-    float currentTemp = readIndex(i);
-    minTempToGraph = min(minTempToGraph, currentTemp);
-    maxTempToGraph = max(maxTempToGraph, currentTemp);
+    float cTempC = readIndex(i);
+    minTempToGraph = min(minTempToGraph, cTempC);
+    maxTempToGraph = max(maxTempToGraph, cTempC);
   }
 
   int graphMaxTemp = ceil(maxTempToGraph);
   int graphMinTemp = floor(minTempToGraph);
 
-  Serial.print(F("graph midpoint ")); 
   display.clearDisplay();
   display.setTextSize(2);
   display.setCursor(0, 0);
@@ -416,12 +445,9 @@ void showGraph(int eeindex) {
   float middle = meanTemp - (float)graphMinTemp;
   int j = 0;
 
-  Serial.println(F("start, 0"));
-  Serial.println(startIndex);
-  Serial.println(eeindex);
   for (int i = startIndex; i < eeindex; i++) {
-    float currentTemp = readIndex(i);
-    float ypos = (currentTemp - graphMinTemp);
+    float cTempC = readIndex(i);
+    float ypos = (cTempC - graphMinTemp);
 
     int x = LEFT_MARGIN + j;
     int y = (64 - (scale * ypos));
@@ -432,7 +458,8 @@ void showGraph(int eeindex) {
   }  
 
   display.display();
-  Serial.println(F("display done"));
+  inMainMenu = false;
+  showingGraph = true;
 }
 
 
@@ -454,31 +481,9 @@ void displayTempMenu() {
   int circleY = 15 + selectedOption * 12; // Position of filled circle
   display.fillCircle(5, circleY, 3, SSD1306_WHITE);
   display.display();
+  inMainMenu = false;
 }
 
-void checkTempButtons() {
-  while (tempMax == 0){
-  if (digitalRead(BUTTON_SELECT) == HIGH) {
-    Serial.println(F("BUTTON SELECT PUSHED!"));
-    tempMax = tempMaxOptions[selectedOption];
-    delay(200); // Debouncing
-  }
-
-  if (digitalRead(BUTTON_UP) == HIGH) {
-    Serial.println(F("BUTTON UP PUSHED!"));
-    selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
-    delay(200); // Debouncing
-    displayTempMenu();
-  }
-
-  if (digitalRead(BUTTON_DN) == HIGH) {
-    Serial.println(F("BUTTON DOWN PUSHED!"));
-    selectedOption = (selectedOption + 1) % totalOptions;
-    delay(200); // Debouncing
-    displayTempMenu();
-  }
-  }
-}
 
 void displayTimeMenu() {
   display.clearDisplay();
@@ -517,7 +522,6 @@ void setMaxTemp() {
   display.print(timeMax);
   display.println("C");
   display.display();
-  delay(1000);
 }
 void displayExitScreen() {
         display.clearDisplay();
@@ -537,7 +541,26 @@ void displayExitScreen() {
 
 }
 
+
 #if defined(STRATEGY_FUZZY)
+// fuzzy
+Fuzzy *fuzzy = new Fuzzy();
+
+// fuzzyInput(Error)
+FuzzySet *negative = new FuzzySet(-50, -50, -5,0);
+FuzzySet *zero = new FuzzySet(-3, 0, 0, 3);
+FuzzySet *positive = new FuzzySet(0, 5, 50, 50);
+
+// fuzzyInput(DiffError)
+FuzzySet *dnegative = new FuzzySet(-50, -50, -2, 0);
+FuzzySet *dzero = new FuzzySet(-1, 0, 0, 1);
+FuzzySet *dpositive = new FuzzySet(0, 2, 50, 50);
+
+// fuzzyOutput(Frequency)
+FuzzySet *fast = new FuzzySet(10, 200, 255, 255);
+FuzzySet *average = new FuzzySet(0, 5, 5, 20);
+FuzzySet *slow = new FuzzySet(0, 0, 1, 5);
+
 void setupFuzzy() {
  // fuzzyInput (Error)
   FuzzyInput *Error = new FuzzyInput(1);
@@ -625,6 +648,22 @@ void setupPID() {
 }
 #endif
 
+void upCallBack(byte buttonEvent);
+void dnCallBack(byte buttonEvent);
+void slCallBack(byte buttonEvent);
+
+
+void setupButtons() {
+  upButton.set(BUTTON_UP,upCallBack,INT_PULL_UP);
+  dnButton.set(BUTTON_DN,dnCallBack,INT_PULL_UP);
+  slButton.set(BUTTON_SL,slCallBack,INT_PULL_UP);
+
+#define DEBOUNCE_TIME_MS 200
+  upButton.setDebounceTime(DEBOUNCE_TIME_MS);
+  dnButton.setDebounceTime(DEBOUNCE_TIME_MS);
+  slButton.setDebounceTime(DEBOUNCE_TIME_MS);
+}
+
 void setup() {
   tempMax = 0;
   seconds = 0;
@@ -687,9 +726,9 @@ void setup() {
   display.display();
   delay(1500);
   display.clearDisplay();
-  pinMode(BUTTON_SELECT, INPUT_PULLUP);
-  pinMode(BUTTON_UP, INPUT_PULLUP);
-  pinMode(BUTTON_DN, INPUT_PULLUP);
+ // pinMode(BUTTON_SL, INPUT_PULLUP);
+ //  pinMode(BUTTON_UP, INPUT_PULLUP);
+ // pinMode(BUTTON_DN, INPUT_PULLUP);
 
 
 #if defined(STRATEGY_FUZZY)
@@ -701,46 +740,52 @@ void setup() {
 #endif
   serialSplash();
 
-  delay(1000);
+  setupButtons(); 
+
   showMenu();
 
+
   Serial.println("Setup Done");
+  delay(3000);
 }
 int renderDisplay_bool = 0;
 
 
 #if defined(STRATEGY_PID)
-int pidPWM() {
+float pidPWM_fraction(float curC) {
       //* PID
-      setPoint = tempMax;
-      contolInput = FilteredTemp;
+      setPoint = targetTemperatureC;
+      controlInput = curC;
+      Serial.print("setPoint, controlInput: ");
+      Serial.println(setPoint);
+      Serial.println(controlInput);
       moonPID.Compute();
       Serial.print("PID controlOuput: ");
-      Serial.println(int(round(controlOutput)));
-   return controlOutput;
+      Serial.println(controlOutput);
+   return controlOutput / 255.0;
 }
 #endif
 
 #if defined(STRATEGY_FUZZY)
-int fuzzyPWM() {
+float fuzzyPWM_fraction(float curC) {
       //* fuzzy
       // get entrances
-      float ErrorInput = FilteredTemp-tempMax;
+      float ErrorInput = curC-targetTemperatureC;
       float DiffErrorInput = ErrorInput - OldErrorInput;
       OldErrorInput = ErrorInput;
       fuzzy->setInput(1, ErrorInput);
       fuzzy->setInput(2, DiffErrorInput);
       fuzzy->fuzzify();
-      return fuzzy->defuzzify(1);
+      return fuzzy->defuzzify(1) / 255.0;
 }
 #endif
 
-#if defined(STRATEGY_TERMOSTAT)
-int thermostatPWM() {
-  if (curtemp > targetTemp) {
-    return 255;
+#if defined(STRATEGY_THERMOSTAT)
+float thermostatPWM_fraction(curC) {
+  if (curC < targetTemperatureC) {
+    return 1.0;
   } else {
-    return 0;
+    return 0.0;
   }
 }
 #endif
@@ -748,7 +793,6 @@ int thermostatPWM() {
 
 int exit_flag = 0;
 void checkTimeExpired() {
-
   if ((hours >= timeMax) && exit_flag == 0)
   {
     displayExitScreen();
@@ -788,8 +832,8 @@ void showMenu() {
   display.setCursor(56, 7);
 
   // It's really useful to see the current temp at all times...
-  double curTemp = read_temp();
-  display.print(curTemp);
+  double curTempC = read_tempC();
+  display.print(curTempC);
   display.print(" ");
   char currentTime[80];
   // String currentTime =
@@ -824,161 +868,201 @@ void showMenu() {
   display.fillCircle(3, SPLIT + menuSelection * LINE_HEIGHT + 3, 3, SSD1306_WHITE);
 
   display.display();
+  inMainMenu = true;
 }
 
 
 #define BUTTON_POLL_PERIOD 0
-bool returnToMain = false;
-// replace this with an enum
-bool inMainMenu = true;
-bool showingGraph = false;
 
 
-bool sel_pressed = false;
-bool up_pressed = false;
-bool dn_pressed = false;
-bool up = false;
-bool dn = false;
-bool sel = false;
 
-void processButtons() {
-  delay(BUTTON_POLL_PERIOD);
-  bool sel_button = digitalRead(BUTTON_SELECT);
-  bool up_button = digitalRead(BUTTON_UP);
-  bool dn_button = digitalRead(BUTTON_DN);
 
-  sel_pressed |= sel_button;
-  up_pressed |= up_button;
-  dn_pressed |= dn_button;
-  // This is meant to catch the release of the button!
-  sel = sel_pressed && !sel_button;
-  dn = dn_pressed && !dn_button;
-  up = up_pressed && !up_button;
-  if (sel) sel_pressed = false;
-  if (dn) dn_pressed = false;
-  if (up) up_pressed = false;
+void upCallBack(byte buttonEvent) {
+  switch (buttonEvent){
+		case onPress:
+      Serial.println("UP onpress");
+			break;
+		case onRelease:
+      Serial.println("UP onRelease");
+        if (inMainMenu) {
+          if (menuSelection > 0) {  
+            menuSelection--;
+            fastBeep();
+            showMenu();
 
-  if (DEBUG_BUTTONS > 0) {
-    Serial.print("processButttons pressed: ");
-    Serial.print(sel_pressed);
-    Serial.print(" ");
-    Serial.print(up_pressed);
-    Serial.print(" ");
-    Serial.println(dn_pressed);
-    Serial.print("processButttons: ");
-    Serial.print(sel);
-    Serial.print(" ");
-    Serial.print(up);
-    Serial.print(" ");
-    Serial.println(dn);
-    delay(100);
-  }
-  // I don't know what this is supposed to do...
-  int multiple = 0;
-  if (!inMainMenu && sel) {
-    inMainMenu = true;
-    showingGraph = false;
-    showMenu();
-    Serial.println("returned to Menu");
-    return;
-  }
-
-  if (!up && !dn && !sel)
-    return;
-
-  Serial.println("menu selection");
-  Serial.println(menuSelection);
-  //controls menu selection
-  if (inMainMenu) {
-    //read buttons and menu
-    if (up && menuSelection > 0) {
-      menuSelection--;
-      up = false;
-      showMenu();
-      return;
-    } else if (dn && menuSelection < 3) {
-      menuSelection++;
-      dn = false;
-      showMenu();
-      return;
-    } 
-  }
-  if (!inMainMenu) {
-    if (sel || up || dn) {
-      inMainMenu = true;
-      showingGraph = false;
-      showMenu();
-      sel = false;
-      up = false;
-      dn = false;
-      return;
-    }
-  }
-  if (sel) {
-    Serial.println(F("loop RRR"));
-    switch (menuSelection) {
-      case TEMPERATURE_M:
-        showCurStatus(CurrentTemp);
-        inMainMenu = false;
-        break;
-      case GRAPH_1_M:
-        {
-          uint16_t index = getIndex();
-          Serial.println("showing graph");
-          showGraph(index);
-          inMainMenu = false;
-          showingGraph = true;
-          Serial.println("returned to Graph");
-        }
-        break;
-      case SET_TEMP_M:
-        {
-          // This is wrong; we whould be showing instructions
-          showSetTempMenu(targetTemperatureC);
-          inMainMenu = false;
-          showingGraph = false;
-          if (up) {
-            if (targetTemperatureC > MAX_TEMPERATURE_C) {
-              targetTemperatureC = MAX_TEMPERATURE_C;
-            }
-            targetTemperatureC += 0.5;
-            setTargetTemp(targetTemperatureC);
+          } else {
+            // We should make a beep here
           }
-          if (dn) {
+        } else {
+        switch (menuSelection) {
+          case TEMPERATURE_M:
+            showCurStatus(CurrentTempC);
+            inMainMenu = false;
+          break;
+          case GRAPH_1_M:
+          {
+            uint16_t index = getIndex();
+            Serial.println("showing graph");
+            showGraph(index);
+            inMainMenu = false;
+            showingGraph = true;
+            Serial.println("returned to Graph");
+          }
+          break;
+          case SET_TEMP_M:
+          {
+            inMainMenu = false;
+            showingGraph = false;
+              if (targetTemperatureC > MAX_TEMPERATURE_C) {
+                targetTemperatureC = MAX_TEMPERATURE_C;
+              }
+              targetTemperatureC += 0.5;
+              setTargetTemp(targetTemperatureC);
+            // This is wrong; we whould be showing instructions
+            showSetTempMenu(targetTemperatureC);
+          }
+          break;
+        }
+			break;
+	}
+  }
+}
+void dnCallBack(byte buttonEvent) {
+  switch (buttonEvent){
+		case onPress:
+      Serial.println("DN onpress");
+			break;
+		case onRelease:
+      Serial.println("DN onRelease");
+      if (inMainMenu) {
+        if (menuSelection < (NUM_MENU_SELECTIONS - 1)) {  
+          menuSelection++;
+          fastBeep();
+          showMenu();
+          Serial.println("Menu Selection Increased!");
+          Serial.println(menuSelection);
+        } else {
+          // We should make a beep here.
+          Serial.println("INTERNAL ERROR");
+        }
+      } else {
+       switch (menuSelection) {
+          case TEMPERATURE_M:
+            showCurStatus(CurrentTempC);
+            inMainMenu = false;
+          break;
+          case GRAPH_1_M:
+          {
+            uint16_t index = getIndex();
+            Serial.println("showing graph");
+            showGraph(index);
+            inMainMenu = false;
+            showingGraph = true;
+            Serial.println("returned to Graph");
+          }
+          break;
+          case SET_TEMP_M:
+          {
+            inMainMenu = false;
+            showingGraph = false;
             targetTemperatureC -= 0.5;
             setTargetTemp(targetTemperatureC);
+            // This is wrong; we whould be showing instructions
+            showSetTempMenu(targetTemperatureC);
           }
+          break;
         }
-        break;
-      case STOP_M:
-        {
-          Serial.println(F("Toggling Incubation!"));
- //         if (!incubating) {
-            // In this case, we want to restart the EEPROM...
+      }
+			break;
+	}
+}
+void slCallBack(byte buttonEvent) {
+  switch (buttonEvent){
+		case onPress:
+      Serial.println("SL onpress");
+			break;
+		case onRelease:
+      Serial.println("SL onRelease");
+      fastBeep();
+      Serial.println(inMainMenu);
+      if (!inMainMenu) {
+        switch (menuSelection) {
+          case TEMPERATURE_M:
+            showMenu();
+          break;
+          case GRAPH_1_M:
+          {
+            showMenu();
+          }
+          break;
+          case SET_TEMP_M:
+          {
+            showMenu();
+          }
+          break;
+          case STOP_M:
+          {
+            Serial.println(F("Toggling Incubation!"));
             rom_reset();
             Serial.println(F("EEPROM RESET!"));
             showMenu();
- //         }
-          incubating = !incubating;
-          inMainMenu = true;
-          showingGraph = false;
+            incubating = !incubating;
+            showingGraph = false;
+          }
+          break;
         }
-        break;
-    }
-    //    Serial.println(F("loop NNN"));
-  }
-
-  //Serial.println(F("loop BBB"));
-  // We have to process menu changes without delay to have
-  // a good user experience; but reading the temperature can
-  // be delayed.
-
+      } else {
+        switch (menuSelection) {
+          case TEMPERATURE_M:
+            showCurStatus(CurrentTempC);
+            inMainMenu = false;
+          break;
+          case GRAPH_1_M:
+          {
+            uint16_t index = getIndex();
+            Serial.println("showing graph");
+            showGraph(index);
+            inMainMenu = false;
+            showingGraph = true;
+            Serial.println("returned to Graph");
+            showMenu();
+          }
+          break;
+          case SET_TEMP_M:
+          {
+            // This is wrong; we whould be showing instructions
+            showSetTempMenu(targetTemperatureC);
+            inMainMenu = false;
+            showingGraph = false;
+          }
+          break;
+          case STOP_M:
+          {
+            Serial.println(F("Toggling Incubation!"));
+            rom_reset();
+            Serial.println(F("EEPROM RESET!"));
+            showMenu();
+            incubating = !incubating;
+            inMainMenu = true;
+            showingGraph = false;
+          }
+          break;
+        }
+      }
+			break;
+	}
 }
 
 uint32_t last_temp_check_ms = 0;
+uint32_t time_since_last_report_ms = 0;
 #define PERIOD_TO_CHECK_TEMP_MS 5000
+#define REPORT_PERIOD 5000
 void loop() {
-  processButtons();
+
+  upButton.poll();
+  dnButton.poll();
+  slButton.poll();
+//  processButtons();
 
   uint32_t loop_start = millis(); 
   if (loop_start < (last_temp_check_ms + PERIOD_TO_CHECK_TEMP_MS))
@@ -1010,12 +1094,12 @@ void loop() {
 
   selectedOption = 0;
 
-  if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH) && (digitalRead(BUTTON_SELECT) == HIGH))
-  {
-      exit_flag = 1;
-      Serial.println("Because 3 buttons were put at once, this incubation is cancelled.");
-      return;
-  }
+  // if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH) && (digitalRead(BUTTON_SL) == HIGH))
+  // {
+  //     exit_flag = 1;
+  //     Serial.println("Because 3 buttons were put at once, this incubation is cancelled.");
+  //     return;
+  // }
 
   checkTimeExpired();
   timeNow = (millis()/1000); // the number of milliseconds that have passed since boot
@@ -1026,27 +1110,29 @@ void loop() {
   if((seconds - secondsSinceTempUpdate) >= secondsToUpdateTemp) // This occurs one per second....
   {
     sensor.requestTemperatures();
-    CurrentTemp = read_temp();
+    CurrentTempC = read_tempC();
 #if defined(KALMAN)
-    FilteredTemp = kalmanFilter(CurrentTemp,FilteredTemp);
+    FilteredTemp = kalmanFilter(CurrentTempC,FilteredTemp);
 #else
-    FilteredTemp = CurrentTemp;
+    FilteredTemp = CurrentTempC;
 #endif
     renderDisplay_bool = (seconds - secondsLastDisplay) > secondsToUpdateDisplay;
     if (renderDisplay_bool) {
-      Serial.println("Updating Display");
-      float outputPWM;
+      float outputPWM_fraction;
 #if defined(STRATEGY_FUZZY)
-      outputPWM = fuzzyPWM();
+      outputPWM_fraction = fuzzyPWM_fraction(FilteredTemp);
+
+      Serial.print("fuzzyPWM Output: ");
+      Serial.println(outputPWM_fraction);
 #endif
 #if defined(STRATEGY_PID)
-      outputPWM = pidPWM();
+      outputPWM_fraction = pidPWM_fraction(FilteredTemp);
 #endif
 #if defined(STRATEGY_THERMOSTAT)
-      outputPWM = thermostatPWM();
+      outputPWM_fraction = thermostatPWM_fraction(FilteredTemp);
 #endif
 
-      setHeatPWM(int(round(outputPWM)));  
+      setHeatPWM_fraction(outputPWM_fraction);  
       // Serial.print("Heater PWM: ");
       // Serial. print((float) outputPWM * 100.0 / 256.0);
       // Serial.println("%");
@@ -1060,10 +1146,14 @@ void loop() {
         showGraph(index);
       }
 
+      if ((time_now_ms - time_since_last_report_ms) > REPORT_PERIOD) {
+        showReport(CurrentTempC);
+          time_since_last_report_ms = time_now_ms;
+        }
       if (time_since_last_entry > DATA_RECORD_PERIOD) {
           //  entryFlag = false;
           Serial.println(F("Writing New Entry"));
-          writeNewEntry(CurrentTemp);
+          writeNewEntry(CurrentTempC);
           time_of_last_entry = time_now_ms;
         }
       secondsLastDisplay = seconds;

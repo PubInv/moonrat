@@ -58,10 +58,10 @@ float duty_factor();
 //turn the heating pad on
 // void heatOFF();
 // void heatON(); 
-void setHeatPWM(double intended_df);
+void setHeatPWM_fraction(double intended_df);
 void getTimeString(char* buff); 
 bool writeNewEntry(float data);
 float getTargetTemp();
 void setTargetTemp(float temp);
 
-float wattHours();
+float wattHours(float& average_watts);
