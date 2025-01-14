@@ -5832,7 +5832,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Resistor"
+		(property "Description" "Pullup Resistor"
 			(at 234.95 115.57 0)
 			(effects
 				(font
