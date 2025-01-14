@@ -1896,6 +1896,259 @@
 				)
 			)
 		)
+		(symbol "Sensor_Temperature:DS18B20"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -3.81 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "DS18B20"
+				(at 6.35 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+				(at -25.4 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://datasheets.maximintegrated.com/en/ds/DS18B20.pdf"
+				(at -3.81 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Programmable Resolution 1-Wire Digital Thermometer TO-92"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "OneWire 1Wire Dallas Maxim"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO*92*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "DS18B20_0_1"
+				(rectangle
+					(start -5.08 5.08)
+					(end 5.08 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(circle
+					(center -3.302 -2.54)
+					(radius 1.27)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start -2.667 -1.905)
+					(end -3.937 0)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(arc
+					(start -2.667 3.175)
+					(mid -3.302 3.8073)
+					(end -3.937 3.175)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.937 0.635) (xy -3.302 0.635)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.937 1.27) (xy -3.302 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.937 1.905) (xy -3.302 1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.937 2.54) (xy -3.302 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.937 3.175) (xy -3.937 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.937 3.175) (xy -3.302 3.175)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.667 3.175) (xy -2.667 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "DS18B20_1_1"
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "DQ"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "V_{DD}"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:+5P"
 			(power)
 			(pin_names
@@ -2348,6 +2601,12 @@
 		(uuid "1a7a97ff-c5bb-43c2-a7fb-b00ad24e3e90")
 	)
 	(junction
+		(at 234.95 111.76)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "25ec7151-75c7-4b7d-b780-d29ab865d025")
+	)
+	(junction
 		(at 234.95 135.89)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2364,6 +2623,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "46ab4aec-165c-4d65-b1a1-5faba5edbe9b")
+	)
+	(junction
+		(at 254 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "674099cf-8b0c-4853-a6e6-2ce92b5c8fb6")
 	)
 	(junction
 		(at 203.2 132.08)
@@ -2396,10 +2661,22 @@
 		(uuid "99b0bb82-9619-4712-9e57-2da3c8ec25b3")
 	)
 	(junction
+		(at 234.95 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a17efd61-44ca-4ae5-a4ea-281d18e71d6f")
+	)
+	(junction
 		(at 210.82 116.84)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a36eab71-1a5f-46eb-aa3b-677afc015149")
+	)
+	(junction
+		(at 246.38 111.76)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b55bda72-0b7b-4dac-a825-4ddc3598b664")
 	)
 	(junction
 		(at 207.01 106.68)
@@ -2436,12 +2713,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "efd3144f-450f-4aae-bc9f-efdcd14bb730")
-	)
-	(junction
-		(at 234.95 111.76)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "fd600021-1215-4fc7-b4c6-0919e1413a8b")
 	)
 	(no_connect
 		(at 224.79 116.84)
@@ -2649,6 +2920,16 @@
 	)
 	(wire
 		(pts
+			(xy 254 119.38) (xy 254 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2fdd75f7-a276-47de-8fe4-4275fc968d0d")
+	)
+	(wire
+		(pts
 			(xy 181.61 124.46) (xy 207.01 124.46)
 		)
 		(stroke
@@ -2726,6 +3007,16 @@
 			(type default)
 		)
 		(uuid "4400e9cb-0f10-4d1f-bfb4-a0cc056ae874")
+	)
+	(wire
+		(pts
+			(xy 234.95 127) (xy 246.38 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "44c76017-257e-4352-b30d-19c7f63cfd67")
 	)
 	(wire
 		(pts
@@ -2849,7 +3140,7 @@
 	)
 	(wire
 		(pts
-			(xy 232.41 132.08) (xy 248.92 132.08)
+			(xy 232.41 132.08) (xy 254 132.08)
 		)
 		(stroke
 			(width 0)
@@ -2909,16 +3200,6 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 119.38) (xy 234.95 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7d9a07b8-f4e8-4a01-ae0b-4084e0e08f84")
-	)
-	(wire
-		(pts
 			(xy 210.82 116.84) (xy 222.25 116.84)
 		)
 		(stroke
@@ -2956,6 +3237,16 @@
 			(type default)
 		)
 		(uuid "8f82e8d8-8882-42c1-8bcb-5f84250c0f4a")
+	)
+	(wire
+		(pts
+			(xy 234.95 127) (xy 234.95 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8fe90a4f-71be-4a06-ac44-283e07209b31")
 	)
 	(wire
 		(pts
@@ -3099,16 +3390,6 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 111.76) (xy 248.92 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ae420424-c9df-4a91-8256-ad46ad34b6c8")
-	)
-	(wire
-		(pts
 			(xy 224.79 114.3) (xy 224.79 111.76)
 		)
 		(stroke
@@ -3239,13 +3520,23 @@
 	)
 	(wire
 		(pts
-			(xy 248.92 111.76) (xy 248.92 132.08)
+			(xy 254 111.76) (xy 254 119.38)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "d17b5567-abcd-40c4-9f0a-a47e121b6792")
+	)
+	(wire
+		(pts
+			(xy 234.95 119.38) (xy 234.95 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "db9ba8fd-bbe1-462c-8ade-ba9e03d1fc84")
 	)
 	(wire
 		(pts
@@ -3286,6 +3577,16 @@
 			(type default)
 		)
 		(uuid "e5483b70-4d97-447b-ada4-b4c0a7c4d5aa")
+	)
+	(wire
+		(pts
+			(xy 246.38 111.76) (xy 254 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5cdf5c6-0966-464f-aa1d-67d590739328")
 	)
 	(wire
 		(pts
@@ -3346,6 +3647,16 @@
 			(type default)
 		)
 		(uuid "f71ee92f-477c-430a-9df5-c0f285513f4d")
+	)
+	(wire
+		(pts
+			(xy 234.95 111.76) (xy 246.38 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "faefe94b-a455-47dc-a12e-ebd1bd999d5a")
 	)
 	(wire
 		(pts
@@ -4480,7 +4791,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "4918191f-7d58-4e83-8684-a7a65246fff1")
 		(property "Reference" "#PWR017"
 			(at 254 139.7 0)
@@ -4492,7 +4802,7 @@
 			)
 		)
 		(property "Value" "VCCQ"
-			(at 254 130.81 0)
+			(at 248.92 134.112 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4935,6 +5245,79 @@
 			(project "moonratII"
 				(path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
 					(reference "#PWR018")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Sensor_Temperature:DS18B20")
+		(at 246.38 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7ae58959-8f5c-472c-9e81-ce03c3581363")
+		(property "Reference" "U1"
+			(at 240.03 118.1099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "DS18B20"
+			(at 240.03 120.6499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 220.98 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://datasheets.maximintegrated.com/en/ds/DS18B20.pdf"
+			(at 242.57 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Programmable Resolution 1-Wire Digital Thermometer TO-92"
+			(at 246.38 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b6964043-b188-4076-bdc7-8758059b08a4")
+		)
+		(pin "3"
+			(uuid "9fda5404-5c54-429a-a076-cbb49822676b")
+		)
+		(pin "2"
+			(uuid "7bc1ff84-153f-497b-9533-c8ff77bf0ac5")
+		)
+		(instances
+			(project ""
+				(path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
+					(reference "U1")
 					(unit 1)
 				)
 			)
