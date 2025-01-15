@@ -80,9 +80,10 @@ int HEATER_PIN = 10; //Heater (termopad) pin
 // DailyStruggleButton dnButton;
 // DailyStruggleButton slButton;
 
-Button upBtn(BUTTON_UP); 
-Button dnBtn(BUTTON_DN);
-Button slBtn(BUTTON_SL);
+const int DEBOUNCE_TIME_MS = 150;
+Button upBtn(BUTTON_UP,DEBOUNCE_TIME_MS); 
+Button dnBtn(BUTTON_DN,DEBOUNCE_TIME_MS);
+Button slBtn(BUTTON_SL,DEBOUNCE_TIME_MS);
 
 bool returnToMain = false;
 // replace this with an enum
@@ -894,6 +895,7 @@ void upCallBack(byte buttonEvent) {
         switch (menuSelection) {
           case TEMPERATURE_M:
             showCurStatus(CurrentTempC);
+            showingGraph = false;
             inMainMenu = false;
           break;
           case GRAPH_1_M:
@@ -973,6 +975,7 @@ void dnCallBack(byte buttonEvent) {
 	}
 }
 void slCallBack(byte buttonEvent) {
+  Serial.println("XXXX");
   switch (buttonEvent){
 		case onPress:
       Serial.println("SL onpress");
@@ -1020,8 +1023,6 @@ void slCallBack(byte buttonEvent) {
             showGraph(index);
             inMainMenu = false;
             showingGraph = true;
-            Serial.println("returned to Graph");
-            showMenu();
           }
           break;
           case SET_TEMP_M:
@@ -1059,22 +1060,22 @@ void loop() {
     upBtn.read();            
     if (upBtn.wasPressed())   
     {
-        // Serial.print("UP BUTTON RELEASED: ");
-        // Serial.println(n++);
+        Serial.print("UP BUTTON RELEASED: ");
+        Serial.println(n++);
         upCallBack(onRelease);
     }
     dnBtn.read();            
     if (dnBtn.wasPressed())   
     {
-        // Serial.print("DN BUTTON RELEASED: ");
-        // Serial.println(n++);
+        Serial.print("DN BUTTON RELEASED: ");
+        Serial.println(n++);
         dnCallBack(onRelease);
     }
     slBtn.read();              
     if (slBtn.wasPressed())    
     {
-        // Serial.print("SL BUTTON RELEASED: ");
-        // Serial.println(n++);
+        Serial.print("SL BUTTON RELEASED: ");
+        Serial.println(n++);
         slCallBack(onRelease);
     }
 
