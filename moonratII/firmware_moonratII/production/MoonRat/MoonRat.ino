@@ -279,24 +279,12 @@ void setup() {
   delay(100);
   Serial.begin(BAUD_RATE);
   delay(1000);
-  while (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println(F("Error while initializing OLED"));
-  }
-  delay(100);
-  Serial.println("successfully started OLED");
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(WHITE);
-  display.setCursor(0, 0);
-  // Display static text
-  display.drawBitmap(0, 0, image_data_Saraarray, 128, 64, 1);
-  display.display();
-  delay(1500);
-  display.clearDisplay();
 
-  pinMode(BUTTON_SL, INPUT_PULLUP);
-  pinMode(BUTTON_UP, INPUT_PULLUP);
-  pinMode(BUTTON_DN, INPUT_PULLUP);
+  setupDisplay();
+
+  // pinMode(BUTTON_SL, INPUT_PULLUP);
+  // pinMode(BUTTON_UP, INPUT_PULLUP);
+  // pinMode(BUTTON_DN, INPUT_PULLUP);
 
 
 #if defined(STRATEGY_FUZZY)
@@ -384,7 +372,12 @@ void upCallBack(byte buttonEvent) {
       showMenu(CurrentTempC);
 
     } else {
-      // We should make a beep here
+      // Does two sound like it is not an error?
+      fastBeep();
+      delay(100);
+      fastBeep();
+      delay(100);
+      fastBeep();
     }
   } else {
     switch (menuSelection) {
@@ -396,11 +389,9 @@ void upCallBack(byte buttonEvent) {
     case GRAPH_1_M:
       {
         uint16_t index = getIndex();
-        Serial.println("showing graph");
         showGraph(index);
         inMainMenu = false;
         showingGraph = true;
-        Serial.println("returned to Graph");
       }
       break;
     case SET_TEMP_M:
@@ -425,11 +416,13 @@ void dnCallBack(byte buttonEvent) {
       menuSelection++;
       fastBeep();
       showMenu(CurrentTempC);
-      Serial.println("Menu Selection Increased!");
-      Serial.println(menuSelection);
     } else {
-      // We should make a beep here.
-      Serial.println("INTERNAL ERROR");
+      // Does two sound like it is not an error?
+      fastBeep();
+      delay(100);
+      fastBeep();
+      delay(100);
+      fastBeep();
     }
   } else {
     switch (menuSelection) {
@@ -440,11 +433,9 @@ void dnCallBack(byte buttonEvent) {
     case GRAPH_1_M:
       {
         uint16_t index = getIndex();
-        Serial.println("showing graph");
         showGraph(index);
         inMainMenu = false;
         showingGraph = true;
-        Serial.println("returned to Graph");
       }
       break;
     case SET_TEMP_M:
@@ -498,7 +489,6 @@ void slCallBack(byte buttonEvent) {
     case GRAPH_1_M:
       {
         uint16_t index = getIndex();
-        Serial.println("showing graph");
         showGraph(index);
         inMainMenu = false;
         showingGraph = true;
@@ -506,7 +496,6 @@ void slCallBack(byte buttonEvent) {
       break;
     case SET_TEMP_M:
       {
-        // This is wrong; we whould be showing instructions
         showSetTempMenu(targetTemperatureC);
         inMainMenu = false;
         showingGraph = false;
@@ -536,25 +525,15 @@ void loop() {
 
   upBtn.read();
   if (upBtn.wasPressed())
-    {
-      Serial.print("UP BUTTON RELEASED: ");
-      Serial.println(n++);
       upCallBack(onRelease);
-    }
+
   dnBtn.read();
   if (dnBtn.wasPressed())
-    {
-      Serial.print("DN BUTTON RELEASED: ");
-      Serial.println(n++);
       dnCallBack(onRelease);
-    }
+
   slBtn.read();
   if (slBtn.wasPressed())
-    {
-      Serial.print("SL BUTTON RELEASED: ");
-      Serial.println(n++);
       slCallBack(onRelease);
-    }
 
   if ((digitalRead(BUTTON_UP) == HIGH) && (digitalRead(BUTTON_DN) == HIGH) && (digitalRead(BUTTON_SL) == HIGH))
     {
@@ -566,7 +545,6 @@ void loop() {
   uint32_t loop_start = millis();
   if (loop_start < (last_temp_check_ms + PERIOD_TO_CHECK_TEMP_MS))
     return;
-
 
   //read keyboard entries from the serial monitor
   char T;
@@ -585,6 +563,8 @@ void loop() {
   }
 
   if (exit_flag) {
+    // What to do in this case is not tested or obvious, but we consider the incubation over.
+    setHeatPWM_fraction(0.0);
     return;
   }
 
@@ -606,9 +586,6 @@ void loop() {
         float outputPWM_fraction;
 #if defined(STRATEGY_FUZZY)
         outputPWM_fraction = fuzzyPWM_fraction(CurrentTempC);
-
-        Serial.print("fuzzyPWM Output: ");
-        Serial.println(outputPWM_fraction);
 #endif
 #if defined(STRATEGY_PID)
         outputPWM_fraction = pidPWM_fraction(CurrentTempC);
@@ -628,8 +605,6 @@ void loop() {
           time_since_last_report_ms = time_now_ms;
         }
         if (time_since_last_entry > DATA_RECORD_PERIOD) {
-          //  entryFlag = false;
-          Serial.println(F("Writing New Entry"));
           writeNewEntry(CurrentTempC);
           time_of_last_entry = time_now_ms;
         }
