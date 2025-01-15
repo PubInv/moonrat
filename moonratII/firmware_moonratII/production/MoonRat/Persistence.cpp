@@ -100,7 +100,7 @@ float sixteenToFloat(uint16_t sixteen) {
 }
 
 /*
-   Writes 16 bits into EEPROM using big-endian respresentation. Will be called to enter temp at a specific address every 5 mibutes
+  Writes 16 bits into EEPROM using big-endian respresentation. Will be called to enter temp at a specific address every 5 mibutes
 */
 void rom_write16(uint16_t address, uint16_t data) {
   EEPROM.update(address, (data & 0xFF00) >> 8);
@@ -108,7 +108,7 @@ void rom_write16(uint16_t address, uint16_t data) {
 }
 
 /*
-   Reads 16 bits from EEPROM using big-endian respresentation. Will be called in readindex to get temp at certain index in order to plot graph
+  Reads 16 bits from EEPROM using big-endian respresentation. Will be called in readindex to get temp at certain index in order to plot graph
 */
 uint16_t rom_read16(uint16_t address) {
   uint16_t data = EEPROM.read(address) << 8;
@@ -120,8 +120,8 @@ uint16_t getIndex() {
   return rom_read16(INDEX_ADDRESS);
 }
 /*
-   Marks the EEPROM as empty by clearing the first address
-   Note: Data is not actually cleared from other addresses
+  Marks the EEPROM as empty by clearing the first address
+  Note: Data is not actually cleared from other addresses
 */
 void rom_reset() {
   rom_write16(INDEX_ADDRESS * 2, 0);
@@ -188,8 +188,8 @@ void setHeatPWM_fraction(double df_fraction) {
   uint32_t tm = millis();
   // _voltage_ms += ((double) current_PWM / 255.0)* (tm - time_of_last_PWM);
   const int pwm_255 = (int)intended_df_255;
-// Now we must compute the fraction of the time of the last period that it 
-// the heater was on.
+  // Now we must compute the fraction of the time of the last period that it
+  // the heater was on.
   float time_of_last_period_ms = (tm - time_of_last_PWM);
   time_heater_turned_on_ms += (unsigned long) (time_of_last_period_ms *  ((float) current_PWM_255 / 255.0));
 
@@ -215,8 +215,8 @@ void getTimeString(char* buff) {
 }
 
 /*
-   Writes a new entry into the next spot in EEPROM
-   returns false if the list is full
+  Writes a new entry into the next spot in EEPROM
+  returns false if the list is full
 */
 bool writeNewEntry(float data) {
   uint16_t bitData = floatToSixteen(data);
