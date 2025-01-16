@@ -8,8 +8,7 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 ---
 
 # Status, January 2025  
-#### Project presentation on YouTube
-<p>Click image to watch.</p>
+#### Project presentation on YouTube (Click image to watch)
 
 [![Watch the video](https://github.com/user-attachments/assets/b2fde032-a1f6-4cba-a1fe-d6f2304b3a2d)](https://www.youtube.com/watch?v=yTW_BcTsaGw&t=22s)
 #### Updated Experiment.com succesful project funding round
