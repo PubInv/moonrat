@@ -2,21 +2,23 @@
 
 Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy](https://github.com/PubInv/moonrat/tree/main/legacy) folder for the work of volunteers prior to December 2022 and the hand built prototype.
 
-**MoonratII** development effort began in 2023.   
+**MoonratII** development effort began January 2023.   
 
 
 ---
 
 # Status, January 2025  
-#### 2024 field testing resulted in changes to the unit:
+#### Project presentation on YouTube (Click image to watch)
 
+[![Watch the video](https://github.com/user-attachments/assets/b2fde032-a1f6-4cba-a1fe-d6f2304b3a2d)](https://www.youtube.com/watch?v=yTW_BcTsaGw&t=22s)
+#### Updated Experiment.com succesful project funding round
+In January 2023, 13 generous patrons funded the production of five complete MoonRatII prototypes. we updated them with the [project results](https://experiment.com/projects/tote-size-portable-incubator-for-rapid-field-work
+).
+#### 2024 field testing resulted in future unit changes:
 - Heater board redesign with a Dallas One wire digital temperature thermometer and a 4.7 ohm pull up resistor.
 - Design a universal heater board cage to secure the heater board beneath the container lid in any external enclosure.
 - Adjust top button spacing in KiCad.
 - Add bottom mounting holes to the enclosure.
-
-#### Preparing an update for project backers at Experiment.com.
-
 
 # Status, November 2024 
 A scientific research paper is tentatively scheduled for March 2025 in the HardwareX journal.
@@ -27,20 +29,24 @@ Prototypes of the MoonratII were field tested in two locations - the Galapagos I
 # Status, April 2024  
 The MoonRatII team has produced five Printed Circuit Assemblies (Control and Heater) of the Rev 1 PWB for use by the USA team and five Printed Circuit Assemblies (Control and Heater) of the Rev 2 PWB for use by  the Mexico team. Enclosure design for the Controller Assembly of Rev 3 PWB is underway TBA. 
 
+# Status January 2024
+[Dr. Robert Read](https://www.pubinv.org) and [Melanie Laporte](https://github.com/melanielaporte) presented the MoonRatII project. Watch the [presentation](https://www.youtube.com/watch?v=yTW_BcTsaGw&t=22s). 
+
 # Current Design Summary
 In one schematic and PCB, we have developed a "Control Assembly" and a "Heater Assembly".  
 - The Control Assembly will be in an enclosure detachable from the incubation chamber.  
 - The Heater Assembly will mounted internal to the incubation assembly under the unit top. Current to a heating pad or pads has changed from the previously used TMP36 low voltage temperature sensor to a digital temperature sensor. 
 - A rechargable battery with its recharging station will complete a MoonRatII incubator system.
   
-### Image Gallery - Current FreeCAD Assembly Designs
+## Image Gallery - Current FreeCAD Assembly Designs
 |A    |B    |C    |
 | --- | --- | --- |
 | <img width="300" atl="image1" src="https://github.com/user-attachments/assets/e7c12fc4-8284-4690-aac5-48fd973704af"> | <img width="300" atl="image2" src="https://github.com/user-attachments/assets/09263421-4ce9-420e-a656-ec62c1cdc5f2"> | <img width="300" atl="image4" src="https://github.com/user-attachments/assets/596ca510-e76f-4bca-a64a-ca0ef15ba3e8">|
 | <img width="300" atl="image5" src="https://github.com/user-attachments/assets/1494b485-7472-4db9-9431-564c4f7dbedf"> | <img width="300" atl="image6" src="https://github.com/user-attachments/assets/4dbd4b99-946e-4f79-9589-6b527d1ca0e3"> | <img width="300" atl="image7" src="https://github.com/user-attachments/assets/b570462b-f9e0-4349-9fd8-33f91ea28a3b"> |
 | <img width="300" atl="image8" src="https://github.com/user-attachments/assets/a76b752d-e472-4d29-aec0-d65051a0d5a1"> | <img width="200" atl="image9" src="https://github.com/user-attachments/assets/1ebdbb64-3320-4e3b-8af4-2a12f6a69f7d"> | <img width="300" atl="image10" src="https://github.com/user-attachments/assets/ffd1c814-bdfc-4d9a-a9ed-c0cb051c3e43"> |  
 
-## 2023 MoonRatII Design
+# 2023 MoonRatII Design
+
 ### Fundamental Modularity: The 6-wire appliance 
 The connections from the controller to the heater needs only 6 wires:
 1. GND (ground, nominally voltage 0).
