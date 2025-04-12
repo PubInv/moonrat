@@ -6,7 +6,7 @@
 	(paper "B")
 	(title_block
 		(title "MoonratII")
-		(date "2024-03-02")
+		(date "2025-03-15")
 		(rev "2.0")
 		(company "PublicInvention")
 		(comment 1 "GNU Affero General Public License v3.0")
@@ -3070,178 +3070,6 @@
 				)
 			)
 		)
-		(symbol "GPAD_SCH_LIB:TMP36GRTZ-REEL7"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "U?"
-				(at 19.05 6.1879 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "TMP36GRTZ-REEL7"
-				(at 19.05 3.6479 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
-				(at 1.27 -6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/TMP35_36_37.pdf"
-				(at 1.27 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "TMP36_SOT_23_5_Low_voltage_precision_centigrade_temperature_sensor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Temperature Sensor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "SOT?23*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "TMP36GRTZ-REEL7_0_1"
-				(rectangle
-					(start -7.62 5.08)
-					(end 7.62 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "TMP36GRTZ-REEL7_1_1"
-				(pin output line
-					(at 10.16 2.54 180)
-					(length 2.54)
-					(name "Vout"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 7.62 270)
-					(length 2.54)
-					(name "+Vs"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 -2.54 0)
-					(length 2.54)
-					(name "NC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 0 0)
-					(length 2.54)
-					(name "/SHUTDOWN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(name "V_{SS}"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Graphic:Logo_Open_Hardware_Small"
 			(exclude_from_sim no)
 			(in_bom no)
@@ -4028,6 +3856,796 @@
 						)
 					)
 					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Relay_SolidState:TLP175A"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -5.08 4.953 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "TLP175A"
+				(at -5.08 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_SO:MFSOP6-4_4.4x3.6mm_P1.27mm"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://toshiba.semicon-storage.com/info/docget.jsp?did=13665&prodName=TLP175A"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "MOSFET Photorelay 1-Form-A, Voff 60V, Ion 100mA, SOP6"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "MOSFET Output Photorelay 1-Form-A"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MFSOP6*4.4x3.6mm*P1.27mm*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "TLP175A_0_1"
+				(rectangle
+					(start -5.08 3.81)
+					(end 5.08 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -0.635) (xy -2.54 -0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 -0.635) (xy 1.016 -2.159)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 2.159) (xy 1.016 0.635)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 -0.508) (xy 1.524 -0.762)
+					)
+					(stroke
+						(width 0.3556)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.794 0) (xy 3.81 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.429 -1.651) (xy 4.191 -1.651)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.429 1.651) (xy 4.191 1.651)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 -2.54) (xy 3.81 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 -2.032) (xy 1.524 -2.286) (xy 1.524 -2.286)
+					)
+					(stroke
+						(width 0.3556)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 -1.27) (xy 1.524 -1.524) (xy 1.524 -1.524)
+					)
+					(stroke
+						(width 0.3556)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 0.762) (xy 1.524 0.508) (xy 1.524 0.508)
+					)
+					(stroke
+						(width 0.3556)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 1.524) (xy 1.524 1.27) (xy 1.524 1.27)
+					)
+					(stroke
+						(width 0.3556)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 2.286) (xy 1.524 2.032) (xy 1.524 2.032)
+					)
+					(stroke
+						(width 0.3556)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.651 -1.397) (xy 2.794 -1.397) (xy 2.794 -0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.651 1.397) (xy 2.794 1.397) (xy 2.794 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 2.54) (xy -3.175 2.54) (xy -3.175 -2.54) (xy -5.08 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.175 -0.635) (xy -3.81 0.635) (xy -2.54 0.635) (xy -3.175 -0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.651 -2.159) (xy 2.794 -2.159) (xy 2.794 -2.54) (xy 5.08 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.651 -0.635) (xy 2.794 -0.635) (xy 2.794 0.635) (xy 1.651 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.651 2.159) (xy 2.794 2.159) (xy 2.794 2.54) (xy 5.08 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.778 -1.397) (xy 2.286 -1.27) (xy 2.286 -1.524) (xy 1.778 -1.397)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.778 1.397) (xy 2.286 1.524) (xy 2.286 1.27) (xy 1.778 1.397)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 -1.651) (xy 3.429 -0.889) (xy 4.191 -0.889) (xy 3.81 -1.651)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 1.651) (xy 3.429 0.889) (xy 4.191 0.889) (xy 3.81 1.651)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.905 -0.508) (xy -0.635 -0.508) (xy -1.016 -0.635) (xy -1.016 -0.381) (xy -0.635 -0.508)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.905 0.508) (xy -0.635 0.508) (xy -1.016 0.381) (xy -1.016 0.635) (xy -0.635 0.508)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.794 -0.635)
+					(radius 0.127)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.794 0)
+					(radius 0.127)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.794 0.635)
+					(radius 0.127)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 3.81 -2.54)
+					(radius 0.127)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 3.81 0)
+					(radius 0.127)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 3.81 2.54)
+					(radius 0.127)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TLP175A_1_1"
+				(pin passive line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -2.54 0)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -2.54 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 2.54 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Sensor_Temperature:TSIC306-TO92"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -6.35 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TSIC306-TO92"
+				(at 1.27 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+				(at -8.89 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://shop.bb-sensors.com/out/media/Datasheet_Digital_Semiconductor_temperatur_sensor_TSIC.pdf"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Digital temperature sensor, range -50 ... +150 °C, 0.3 K accuracy, TO-92"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "temperature digital"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO?92*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "TSIC306-TO92_0_1"
+				(rectangle
+					(start -7.62 5.08)
+					(end 7.62 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(circle
+					(center -4.445 -2.54)
+					(radius 1.27)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start -3.81 -1.905)
+					(end -5.08 0)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(arc
+					(start -3.81 3.175)
+					(mid -4.445 3.8073)
+					(end -5.08 3.175)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 0.635) (xy -4.445 0.635)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 1.27) (xy -4.445 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 1.905) (xy -4.445 1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 2.54) (xy -4.445 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 3.175) (xy -5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 3.175) (xy -4.445 3.175)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 3.175) (xy -3.81 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TSIC306-TO92_1_1"
+				(pin power_in line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "V+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 10.16 0 180)
+					(length 2.54)
+					(name "Signal"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5658,10 +6276,10 @@
 		(uuid "0ed2ec52-810f-4cb4-8186-f8da81e3b8bd")
 	)
 	(junction
-		(at 387.985 140.97)
+		(at 369.57 191.77)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "17240f42-a60a-4b41-9b89-c7a08905c5d6")
+		(uuid "15b46b0c-9741-4e6c-90c9-c5016461744f")
 	)
 	(junction
 		(at 356.235 182.88)
@@ -5760,6 +6378,12 @@
 		(uuid "5469125a-1e51-4772-9d10-26d5719854c4")
 	)
 	(junction
+		(at 369.57 173.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "55796191-b426-4b60-af56-46c5b4449754")
+	)
+	(junction
 		(at 233.045 128.27)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5782,6 +6406,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "5dc6756a-b752-4497-aa09-139fe2c33997")
+	)
+	(junction
+		(at 386.08 173.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6488015d-8c5a-4d16-8882-4d74e6b50432")
 	)
 	(junction
 		(at 233.045 132.08)
@@ -5812,12 +6442,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "75b2167b-73d4-43f7-8b00-aff383e32523")
-	)
-	(junction
-		(at 370.205 180.34)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "75de0de7-14ab-4709-a35c-b7e93aca52b4")
 	)
 	(junction
 		(at 280.035 177.8)
@@ -5868,6 +6492,12 @@
 		(uuid "99b0bb82-9619-4712-9e57-2da3c8ec25b3")
 	)
 	(junction
+		(at 369.57 186.69)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9ed2bb72-dedd-40f2-b63b-cfb54a46dc12")
+	)
+	(junction
 		(at 363.855 154.94)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5884,6 +6514,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a9691c03-ec60-4279-b3c7-6355031920f0")
+	)
+	(junction
+		(at 369.57 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "acc9a8f1-96aa-4a5c-b60f-3caf94e0e662")
 	)
 	(junction
 		(at 227.965 132.08)
@@ -5916,6 +6552,12 @@
 		(uuid "bbcf87da-38c7-4c09-b86c-178efefff456")
 	)
 	(junction
+		(at 369.57 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bd102781-3b93-4f08-9a26-f2c8d85ae99c")
+	)
+	(junction
 		(at 225.425 67.31)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5940,10 +6582,10 @@
 		(uuid "c6d777e5-e612-49fc-88fa-69a140b32308")
 	)
 	(junction
-		(at 370.205 170.18)
+		(at 387.985 142.24)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "c9b1976e-e28b-4bf2-92cb-f6354e220cf6")
+		(uuid "d0ac0412-adbf-409e-bf17-eda9b276c3ef")
 	)
 	(junction
 		(at 385.445 170.18)
@@ -5980,6 +6622,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "eb114223-fb5f-499f-b478-155e49a16469")
+	)
+	(junction
+		(at 360.045 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ec960b5a-8a29-4230-8662-f71094502047")
 	)
 	(junction
 		(at 277.495 152.4)
@@ -6529,7 +7177,7 @@
 	)
 	(wire
 		(pts
-			(xy 370.205 170.18) (xy 370.205 180.34)
+			(xy 369.57 170.18) (xy 369.57 173.99)
 		)
 		(stroke
 			(width 0)
@@ -6579,7 +7227,7 @@
 	)
 	(wire
 		(pts
-			(xy 387.985 140.97) (xy 387.985 144.78)
+			(xy 387.985 138.43) (xy 387.985 142.24)
 		)
 		(stroke
 			(width 0)
@@ -6606,6 +7254,16 @@
 			(type default)
 		)
 		(uuid "200822f0-0393-4f06-b8a8-5b3f8dc7f6ea")
+	)
+	(wire
+		(pts
+			(xy 369.57 173.99) (xy 374.65 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20e14dab-a300-4fed-a024-9a6b00a03ba9")
 	)
 	(wire
 		(pts
@@ -6646,6 +7304,16 @@
 			(type default)
 		)
 		(uuid "243e555b-755f-42cd-9f32-4d312b31d84a")
+	)
+	(wire
+		(pts
+			(xy 369.57 191.77) (xy 369.57 186.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "248dccb9-fdd4-4a3d-9103-a9d07423bf30")
 	)
 	(wire
 		(pts
@@ -6829,6 +7497,16 @@
 	)
 	(wire
 		(pts
+			(xy 387.985 142.24) (xy 387.985 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ce9e31c-e3b6-4d29-8c70-ca3e90d737f6")
+	)
+	(wire
+		(pts
 			(xy 227.965 132.08) (xy 230.505 132.08)
 		)
 		(stroke
@@ -6959,7 +7637,7 @@
 	)
 	(wire
 		(pts
-			(xy 387.985 140.97) (xy 381.635 140.97)
+			(xy 387.985 142.24) (xy 383.54 142.24)
 		)
 		(stroke
 			(width 0)
@@ -7329,16 +8007,6 @@
 	)
 	(wire
 		(pts
-			(xy 385.445 173.99) (xy 387.985 173.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "625b5946-4a59-4dc7-8830-6ca4a51a0c69")
-	)
-	(wire
-		(pts
 			(xy 272.415 91.44) (xy 277.495 91.44)
 		)
 		(stroke
@@ -7439,7 +8107,7 @@
 	)
 	(wire
 		(pts
-			(xy 372.745 152.4) (xy 372.745 140.97)
+			(xy 372.745 152.4) (xy 372.745 142.24)
 		)
 		(stroke
 			(width 0)
@@ -7509,7 +8177,7 @@
 	)
 	(polyline
 		(pts
-			(xy 410.845 106.68) (xy 410.845 191.77)
+			(xy 411.48 106.68) (xy 411.48 207.01)
 		)
 		(stroke
 			(width 0)
@@ -7579,6 +8247,16 @@
 	)
 	(wire
 		(pts
+			(xy 369.57 175.26) (xy 360.045 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71b92e91-811d-4519-8d20-48511660727f")
+	)
+	(wire
+		(pts
 			(xy 354.965 144.78) (xy 352.425 144.78)
 		)
 		(stroke
@@ -7606,6 +8284,16 @@
 			(type default)
 		)
 		(uuid "7501394c-2838-4550-9010-d3102fcd49ea")
+	)
+	(wire
+		(pts
+			(xy 369.57 191.77) (xy 369.57 198.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "761dcc84-3bd5-49a0-9da5-2dfe54bb9601")
 	)
 	(wire
 		(pts
@@ -7699,7 +8387,7 @@
 	)
 	(polyline
 		(pts
-			(xy 327.025 191.77) (xy 327.025 106.68)
+			(xy 327.66 207.01) (xy 327.66 106.68)
 		)
 		(stroke
 			(width 0)
@@ -7819,6 +8507,16 @@
 	)
 	(wire
 		(pts
+			(xy 386.08 173.99) (xy 387.985 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c81877b-393c-4dd7-99dc-44455899e568")
+	)
+	(wire
+		(pts
 			(xy 253.365 138.43) (xy 253.365 133.35)
 		)
 		(stroke
@@ -7869,16 +8567,6 @@
 	)
 	(wire
 		(pts
-			(xy 385.445 180.34) (xy 385.445 173.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "90bd8d29-effb-4d11-b19a-e108912622cb")
-	)
-	(wire
-		(pts
 			(xy 310.515 170.18) (xy 310.515 182.88)
 		)
 		(stroke
@@ -7896,16 +8584,6 @@
 			(type default)
 		)
 		(uuid "91cab682-c4bc-4ad2-9124-6ecf4343ddfd")
-	)
-	(wire
-		(pts
-			(xy 370.205 190.5) (xy 370.205 180.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "936f43dd-962a-48b3-a75d-0783232947fc")
 	)
 	(wire
 		(pts
@@ -8056,6 +8734,16 @@
 			(type default)
 		)
 		(uuid "a20a486d-fac0-4144-aea3-762595da2e10")
+	)
+	(wire
+		(pts
+			(xy 386.08 173.99) (xy 386.08 186.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a271dd44-1e90-4677-a67b-6c6f2e2c1d2c")
 	)
 	(wire
 		(pts
@@ -8339,7 +9027,7 @@
 	)
 	(wire
 		(pts
-			(xy 380.365 180.34) (xy 385.445 180.34)
+			(xy 382.27 173.99) (xy 386.08 173.99)
 		)
 		(stroke
 			(width 0)
@@ -8489,6 +9177,16 @@
 	)
 	(wire
 		(pts
+			(xy 369.57 191.77) (xy 370.84 191.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bd32d5b4-0926-4f96-b52f-0081dd76b475")
+	)
+	(wire
+		(pts
 			(xy 300.355 177.8) (xy 306.705 177.8)
 		)
 		(stroke
@@ -8549,6 +9247,16 @@
 	)
 	(wire
 		(pts
+			(xy 369.57 173.99) (xy 369.57 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c07125ce-974c-4251-9c3b-0b97059461d4")
+	)
+	(wire
+		(pts
 			(xy 334.645 127) (xy 334.645 132.08)
 		)
 		(stroke
@@ -8589,7 +9297,7 @@
 	)
 	(polyline
 		(pts
-			(xy 327.025 191.77) (xy 410.845 191.77)
+			(xy 327.66 207.01) (xy 411.48 207.01)
 		)
 		(stroke
 			(width 0)
@@ -8639,6 +9347,16 @@
 	)
 	(wire
 		(pts
+			(xy 369.57 170.18) (xy 370.205 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ca990ce7-fab9-4a03-9610-ad009b078503")
+	)
+	(wire
+		(pts
 			(xy 217.805 109.22) (xy 212.725 109.22)
 		)
 		(stroke
@@ -8656,6 +9374,16 @@
 			(type default)
 		)
 		(uuid "cb6ef91b-79b9-459c-9777-adcc41b34345")
+	)
+	(wire
+		(pts
+			(xy 369.57 186.69) (xy 369.57 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cb8ca957-e49e-4cbc-8f73-ee1a3330caab")
 	)
 	(wire
 		(pts
@@ -8686,16 +9414,6 @@
 			(type default)
 		)
 		(uuid "cdf3fb84-d986-49c0-bd7e-4671a6536ca8")
-	)
-	(wire
-		(pts
-			(xy 370.205 180.34) (xy 372.745 180.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cdf5c265-d57f-4135-83f8-d958e2efc981")
 	)
 	(wire
 		(pts
@@ -8797,6 +9515,16 @@
 		)
 		(uuid "d763de81-ac31-4abf-af62-ef68788629db")
 	)
+	(wire
+		(pts
+			(xy 369.57 186.69) (xy 370.84 186.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d8c56fd7-a157-4142-9141-82e3242f6791")
+	)
 	(polyline
 		(pts
 			(xy 405.765 60.96) (xy 337.185 59.69)
@@ -8849,16 +9577,6 @@
 	)
 	(wire
 		(pts
-			(xy 387.985 138.43) (xy 387.985 140.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e53d12dd-3a11-4260-ac48-90a316ecb8f4")
-	)
-	(wire
-		(pts
 			(xy 352.425 149.86) (xy 370.205 149.86)
 		)
 		(stroke
@@ -8899,7 +9617,7 @@
 	)
 	(wire
 		(pts
-			(xy 356.235 170.18) (xy 370.205 170.18)
+			(xy 356.235 170.18) (xy 369.57 170.18)
 		)
 		(stroke
 			(width 0)
@@ -9089,6 +9807,16 @@
 	)
 	(wire
 		(pts
+			(xy 367.03 198.12) (xy 369.57 198.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f5f6b65b-219e-4fca-8fbc-12e2824244ce")
+	)
+	(wire
+		(pts
 			(xy 390.525 181.61) (xy 401.955 181.61)
 		)
 		(stroke
@@ -9099,7 +9827,7 @@
 	)
 	(wire
 		(pts
-			(xy 360.045 175.26) (xy 353.695 175.26)
+			(xy 353.695 175.26) (xy 360.045 175.26)
 		)
 		(stroke
 			(width 0)
@@ -9149,7 +9877,7 @@
 	)
 	(wire
 		(pts
-			(xy 372.745 140.97) (xy 374.015 140.97)
+			(xy 372.745 142.24) (xy 375.92 142.24)
 		)
 		(stroke
 			(width 0)
@@ -13141,22 +13869,22 @@
 	)
 	(global_label "HeaterDrive_IB"
 		(shape input)
-		(at 370.205 190.5 0)
+		(at 367.03 198.12 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
 		(uuid "e8adad22-9a11-458b-82f4-110f03e1539b")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 386.9184 190.5 0)
+			(at 350.3166 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -13849,7 +14577,7 @@
 		(fields_autoplaced yes)
 		(uuid "0fc4f76a-705d-497c-9e91-55c81d276aff")
 		(property "Reference" "A1"
-			(at 236.1947 71.12 0)
+			(at 236.0615 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13857,8 +14585,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Arduino_UNO_R3 with uUSB and Cable"
-			(at 236.1947 73.66 0)
+		(property "Value" "Arduino_UNO_R4 with USB-C connector"
+			(at 236.0615 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15582,6 +16310,72 @@
 			(project "moonratII"
 				(path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
 					(reference "TP2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND1")
+		(at 386.08 191.77 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3eaa82bb-b97d-49d3-bd8e-9d732c7e4104")
+		(property "Reference" "#PWR014"
+			(at 386.08 198.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND1"
+			(at 386.08 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 386.08 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 386.08 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 386.08 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "198b18b1-5d2e-4ba5-be77-922da1106285")
+		)
+		(instances
+			(project "moonratII"
+				(path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -18601,6 +19395,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Relay_SolidState:TLP175A")
+		(at 378.46 189.23 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "913185a9-27f9-480b-abd6-3c91af7f3ca3")
+		(property "Reference" "U2"
+			(at 378.46 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TLP175A"
+			(at 378.46 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:MFSOP6-4_4.4x3.6mm_P1.27mm"
+			(at 378.46 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://toshiba.semicon-storage.com/info/docget.jsp?did=13665&prodName=TLP175A"
+			(at 378.46 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "MOSFET Photorelay 1-Form-A, Voff 60V, Ion 100mA, SOP6"
+			(at 378.46 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "a9d0adf0-5174-4684-b5ba-3545dde8480f")
+		)
+		(pin "1"
+			(uuid "d1456fbb-6938-4fe0-8fe3-9f66445b6616")
+		)
+		(pin "6"
+			(uuid "7f3e51fd-2a72-4687-9c8e-826492322a95")
+		)
+		(pin "4"
+			(uuid "5dd789e4-1e16-43b3-8d3a-dd0d5375c2f4")
+		)
+		(instances
+			(project ""
+				(path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
+					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 280.035 142.24 0)
 		(unit 1)
@@ -19009,7 +19879,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 377.825 140.97 90)
+		(at 379.73 142.24 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -19017,7 +19887,7 @@
 		(dnp no)
 		(uuid "a7619716-2a6b-439c-a2d9-e80479877712")
 		(property "Reference" "R7"
-			(at 374.015 138.43 90)
+			(at 375.92 139.7 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19025,7 +19895,7 @@
 			)
 		)
 		(property "Value" "1R"
-			(at 381.635 138.43 90)
+			(at 383.54 139.7 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19033,7 +19903,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 378.079 139.954 90)
+			(at 379.984 141.224 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19042,7 +19912,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.amazon.com/Momentary-Tactile-Through-Breadboard-Friendly/dp/B07WF76VHT/"
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19051,7 +19921,7 @@
 			)
 		)
 		(property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19060,7 +19930,7 @@
 			)
 		)
 		(property "AssemblyType" "SMT"
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19069,7 +19939,7 @@
 			)
 		)
 		(property "Cost" "0.0015"
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19078,7 +19948,7 @@
 			)
 		)
 		(property "Distributor 1" "JLCPCB"
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19087,7 +19957,7 @@
 			)
 		)
 		(property "Distributor 1 PN" "C269434"
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19096,7 +19966,7 @@
 			)
 		)
 		(property "MPN" "RMC060315%N"
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19105,7 +19975,7 @@
 			)
 		)
 		(property "Manufacturer" "TyoHM"
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19114,7 +19984,7 @@
 			)
 		)
 		(property "Notes" ""
-			(at 377.825 140.97 0)
+			(at 379.73 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19419,7 +20289,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_Schottky")
-		(at 376.555 180.34 0)
+		(at 378.46 173.99 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -19427,7 +20297,7 @@
 		(dnp no)
 		(uuid "c27a5f99-b11b-493b-90bc-0df70d7930d0")
 		(property "Reference" "D1"
-			(at 375.285 176.53 0)
+			(at 377.19 170.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19435,7 +20305,7 @@
 			)
 		)
 		(property "Value" "Schottky 2A"
-			(at 378.46 183.515 0)
+			(at 380.365 177.165 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19443,7 +20313,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_SMB"
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19452,7 +20322,7 @@
 			)
 		)
 		(property "Datasheet" "SS210.pdf"
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19461,7 +20331,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19470,7 +20340,7 @@
 			)
 		)
 		(property "Distributor 1" "JLCPCB"
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19479,7 +20349,7 @@
 			)
 		)
 		(property "Distributor 1 PN" "C14996"
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19488,7 +20358,7 @@
 			)
 		)
 		(property "MPN" "SS210"
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19497,7 +20367,7 @@
 			)
 		)
 		(property "Manufacturer" "MDD（Microdiode Electronics）"
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19506,7 +20376,7 @@
 			)
 		)
 		(property "AssemblyType" "SMT"
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19515,7 +20385,7 @@
 			)
 		)
 		(property "Cost" "0.0343"
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19524,7 +20394,7 @@
 			)
 		)
 		(property "Notes" ""
-			(at 376.555 180.34 0)
+			(at 378.46 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20856,120 +21726,6 @@
 		)
 	)
 	(symbol
-		(lib_id "GPAD_SCH_LIB:TMP36GRTZ-REEL7")
-		(at 387.985 152.4 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "eb9e92ee-2b9b-4476-b734-d9f50c4ee19c")
-		(property "Reference" "U1"
-			(at 405.765 146.2121 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TMP36GRTZ-REEL7"
-			(at 405.765 148.7521 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
-			(at 389.255 158.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/TMP35_36_37.pdf"
-			(at 389.255 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 387.985 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "1.2837"
-			(at 387.985 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Distributor 1" "JLCPCB"
-			(at 387.985 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Distributor 1 PN" "C129489"
-			(at 387.985 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Notes" ""
-			(at 387.985 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "331e9dae-0e7b-48ef-a652-ec1e9bcda592")
-		)
-		(pin "2"
-			(uuid "a61a8b79-fbbc-40ed-a8b9-a170b1fa52ec")
-		)
-		(pin "3"
-			(uuid "fe9813e4-9717-4950-b9c9-256800834cd4")
-		)
-		(pin "4"
-			(uuid "87db770d-e273-46a3-a64b-3993f8df6097")
-		)
-		(pin "5"
-			(uuid "99936893-af84-4efb-9370-83f860cc1e58")
-		)
-		(instances
-			(project "moonratII"
-				(path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-					(reference "U1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_US")
 		(at 268.605 104.14 90)
 		(unit 1)
@@ -21410,6 +22166,80 @@
 			(project "moonratII"
 				(path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
 					(reference "Q1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Sensor_Temperature:TSIC306-TO92")
+		(at 387.35 154.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f2db0c4b-d6f1-4040-801b-27821868e01f")
+		(property "Reference" "U1"
+			(at 378.46 153.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "TSIC306-TO92"
+			(at 378.46 156.2099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 378.46 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://shop.bb-sensors.com/out/media/Datasheet_Digital_Semiconductor_temperatur_sensor_TSIC.pdf"
+			(at 387.35 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Digital temperature sensor, range -50 ... +150 °C, 0.3 K accuracy, TO-92"
+			(at 387.35 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "24bf26c5-a7fb-41c6-9713-fb5fb31d2782")
+		)
+		(pin "2"
+			(uuid "101af21c-da77-4658-bda1-fd14f0a552f2")
+		)
+		(pin "3"
+			(uuid "325d6ae0-64b6-43c9-9d1f-b3bd3314102e")
+		)
+		(instances
+			(project ""
+				(path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
+					(reference "U1")
 					(unit 1)
 				)
 			)
