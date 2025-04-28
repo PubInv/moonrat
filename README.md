@@ -7,7 +7,7 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 ---
 
 # Status, April 28, 2025  
-Created a stand alone schematic for heaterboard PCB.
+Created a standalone schematic for heaterboard PCB.
 
 # Status, January 2025  
 #### Project presentation on YouTube (Click image to watch)
