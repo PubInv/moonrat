@@ -2114,7 +2114,7 @@
   (symbol (lib_id "GPAD_SCH_LIB:MountingHole_Pad_3.5mm") (at 110.49 66.04 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 265891ea-3d36-4a5e-82df-539d3a42d67b)
-    (property "Reference" "H1" (at 113.03 62.4586 0)
+    (property "Reference" "H5" (at 113.03 62.4586 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MountingHole_Pad_3.5mm" (at 113.03 64.77 0)
@@ -2154,7 +2154,7 @@
     (instances
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "H1") (unit 1)
+          (reference "H5") (unit 1)
         )
       )
     )
@@ -2526,7 +2526,7 @@
   (symbol (lib_id "Device:R_US") (at 146.05 82.55 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6ef4c4fc-fd36-4758-819e-217818d05973)
-    (property "Reference" "R1" (at 142.24 80.01 90)
+    (property "Reference" "R7" (at 142.24 80.01 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "4K7" (at 149.86 80.01 90)
@@ -2567,7 +2567,7 @@
     (instances
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "R1") (unit 1)
+          (reference "R7") (unit 1)
         )
       )
     )
@@ -2621,7 +2621,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 143.51 120.65 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 7ac7f71a-41cd-4aad-a6ef-50828bd1cbcf)
-    (property "Reference" "J8" (at 146.685 121.285 90)
+    (property "Reference" "J11" (at 147.32 115.57 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (at 137.16 113.03 0)
@@ -2662,7 +2662,7 @@
     (instances
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "J8") (unit 1)
+          (reference "J11") (unit 1)
         )
       )
     )
@@ -2740,7 +2740,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x06") (at 115.57 91.44 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 981272b6-c1ae-447e-a87f-b514b9820db4)
-    (property "Reference" "J1" (at 113.03 91.4399 0)
+    (property "Reference" "J9" (at 113.03 91.4399 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x06" (at 123.825 102.235 0)
@@ -2785,7 +2785,7 @@
     (instances
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "J1") (unit 1)
+          (reference "J9") (unit 1)
         )
       )
     )
@@ -2892,7 +2892,7 @@
       )
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "TP2") (unit 1)
+          (reference "TP1") (unit 1)
         )
       )
     )
@@ -2999,7 +2999,7 @@
       )
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "TP1") (unit 1)
+          (reference "TP2") (unit 1)
         )
       )
     )
@@ -3083,7 +3083,7 @@
   (symbol (lib_id "Device:Heater") (at 142.24 130.81 90) (unit 1)
     (in_bom yes) (on_board no) (dnp no)
     (uuid df34e8d0-4894-483c-9335-194908e1470a)
-    (property "Reference" "R5" (at 142.24 124.46 90)
+    (property "Reference" "R5" (at 143.51 128.27 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Heating Pad - 5x10cm" (at 149.86 137.16 90)
@@ -3133,7 +3133,7 @@
   (symbol (lib_id "GPAD_SCH_LIB:MountingHole_Pad_3.5mm") (at 110.49 73.66 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e0f5c919-24c6-4d70-9a14-167742346049)
-    (property "Reference" "H2" (at 113.03 69.85 0)
+    (property "Reference" "H6" (at 113.03 69.85 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MountingHole_Pad_3.5mm" (at 113.03 72.1614 0)
@@ -3173,7 +3173,7 @@
     (instances
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "H2") (unit 1)
+          (reference "H6") (unit 1)
         )
       )
     )
@@ -3182,7 +3182,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 158.75 116.84 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e303d79a-32fb-4487-9490-aee82b0716a2)
-    (property "Reference" "J5" (at 171.45 125.73 0)
+    (property "Reference" "J12" (at 162.56 113.03 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (at 152.4 113.03 0)
@@ -3223,7 +3223,7 @@
     (instances
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "J5") (unit 1)
+          (reference "J12") (unit 1)
         )
       )
     )
@@ -3282,7 +3282,7 @@
   (symbol (lib_id "Connector_Generic:Conn_02x05_Odd_Even") (at 116.84 116.84 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid fbb32812-ca9a-437a-8370-1156800f291e)
-    (property "Reference" "J2" (at 115.57 105.41 0)
+    (property "Reference" "J10" (at 115.57 105.41 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_02x05_Odd_Even" (at 115.57 107.95 0)
@@ -3331,7 +3331,7 @@
     (instances
       (project "heaterboard_1"
         (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
-          (reference "J2") (unit 1)
+          (reference "J10") (unit 1)
         )
       )
     )
