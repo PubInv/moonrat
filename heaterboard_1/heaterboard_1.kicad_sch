@@ -2112,7 +2112,7 @@
   )
 
   (symbol (lib_id "GPAD_SCH_LIB:MountingHole_Pad_3.5mm") (at 110.49 66.04 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 265891ea-3d36-4a5e-82df-539d3a42d67b)
     (property "Reference" "H5" (at 113.03 62.4586 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3131,7 +3131,7 @@
   )
 
   (symbol (lib_id "GPAD_SCH_LIB:MountingHole_Pad_3.5mm") (at 110.49 73.66 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid e0f5c919-24c6-4d70-9a14-167742346049)
     (property "Reference" "H6" (at 113.03 69.85 0)
       (effects (font (size 1.27 1.27)) (justify left))
