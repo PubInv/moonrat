@@ -1,4 +1,10 @@
+20250520 
+KF128 Screw Terminal (2.54 mm pitch)
+https://grabcad.com/library/kf128-screw-terminal-2-54-mm-pitch-1
 
+Added a folder of step files.
+------
+X
 Screw terimonal file: KF128-2.54-6P.step
 From: https://grabcad.com/library/kf128-screw-terminal-2-54-mm-pitch-1/details?folder_id=11526606
 
@@ -27,3 +33,4 @@ https://grabcad.com/library/pantalla-oled-0-96-128x64-1
 https://www.mcmaster.com/products/screws/jis-steel-pan-head-screws/thread-size~m1-7/length~6-mm/?s=screws
 
 2x3x3 mm spacer made in FreeCAD.
+

@@ -14,11 +14,13 @@
 *~
 *.*#
 _autosave-*
+*.*#auto_saved_files#-*
 *.tmp
 *-save.pro
 *-save.kicad_pcb
 fp-info-cache
 *.FCStd1
+*.FCBak
 
 # Netlist files (exported from Eeschema)
 *.net
