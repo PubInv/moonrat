@@ -5,11 +5,16 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 **MoonratII** development effort began January 2023.   
 
 ---
+# August 2025  
+## MoonratII Build Lifecycle
+Handwired prototype -> PWA prototype -> MVP -> 
 
-# Status, April 28, 2025  
+Solved enclosure bugs, built the MP
+
+# April 28, 2025  
 Created a standalone schematic for heaterboard PCB.
 
-# Status, January 2025  
+# January 2025  
 #### Project presentation on YouTube (Click image to watch)
 
 [![Watch the video](https://github.com/user-attachments/assets/b2fde032-a1f6-4cba-a1fe-d6f2304b3a2d)](https://www.youtube.com/watch?v=yTW_BcTsaGw&t=22s)
