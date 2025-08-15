@@ -5,16 +5,31 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 **MoonratII** development effort began January 2023.   
 
 ---
-# August 2025  
-## MoonratII Build Lifecycle
-Handwired prototype -> PWA prototype -> MVP -> 
+# Status, August 2025  
 
-Solved enclosure bugs, built the MP
+## Latest Progress  
+**We’re finalizing all updated FreeCAD 3D models by next week!** This includes:  
+- New enclosure design (improved insulation/portability)  
+- Redesigned controller mounts (3D-printed, better cable management)  
+- Mechanical optimizations (easier assembly/maintenance)  
 
-# April 28, 2025  
+### Next Steps  
+| Milestone               | Target Date   | Status       |  
+|-------------------------|---------------|--------------|  
+| FreeCAD model completion | Aug 20, 2024  | 🟡 In progress |  
+| MVP prototype build     | Aug 27, 2024  | 🟢 Planned    |  
+| Write and submit paper to *Hardware X*  | Aug 31, 2024  | 🟢 Planned    |  
+
+---  
+**Hardware X Paper Focus**:  
+- Open-source medical hardware  
+- Low-cost neonatal incubator design  
+- Reproducibility documentation ([Journal guidelines](https://www.journals.elsevier.com/hardware-x))  
+
+# Status, April 28, 2025  
 Created a standalone schematic for heaterboard PCB.
 
-# January 2025  
+# Status, January 2025  
 #### Project presentation on YouTube (Click image to watch)
 
 [![Watch the video](https://github.com/user-attachments/assets/b2fde032-a1f6-4cba-a1fe-d6f2304b3a2d)](https://www.youtube.com/watch?v=yTW_BcTsaGw&t=22s)
