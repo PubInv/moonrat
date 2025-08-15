@@ -7,11 +7,10 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 ---
 # Status, August 2025  
 
-## Latest Progress  
-**We’re finalizing all updated FreeCAD 3D models by next week!** This includes:  
-- New enclosure design (improved insulation/portability)  
-- Redesigned controller mounts (3D-printed, better cable management)  
-- Mechanical optimizations (easier assembly/maintenance)  
+**Latest Progress -> We’re finalizing all updated FreeCAD 3D models by next week!** This includes:  
+- New enclosure design - improved insulation/portability 
+- Redesigned controller mounts - 3D-printed, better cable management
+- Mechanical optimizations - easier assembly/maintenance 
 
 ### Next Steps  
 | Milestone               | Target Date   | Status       |  
