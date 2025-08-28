@@ -1,12 +1,16 @@
 <h1 align="center">MoonRatII, A Tote-Size Portable Incubator for Rapid Field Work</h1>
 
 Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy](https://github.com/PubInv/moonrat/tree/main/legacy) folder for the work of volunteers prior to December 2022 and the hand built prototype.
-
 **MoonratII** development effort began January 2023.   
 
 ---
-# Status, August 2025  
+# Status, August 28, 2025  
+The mechanical design phase for the MoonRat II enclosure is officially complete. All recent updates, including finalizing mounting holes, component spacing, and structural parameters, have been committed. The finalized design files are now being test printed. 
+Pending a successful print, the enclosure will be ready for assembly.
 
+<img width="1728" height="1117" alt="Screenshot 2025-08-28 at 5 58 10 PM" src="https://github.com/user-attachments/assets/7e2812ba-5a1b-452b-9ffc-cfed862a5d77" />
+
+# Status, August 2025  
 **Latest Progress -> We’re finalizing all updated FreeCAD 3D models by next week!** This includes:  
 - New enclosure design - improved insulation/portability 
 - Redesigned controller mounts - 3D-printed, better cable management
