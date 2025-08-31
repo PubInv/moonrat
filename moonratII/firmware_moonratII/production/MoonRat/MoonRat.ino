@@ -506,10 +506,10 @@ void slCallBack(byte buttonEvent) {
         Serial.println(F("Toggling Incubation!"));
         rom_reset();
         Serial.println(F("EEPROM RESET!"));
-        showMenu(CurrentTempC);
         incubating = !incubating;
         inMainMenu = true;
         showingGraph = false;
+        showMenu(CurrentTempC);
       }
       break;
     }
