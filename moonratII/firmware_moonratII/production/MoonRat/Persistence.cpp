@@ -250,3 +250,7 @@ float wattHours(float& average_watts) {
   average_watts = watt_hours / time_incubating_hours;
   return watt_hours;
 }
+
+float ampHours(float watt_hours) {
+  return watt_hours / VOLTAGE_V;
+}

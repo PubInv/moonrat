@@ -68,5 +68,6 @@ float getTargetTemp();
 void setTargetTemp(float temp);
 
 float wattHours(float& average_watts);
+float ampHours(float watt_hours);
 
 #endif
