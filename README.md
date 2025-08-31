@@ -7,10 +7,10 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 # Status, August 28, 2025  
 | Milestone               | Target Date   | Status       |  
 |-------------------------|---------------|--------------|  
-| FreeCAD model completion | Aug 28, 2025  | ✅ Complete |  
-| MVP prototype build     | Aug 30, 2025  | 🟢 Planned    |  
-| Write and submit paper to *Hardware X*  | Aug 31, 2025  | 🟢 Planned  | 
-| Project Closure  | Sep 1, 2025 | 🟢 Planned |
+| FreeCAD model completion | Sep 01, 2025  | ✅ Complete |  
+| MVP prototype build     | Sep 06, 2025  | 🟢 Planned    |  
+| Write and submit paper to *Hardware X*  | Sep 10, 2025  | 🟢 Planned  | 
+| Project Closure  | Sep 15, 2025 | 🟢 Planned |
 
 The mechanical design phase for the MoonRat II enclosure is officially complete. All recent updates, including finalizing mounting holes, component spacing, and structural parameters, have been committed. The finalized design files are now being test printed. 
 Pending a successful print, the enclosure will be ready for assembly.
