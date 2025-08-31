@@ -7,7 +7,7 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 # Status, August 28, 2025  
 | Milestone               | Target Date   | Status       |  
 |-------------------------|---------------|--------------|  
-| FreeCAD model completion | Sep 01, 2025  | ✅ Complete |  
+| FreeCAD model completion | Sep 01, 2025  | 🟢 Planned |  
 | MVP prototype build     | Sep 06, 2025  | 🟢 Planned    |  
 | Write and submit paper to *Hardware X*  | Sep 10, 2025  | 🟢 Planned  | 
 | Project Closure  | Sep 15, 2025 | 🟢 Planned |
