@@ -392,7 +392,7 @@ void upCallBack(byte buttonEvent) {
   } else {
     switch (menuSelection) {
     case STATUS_M:
-      showCurStatus(CurrentTempC);
+      showCurStatus(CurrentTempC,timeMax,hours,minutes);
       showingGraph = false;
       inMainMenu = false;
       csm = Status;
@@ -448,7 +448,7 @@ void dnCallBack(byte buttonEvent) {
   } else {
     switch (menuSelection) {
     case STATUS_M:
-      showCurStatus(CurrentTempC);
+      showCurStatus(CurrentTempC,timeMax,hours,minutes);
       inMainMenu = false;
       csm = Status;
       break;
@@ -521,7 +521,7 @@ void slCallBack(byte buttonEvent) {
   } else {
     switch (menuSelection) {
     case STATUS_M:
-      showCurStatus(CurrentTempC);
+      showCurStatus(CurrentTempC,timeMax,hours,minutes);
       inMainMenu = false;
       csm = Status;
       break;
@@ -644,14 +644,10 @@ void loop() {
 #endif
 
         setHeatPWM_fraction(outputPWM_fraction);
-        // if (showingGraph) {
-        //   uint16_t index  = getIndex();
-        //   showGraph(index);
-        // }
         if (!inMainMenu) {
           switch (csm) {
             case Status:
-              showCurStatus(CurrentTempC);
+              showCurStatus(CurrentTempC,timeMax,hours,minutes);
             break;
             case Graph:
               {
