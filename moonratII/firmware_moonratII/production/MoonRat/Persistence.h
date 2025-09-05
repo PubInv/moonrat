@@ -66,6 +66,8 @@ void getTimeString(char* buff);
 bool writeNewEntry(float data);
 float getTargetTemp();
 void setTargetTemp(float temp);
+int getIncubationTime();
+void setIncubationTime(int incubationTime);
 
 float wattHours(float& average_watts);
 float ampHours(float watt_hours);

@@ -426,6 +426,7 @@ void upCallBack(byte buttonEvent) {
         showingGraph = false;
         timeMax += 1;
         showSetTimeMenu(timeMax);
+        setIncubationTime(timeMax);
         csm = Time;
       }
     }
@@ -477,6 +478,7 @@ void dnCallBack(byte buttonEvent) {
         showingGraph = false;
         timeMax -= 1;
         showSetTimeMenu(timeMax);
+        setIncubationTime(timeMax);
         csm = Time;
       }
       break;
