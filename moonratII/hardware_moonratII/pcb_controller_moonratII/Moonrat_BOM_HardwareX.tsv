@@ -1,0 +1,27 @@
+Reference	Value	Qty	DNP	Cost	Description
+A1	Arduino_UNO_R3 with uUSB and Cable	1		5.65	Arduino UNO EXCEPT with micro USB
+BZ1	Buzzer_D12mm_H9.6mm_LS7.6mm	1		0.16	
+C1	0.1uF	1		0.0021	50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS
+Cable_MoldedFemale1	Cable_02x06_Female	1		7.00	807 Square 6-Way Trailer Wiring Harness Connectors,6 pin Square Trailer Wire Extension for LED Brake Tailgate Light Bars,Hitch Light Trailer Wiring Harness Extension Connector (6 Way-Socket)
+Cable_MoldedMale1	Cable_02x06_Male	1		7.00	Cable_02x06_Male
+Cable_Ribbon1	Cable_02x05	1		6.75	Cable_02x05
+D1	Schottky 2A	1		0.0343	
+F1	Polyfuse 6A	1		0.0691	16V 3A 40A 6A 1812 Resettable Fuses ROHS
+H1,H2,H3,H4,H5,H6	MountingHole_Pad_3.5mm	6		0	MountingHole_Pad_3.5mm
+J1	Barrel_Jack_Switch_SMT	1		0.205	Power Barrel Connector Jack 2.10mm ID (0.083"), 5.50mm OD (0.217") Surface Mount, Right Angle
+J2	HS96L03W2C03_0.96_Oled	1		1.64	OLED Displays Modules ROHS
+J5,J10	Conn_02x05_Odd_Even	2		0.0655	2.54mm Straight 2x5P 5 Push - Pull 2.54mm 2 Plugin,P=2.54mm IDC Connectors ROHS
+J6,J9	Screw_Terminal_01x06	2		0.4614	1x6P -40℃~+105℃ 8A 130V Green 18~26 Straight 2.54mm 1 1 6 Plugin,P=2.54mm Screw terminal ROHS
+J11	Screw_Terminal_01x02	1		0.1537	1x2P 6A 150V Green 18~26 Straight 2.54mm 1 1 2 Plugin,P=2.54mm Screw terminal ROHS
+MF1,MF2,MF3	CAP TACTILE ROUND IVORY 6.00mm Dia	3		0.95	Round Tactile Switch Cap Ivory Slip On, 6.00mm Dia x 5.50mm H
+MF4,MF5,MF6,MF8	SMD_round_nut_M2*4*5+1.5	4		0.0736	
+MF7,MF9,MF10,MF11	Steel Pan Head Phillips Screw M2 x 0.4 mm Thread, 6 mm Long	4		0.05	
+MF12	250V 3A Straight Square Pins 2.5mm 4P 6mm -40℃~+105℃ 3mm 2.54mm Plugin Black 1x4P Plugin,P=2.54mm Pin Headers ROHS	1		0.0201	
+Q1	IRF540N	1		0.3480	100V 33A 44mΩ@10V,16A 130W N Channel TO-220 MOSFETs ROHS
+Q2	BSS138	1		0.0196	N-Channel Enhancement Mode Field Effect Transistor
+R1,R7	1R	2		0.0015	0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS
+R3,R4,R5,R6,R9	1K	5		0.0015	0.1W ±1% 1kΩ 0603 Chip Resistor - Surface Mount ROHS
+R8	Heater	1		4.50	Heating Pad - 5x10cm
+R10	10K	1		0.0036	100mW ±1% 10kΩ 0603 Chip Resistor - Surface Mount ROHS
+SW1,SW2,SW3	6mm 2 Pin Tact NO Breadboard Friendly	3		0.1091	
+U1	TMP36GRTZ-REEL7	1		1.2837	
