@@ -79,9 +79,13 @@ Button slBtn(BUTTON_SL,DEBOUNCE_TIME_MS);
 bool inMainMenu = true;
 bool showingGraph = false;
 
+// This is valid ONLY if inMainMenu is false;
+enum CurrentSubMenu { Status, Graph, Temp, Time };
+CurrentSubMenu csm;
+
 int menuSelection = 0;
 
-#define NUM_MENU_SELECTIONS 4
+
 
 int LOG_VERBOSE = 5;
 int LOG_DEBUG   = 4;
@@ -95,12 +99,15 @@ int LOG_LEVEL   = 5;
 const int DEBUG_TEMP = 1;
 
 // These are Menu items
-#define TEMPERATURE_M 0
+#define NUM_MENU_SELECTIONS 5
+#define STATUS_M 0
 #define GRAPH_1_M 1
 #define SET_TEMP_M 2
-#define STOP_M 3
+#define SET_TIME_M 3
+#define STOP_M 4
 
 #define MAX_TEMPERATURE_C 42.0
+#define MAX_INCUBATION_TIME 168
 
 #ifdef USE_LOW_TEMP
 float targetTemperatureC = 30.0;  // Celcius
@@ -133,11 +140,16 @@ const int numPoints = 60;
 // MENU VARIABLES
 int selectedOption = 0;
 
-int timeMaxOptions[] = {12, 24, 36, 48};
+// int timeMaxOptions[] = {12, 24, 36, 48};
+
+// int timeMax = timeMaxOptions[3];
+
 int tempMin = 0;
 int tempMax = 0;
 int timeMin = 0;
-int timeMax = timeMaxOptions[3];
+
+int timeMax = 48;
+
 
 int totalOptions = 4; // Change this to the total number of options in the menu
 
@@ -251,6 +263,17 @@ void setup() {
   }
   targetTemperatureC = storedTargetTemp;
 
+  int storedIncTime = getIncubationTime();
+  if (storedIncTime > MAX_INCUBATION_TIME) {
+    setIncubationTime(MAX_INCUBATION_TIME);
+    storedIncTime = MAX_INCUBATION_TIME;
+  }
+ if (storedIncTime < 1) {
+    setIncubationTime(1);
+    Serial.println(F("Incubation Time too low, setting to one hour!"));
+    storedIncTime = 1;
+  }
+  timeMax = storedIncTime;
 
   // This is insufficient to read the DS18B20 temperature sensor
   pinMode(A0, INPUT_PULLUP);
@@ -370,7 +393,6 @@ void upCallBack(byte buttonEvent) {
       menuSelection--;
       fastBeep();
       showMenu(CurrentTempC);
-
     } else {
       // Does two sound like it is not an error?
       fastBeep();
@@ -381,10 +403,11 @@ void upCallBack(byte buttonEvent) {
     }
   } else {
     switch (menuSelection) {
-    case TEMPERATURE_M:
-      showCurStatus(CurrentTempC);
+    case STATUS_M:
+      showCurStatus(CurrentTempC,timeMax,hours,minutes);
       showingGraph = false;
       inMainMenu = false;
+      csm = Status;
       break;
     case GRAPH_1_M:
       {
@@ -392,12 +415,14 @@ void upCallBack(byte buttonEvent) {
         showGraph(index);
         inMainMenu = false;
         showingGraph = true;
+        csm = Graph;
       }
       break;
     case SET_TEMP_M:
       {
         inMainMenu = false;
         showingGraph = false;
+        csm = Temp;
         if (targetTemperatureC > MAX_TEMPERATURE_C) {
           targetTemperatureC = MAX_TEMPERATURE_C;
         }
@@ -407,6 +432,15 @@ void upCallBack(byte buttonEvent) {
         showSetTempMenu(targetTemperatureC);
       }
       break;
+    case SET_TIME_M:
+      {
+        inMainMenu = false;
+        showingGraph = false;
+        timeMax += 1;
+        showSetTimeMenu(timeMax);
+        setIncubationTime(timeMax);
+        csm = Time;
+      }
     }
   }
 }
@@ -426,9 +460,10 @@ void dnCallBack(byte buttonEvent) {
     }
   } else {
     switch (menuSelection) {
-    case TEMPERATURE_M:
-      showCurStatus(CurrentTempC);
+    case STATUS_M:
+      showCurStatus(CurrentTempC,timeMax,hours,minutes);
       inMainMenu = false;
+      csm = Status;
       break;
     case GRAPH_1_M:
       {
@@ -436,6 +471,7 @@ void dnCallBack(byte buttonEvent) {
         showGraph(index);
         inMainMenu = false;
         showingGraph = true;
+        csm = Graph;
       }
       break;
     case SET_TEMP_M:
@@ -445,6 +481,17 @@ void dnCallBack(byte buttonEvent) {
         targetTemperatureC -= 0.5;
         setTargetTemp(targetTemperatureC);
         showSetTempMenu(targetTemperatureC);
+        csm = Temp;
+      }
+      break;
+      case SET_TIME_M:
+      {
+        inMainMenu = false;
+        showingGraph = false;
+        timeMax -= 1;
+        showSetTimeMenu(timeMax);
+        setIncubationTime(timeMax);
+        csm = Time;
       }
       break;
     }
@@ -456,7 +503,7 @@ void slCallBack(byte buttonEvent) {
   Serial.println(inMainMenu);
   if (!inMainMenu) {
     switch (menuSelection) {
-    case TEMPERATURE_M:
+    case STATUS_M:
       showMenu(CurrentTempC);
       break;
     case GRAPH_1_M:
@@ -465,6 +512,11 @@ void slCallBack(byte buttonEvent) {
       }
       break;
     case SET_TEMP_M:
+      {
+        showMenu(CurrentTempC);
+      }
+      break;
+    case SET_TIME_M:
       {
         showMenu(CurrentTempC);
       }
@@ -482,9 +534,10 @@ void slCallBack(byte buttonEvent) {
     }
   } else {
     switch (menuSelection) {
-    case TEMPERATURE_M:
-      showCurStatus(CurrentTempC);
+    case STATUS_M:
+      showCurStatus(CurrentTempC,timeMax,hours,minutes);
       inMainMenu = false;
+      csm = Status;
       break;
     case GRAPH_1_M:
       {
@@ -492,6 +545,7 @@ void slCallBack(byte buttonEvent) {
         showGraph(index);
         inMainMenu = false;
         showingGraph = true;
+        csm = Graph;
       }
       break;
     case SET_TEMP_M:
@@ -499,6 +553,15 @@ void slCallBack(byte buttonEvent) {
         showSetTempMenu(targetTemperatureC);
         inMainMenu = false;
         showingGraph = false;
+        csm = Temp;
+      }
+      break;
+    case SET_TIME_M:
+      {
+        showSetTimeMenu(timeMax);
+        inMainMenu = false;
+        showingGraph = false;
+        csm = Time;
       }
       break;
     case STOP_M:
@@ -595,10 +658,26 @@ void loop() {
 #endif
 
         setHeatPWM_fraction(outputPWM_fraction);
-        if (showingGraph) {
-          uint16_t index  = getIndex();
-          showGraph(index);
+        if (!inMainMenu) {
+          switch (csm) {
+            case Status:
+              showCurStatus(CurrentTempC,timeMax,hours,minutes);
+            break;
+            case Graph:
+              {
+                uint16_t index  = getIndex();
+                showGraph(index);
+              }
+            break;
+            case Temp:
+              showSetTempMenu(targetTemperatureC);
+            break;
+            case Time:
+              showSetTimeMenu(timeMax);
+            break;
+          }
         }
+
 
         if ((time_now_ms - time_since_last_report_ms) > REPORT_PERIOD) {
           showReport(CurrentTempC);

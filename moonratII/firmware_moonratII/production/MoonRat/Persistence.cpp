@@ -47,7 +47,7 @@ uint32_t time_of_last_entry = 0;
 // than 48 hours. We record data in the eprom at this rate
 // once the begin is done.
 #define WORDS_IN_EEPROM 8192/2
-#define MAX_SAMPLES (WORDS_IN_EEPROM -1)
+#define MAX_SAMPLES (WORDS_IN_EEPROM -2)
 unsigned long BASE_DATA_RECORD_PERIOD_S = 48 * 60 * 60 / (MAX_SAMPLES -1);
 unsigned long BASE_DATA_RECORD_PERIOD_MS = BASE_DATA_RECORD_PERIOD_S * 1000;
 
@@ -71,6 +71,8 @@ int graphTimeLength = 24;  //2 hours long bexause plotting every 5 mins
 //eeprom variables
 // NOTE: I treat the EEPROM as 16-bit words.
 #define TARGET_TEMP_ADDRESS 4095
+#define INC_TIME_ADDRESS 4094
+
 // Because we keep the "INDEX" at location, we chave to be careful
 // about our accounting and our meaning.
 // TODO: This is not implementing a full ring buffer!
@@ -242,6 +244,16 @@ void setTargetTemp(float temp) {
   uint16_t temp_i = (uint16_t)temp * 2;
   rom_write16(TARGET_TEMP_ADDRESS * 2, temp_i);
 }
+
+int getIncubationTime() {
+  uint16_t incubationTime = rom_read16(INC_TIME_ADDRESS  * 2);
+  return incubationTime;
+}
+void setIncubationTime(int incubationTime) {
+  Serial.println(F("Setting Incubation Time! "));
+  rom_write16(INC_TIME_ADDRESS * 2,incubationTime);
+}
+
 // return the number of watt hours used in the current incubation
 float wattHours(float& average_watts) {
   float time_on_hours =  MS_TO_HOURS * time_heater_turned_on_ms ;
@@ -249,4 +261,8 @@ float wattHours(float& average_watts) {
   float watt_hours = POWER_WATTS * time_on_hours;
   average_watts = watt_hours / time_incubating_hours;
   return watt_hours;
+}
+
+float ampHours(float watt_hours) {
+  return watt_hours / VOLTAGE_V;
 }
