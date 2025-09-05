@@ -107,6 +107,7 @@ const int DEBUG_TEMP = 1;
 #define STOP_M 4
 
 #define MAX_TEMPERATURE_C 42.0
+#define MAX_INCUBATION_TIME 168
 
 #ifdef USE_LOW_TEMP
 float targetTemperatureC = 30.0;  // Celcius
@@ -262,6 +263,17 @@ void setup() {
   }
   targetTemperatureC = storedTargetTemp;
 
+  int storedIncTime = getIncubationTime();
+  if (storedIncTime > MAX_INCUBATION_TIME) {
+    setIncubationTime(MAX_INCUBATION_TIME);
+    storedIncTime = MAX_INCUBATION_TIME;
+  }
+ if (storedIncTime < 1) {
+    setIncubationTime(1);
+    Serial.println(F("Incubation Time too low, setting to one hour!"));
+    storedIncTime = 1;
+  }
+  timeMax = storedIncTime;
 
   // This is insufficient to read the DS18B20 temperature sensor
   pinMode(A0, INPUT_PULLUP);
