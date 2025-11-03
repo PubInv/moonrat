@@ -2,33 +2,36 @@
 
 Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy](https://github.com/PubInv/moonrat/tree/main/legacy) folder for the work of volunteers prior to December 2022 and the hand built prototype.
 **MoonratII** development effort began January 2023.   
+![IMG_4869](https://github.com/user-attachments/assets/309292d2-703c-418f-b9d3-98331195c6d2)
 
----
-# Status, August 28, 2025  
+![IMG_4853](https://github.com/user-attachments/assets/31abf7bd-5314-4ad5-84ab-c13fd02517be)
+
+# Status, November 02, 2025  
 | Milestone               | Target Date   | Status       |  
 |-------------------------|---------------|--------------|  
-| FreeCAD model completion | Sep 01, 2025  | 🟢 Planned |  
-| MVP prototype build     | Sep 06, 2025  | 🟢 Planned    |  
-| Write and submit paper to *Hardware X*  | Sep 10, 2025  | 🟢 Planned  | 
-| Project Closure  | Sep 15, 2025 | 🟢 Planned |
+| Write and submit paper to *Hardware X*  | Nov 06, 2025  | 🟢 Planned  | 
+| Project Closure  | Nov 15, 2025 | 🟢 Planned |
 
-The mechanical design phase for the MoonRat II enclosure is officially complete. All recent updates, including finalizing mounting holes, component spacing, and structural parameters, have been committed. The finalized design files are now being test printed. 
-Pending a successful print, the enclosure will be ready for assembly.
+The project build is complete. 
 
 <img width="1728" height="1117" alt="Screenshot 2025-08-28 at 5 58 10 PM" src="https://github.com/user-attachments/assets/7e2812ba-5a1b-452b-9ffc-cfed862a5d77" />
 
 # Status, August 2025  
+
+The mechanical design phase for the MoonRat II enclosure is officially complete. All recent updates, including finalizing mounting holes, component spacing, and structural parameters, have been committed. The finalized design files are now being test printed. 
+Pending a successful print, the enclosure will be ready for assembly.
+
 **Latest Progress -> We’re finalizing all updated FreeCAD 3D models by next week!** This includes:  
 - New enclosure design - improved insulation/portability 
 - Redesigned controller mounts - 3D-printed, better cable management
-- Mechanical optimizations - easier assembly/maintenance 
+- Mechanical optimizations - easier assembly/maintenance
 
 ### Next Steps  
 | Milestone               | Target Date   | Status       |  
 |-------------------------|---------------|--------------|  
 | FreeCAD model completion | Aug 20, 2025  | 🟡 In progress |  
 | MVP prototype build     | Aug 27, 2025 | 🟢 Planned    |  
-| Write and submit paper to *Hardware X*  | Aug 31, 2025  | 🟢 Planned |  
+| Write and submit paper to *Hardware X*  | Nov 15, 2025  | 🟢 Planned |  
 
 ---  
 **Hardware X Paper Focus**:  
