@@ -2,7 +2,9 @@
 
 Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy](https://github.com/PubInv/moonrat/tree/main/legacy) folder for the work of volunteers prior to December 2022 and the hand built prototype.
 **MoonratII** development effort began January 2023.   
-![IMG_4869](https://github.com/user-attachments/assets/309292d2-703c-418f-b9d3-98331195c6d2)
+
+
+![IMG_4994](https://github.com/user-attachments/assets/eabbd503-81c7-4eb3-8cf5-789e0e3696bf)
 
 ![IMG_4853](https://github.com/user-attachments/assets/31abf7bd-5314-4ad5-84ab-c13fd02517be)
 
