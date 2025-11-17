@@ -11,8 +11,8 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 # Status, November 02, 2025  
 | Milestone               | Target Date   | Status       |  
 |-------------------------|---------------|--------------|  
-| Write and submit paper to *Hardware X*  | Nov 06, 2025  | 🟢 Planned  | 
-| Project Closure  | Nov 15, 2025 | 🟢 Planned |
+| Write and submit paper to *Hardware X*  | Nov 20, 2025  | 🟢 Planned  | 
+| Project Closure  | Nov 21, 2025 | 🟢 Planned |
 
 The project build is complete. 
 
