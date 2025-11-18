@@ -6,6 +6,7 @@ Aliases used by other developers include [Moonrat](https://github.com/PubInv/moo
 # Status, November 17, 2025  
 | Milestone               | Target Date   | Status       |  
 |-------------------------|---------------|--------------|  
+| New 3D printed controller enclosure top ordered from Xometry | Nov 18, 2025  | 🟢 Completed  | 
 | Changes to controller enclosure top  | Nov 17, 2025  | 🟢 Completed  | 
 | Write and submit paper to *Hardware X*  | Nov 25, 2025  | 🟢 Planned  | 
 | Project Closure  | Nov 30, 2025 | 🟢 Planned |
