@@ -1,4 +1,4 @@
-DOI: 10.5281/zenodo.17694077 for Release V1.0.0
+DOI: [10.5281/zenodo.17694077](https://zenodo.org/records/17694077) for Release V1.0.0
 
 <h1 align="center">MoonRatII, A Tote-Size Portable Incubator for Rapid Field Work</h1>
 
