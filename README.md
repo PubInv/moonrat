@@ -1,3 +1,5 @@
+DOI: 10.5281/zenodo.17694077 for Release V1.0.0
+
 <h1 align="center">MoonRatII, A Tote-Size Portable Incubator for Rapid Field Work</h1>
 
 Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy](https://github.com/PubInv/moonrat/tree/main/legacy) folder for the work of volunteers prior to December 2022 and the hand built prototype.
