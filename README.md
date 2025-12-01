@@ -5,12 +5,17 @@ DOI: [10.5281/zenodo.17694076](https://zenodo.org/records/17694076) for Release 
 Aliases used by other developers include [Moonrat](https://github.com/PubInv/moonrat/tree/main/legacy/moonrat), [Rice MiniCubator](https://github.com/PubInv/moonrat/tree/main/legacy/RiceMiniCubator), and [Rice Petri FI](https://github.com/PubInv/moonrat/tree/main/legacy/RicePetriFI). Visit the [Legacy](https://github.com/PubInv/moonrat/tree/main/legacy) folder for the work of volunteers prior to December 2022 and the hand built prototype.
 **MoonratII** development effort began January 2023.   
 
+# Status, December 01, 2025  
+| Milestone               | Target Date   | Status       |  
+|-------------------------|---------------|--------------|  
+| Write and submit paper to *Hardware X*  | Dec 04, 2025  | 🟢 Planned  | 
+| Project Closure  | Dec 10, 2025 | 🟢 Planned |
+
 # Status, November 17, 2025  
 | Milestone               | Target Date   | Status       |  
 |-------------------------|---------------|--------------|  
 | Changes to controller enclosure top  | Nov 17, 2025  | 🟢 Completed  | 
 | Write and submit paper to *Hardware X*  | Nov 25, 2025  | 🟢 Planned  | 
-| Project Closure  | Nov 30, 2025 | 🟢 Planned |
 
 ### Updated controller enclosure top design
 - Realigned power port opening with enclosure bottom.
