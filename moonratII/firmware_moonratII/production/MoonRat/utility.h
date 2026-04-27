@@ -30,7 +30,7 @@
 #define ORIGIN "US"
 
 #define VOLTAGE_V 12.0
-#define RESISTANCE_OHMS 6.3
+#define RESISTANCE_OHMS 12.5
 #define POWER_WATTS (VOLTAGE_V * VOLTAGE_V / RESISTANCE_OHMS)
 
 
@@ -38,8 +38,8 @@
 
 
 // #define STRATEGY_THERMOSTAT 1
-// #define STRATEGY_PID 2
-#define STRATEGY_FUZZY 3
+#define STRATEGY_PID 2
+// #define STRATEGY_FUZZY 3
 
 // The Public Invention Logo
 static const unsigned char PROGMEM image_data_Saraarray[] = {

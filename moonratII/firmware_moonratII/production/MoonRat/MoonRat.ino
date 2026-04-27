@@ -171,14 +171,14 @@ int hours = startingHour;
 
 int secondsLastDisplay = 0;
 
-int secondsToUpdateTemp = 10;
+int secondsToUpdateTemp = 30;
 int secondsToUpdateDisplay = 10;
 
 #if defined(STRATEGY_PID)
 //* PID controller
-float Kp = 312.7907;
-float Ki = 520.0;
-float Kd = 230.0;
+float Kp = 150.0; // reduced from 312
+float Ki = 125.0;
+float Kd = 600.0;
 double setPoint; // Desired reference for the controller
 double controlInput; // Sensor's information in voltage
 double controlOutput; // Control's output signal
@@ -582,7 +582,7 @@ void slCallBack(byte buttonEvent) {
 uint32_t last_temp_check_ms = 0;
 uint32_t time_since_last_report_ms = 0;
 #define PERIOD_TO_CHECK_TEMP_MS 5000
-#define REPORT_PERIOD 5000
+#define REPORT_PERIOD 30*1000
 int n = 0;
 void loop() {
 
@@ -679,7 +679,8 @@ void loop() {
         }
 
 
-        if ((time_now_ms - time_since_last_report_ms) > REPORT_PERIOD) {
+        if ((time_now_ms - time_since_last_report_ms) >= REPORT_PERIOD) {
+          Serial.println(time_now_ms);
           showReport(CurrentTempC);
           time_since_last_report_ms = time_now_ms;
         }

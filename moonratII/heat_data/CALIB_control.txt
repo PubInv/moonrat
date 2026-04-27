@@ -1,0 +1,2207 @@
+Script started on Sat Apr 25 14:36:46 2026
+[1m[7m%[27m[1m[0m                                                                                   ]7;file://MacBookPro.lan/Users/robertread/scratch[0m[27m[24m[J(base) robertread@MacBookPro scratch % [K[?2004hsscreen /e de/ v/tty/ 
+zsh: do you wish to see all 140 possibilities (70 lines)? n[J[A[0m[27m[24m[39Cscreen /dev/tty[K[?2004l
+[J[?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;37r[H[2J[36B[7mCannot open line '/dev/tty' for R/W: Device not configured[27m  [59C[1K[H[36B[7mSorry, could not find a PTY.[27m  [29C[1K[H[?1l>[37;1H
+[?1049l[screen is terminating]
+[1m[7m%[27m[1m[0m                                                                                   ]7;file://MacBookPro.lan/Users/robertread/scratch[0m[27m[24m[J(base) robertread@MacBookPro scratch % [K[?2004hq[?2004l
+[1m[7m%[27m[1m[0m                                                                                   ]7;file://MacBookPro.lan/Users/robertread/scratch[0m[27m[24m[J(base) robertread@MacBookPro scratch % [K[?2004hlls /dev/tty*[?2004l
+/dev/tty				/dev/ttysa
+/dev/tty.BLTH				/dev/ttysb
+/dev/tty.Bluetooth-Incoming-Port	/dev/ttysc
+/dev/tty.usbmodem14401			/dev/ttysd
+/dev/tty.usbserial-01D1CC74		/dev/ttyse
+/dev/ttyp0				/dev/ttysf
+/dev/ttyp1				/dev/ttyt0
+/dev/ttyp2				/dev/ttyt1
+/dev/ttyp3				/dev/ttyt2
+/dev/ttyp4				/dev/ttyt3
+/dev/ttyp5				/dev/ttyt4
+/dev/ttyp6				/dev/ttyt5
+/dev/ttyp7				/dev/ttyt6
+/dev/ttyp8				/dev/ttyt7
+/dev/ttyp9				/dev/ttyt8
+/dev/ttypa				/dev/ttyt9
+/dev/ttypb				/dev/ttyta
+/dev/ttypc				/dev/ttytb
+/dev/ttypd				/dev/ttytc
+/dev/ttype				/dev/ttytd
+/dev/ttypf				/dev/ttyte
+/dev/ttyq0				/dev/ttytf
+/dev/ttyq1				/dev/ttyu0
+/dev/ttyq2				/dev/ttyu1
+/dev/ttyq3				/dev/ttyu2
+/dev/ttyq4				/dev/ttyu3
+/dev/ttyq5				/dev/ttyu4
+/dev/ttyq6				/dev/ttyu5
+/dev/ttyq7				/dev/ttyu6
+/dev/ttyq8				/dev/ttyu7
+/dev/ttyq9				/dev/ttyu8
+/dev/ttyqa				/dev/ttyu9
+/dev/ttyqb				/dev/ttyua
+/dev/ttyqc				/dev/ttyub
+/dev/ttyqd				/dev/ttyuc
+/dev/ttyqe				/dev/ttyud
+/dev/ttyqf				/dev/ttyue
+/dev/ttyr0				/dev/ttyuf
+/dev/ttyr1				/dev/ttyv0
+/dev/ttyr2				/dev/ttyv1
+/dev/ttyr3				/dev/ttyv2
+/dev/ttyr4				/dev/ttyv3
+/dev/ttyr5				/dev/ttyv4
+/dev/ttyr6				/dev/ttyv5
+/dev/ttyr7				/dev/ttyv6
+/dev/ttyr8				/dev/ttyv7
+/dev/ttyr9				/dev/ttyv8
+/dev/ttyra				/dev/ttyv9
+/dev/ttyrb				/dev/ttyva
+/dev/ttyrc				/dev/ttyvb
+/dev/ttyrd				/dev/ttyvc
+/dev/ttyre				/dev/ttyvd
+/dev/ttyrf				/dev/ttyve
+/dev/ttys0				/dev/ttyvf
+/dev/ttys000				/dev/ttyw0
+/dev/ttys001				/dev/ttyw1
+/dev/ttys002				/dev/ttyw2
+/dev/ttys003				/dev/ttyw3
+/dev/ttys004				/dev/ttyw4
+/dev/ttys005				/dev/ttyw5
+/dev/ttys006				/dev/ttyw6
+/dev/ttys1				/dev/ttyw7
+/dev/ttys2				/dev/ttyw8
+/dev/ttys3				/dev/ttyw9
+/dev/ttys4				/dev/ttywa
+/dev/ttys5				/dev/ttywb
+/dev/ttys6				/dev/ttywc
+/dev/ttys7				/dev/ttywd
+/dev/ttys8				/dev/ttywe
+/dev/ttys9				/dev/ttywf
+[1m[7m%[27m[1m[0m                                                                                   ]7;file://MacBookPro.lan/Users/robertread/scratch[0m[27m[24m[J(base) robertread@MacBookPro scratch % [K[?2004hsscreen [7m/dev/tty.usbmodem14401[27m[22D[27m/[27md[27me[27mv[27m/[27mt[27mt[27my[27m.[27mu[27ms[27mb[27mm[27mo[27md[27me[27mm[27m1[27m4[27m4[27m0[27m1 115200[?2004l
+[?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;37r[H[2J[H[2JsetPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+390000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.09
+Watt Hours: 2.10
+Average Watts: 19.31
+Amp  Hours: 0.17
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+420000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.10
+Watt Hours: 2.29
+Average Watts: 19.56
+Amp  Hours: 0.19
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+450000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.11
+Watt Hours: 2.48
+Average Watts: 19.78
+Amp  Hours: 0.21
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+480000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.12
+Watt Hours: 2.67
+Average Watts: 19.97
+Amp  Hours: 0.22
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+510000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.13
+Watt Hours: 2.86
+Average Watts: 20.14
+Amp  Hours: 0.24
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+540000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.13
+Watt Hours: 3.05
+Average Watts: 20.29
+Amp  Hours: 0.25
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+570000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.14
+Watt Hours: 3.24
+Average Watts: 20.43
+Amp  Hours: 0.27
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+600000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.15
+Watt Hours: 3.43
+Average Watts: 20.55
+Amp  Hours: 0.29
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+630000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.16
+Watt Hours: 3.62
+Average Watts: 20.66
+Amp  Hours: 0.30
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+660000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.17
+Watt Hours: 3.81
+Average Watts: 20.76
+Amp  Hours: 0.32
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+690000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:0.18
+Watt Hours: 4.00
+Average Watts: 20.85
+Amp  Hours: 0.33
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+720000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.18
+Watt Hours: 4.19
+Average Watts: 20.93
+Amp  Hours: 0.35
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+750000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:0.19
+Watt Hours: 4.38
+Average Watts: 21.01
+Amp  Hours: 0.37
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+780000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.20
+Watt Hours: 4.57
+Average Watts: 21.08
+Amp  Hours: 0.38
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+810000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.21
+Watt Hours: 4.76
+Average Watts: 21.15
+Amp  Hours: 0.40
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+840000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.22
+Watt Hours: 4.95
+Average Watts: 21.21
+Amp  Hours: 0.41
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+870000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.23
+Watt Hours: 5.14
+Average Watts: 21.27
+Amp  Hours: 0.43
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+900000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.23
+Watt Hours: 5.33
+Average Watts: 21.32
+Amp  Hours: 0.44
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+930000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.24
+Watt Hours: 5.52
+Average Watts: 21.37
+Amp  Hours: 0.46
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+960000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:0.25
+Watt Hours: 5.71
+Average Watts: 21.41
+Amp  Hours: 0.48
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+990000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.26
+Watt Hours: 5.90
+Average Watts: 21.46
+Amp  Hours: 0.49
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1020000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.27
+Watt Hours: 6.10
+Average Watts: 21.50
+Amp  Hours: 0.51
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1050000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.28
+Watt Hours: 6.29
+Average Watts: 21.54
+Amp  Hours: 0.52
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1080000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.28
+Watt Hours: 6.48
+Average Watts: 21.57
+Amp  Hours: 0.54
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1110000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.29
+Watt Hours: 6.67
+Average Watts: 21.61
+Amp  Hours: 0.56
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1140000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.30
+Watt Hours: 6.86
+Average Watts: 21.64
+Amp  Hours: 0.57
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1170000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.31
+Watt Hours: 7.05
+Average Watts: 21.67
+Amp  Hours: 0.59
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+1200000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.32
+Watt Hours: 7.24
+Average Watts: 21.70
+Amp  Hours: 0.60
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+1230000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.33
+Watt Hours: 7.43
+Average Watts: 21.73
+Amp  Hours: 0.62
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+1260000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.33
+Watt Hours: 7.62
+Average Watts: 21.76
+Amp  Hours: 0.63
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+1290000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.34
+Watt Hours: 7.81
+Average Watts: 21.78
+Amp  Hours: 0.65
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1320000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.35
+Watt Hours: 8.00
+Average Watts: 21.81
+Amp  Hours: 0.67
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1350000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.36
+Watt Hours: 8.19
+Average Watts: 21.83
+Amp  Hours: 0.68
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1380000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.37
+Watt Hours: 8.38
+Average Watts: 21.85
+Amp  Hours: 0.70
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1410000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.38
+Watt Hours: 8.57
+Average Watts: 21.87
+Amp  Hours: 0.71
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1440000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.38
+Watt Hours: 8.76
+Average Watts: 21.90
+Amp  Hours: 0.73
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1470000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.39
+Watt Hours: 8.95
+Average Watts: 21.91
+Amp  Hours: 0.75
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1500000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.40
+Watt Hours: 9.14
+Average Watts: 21.93
+Amp  Hours: 0.76
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1530000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.41
+Watt Hours: 9.33
+Average Watts: 21.95
+Amp  Hours: 0.78
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1560000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.42
+Watt Hours: 9.52
+Average Watts: 21.97
+Amp  Hours: 0.79
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1590000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.43
+Watt Hours: 9.71
+Average Watts: 21.99
+Amp  Hours: 0.81
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1620000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.43
+Watt Hours: 9.90
+Average Watts: 22.00
+Amp  Hours: 0.83
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1650000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.44
+Watt Hours: 10.10
+Average Watts: 22.02
+Amp  Hours: 0.84
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1680000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.45
+Watt Hours: 10.29
+Average Watts: 22.03
+Amp  Hours: 0.86
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+1710000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.46
+Watt Hours: 10.48
+Average Watts: 22.05
+Amp  Hours: 0.87
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1740000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.47
+Watt Hours: 10.67
+Average Watts: 22.06
+Amp  Hours: 0.89
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1770000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.48
+Watt Hours: 10.86
+Average Watts: 22.07
+Amp  Hours: 0.90
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1800000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.48
+Watt Hours: 11.05
+Average Watts: 22.09
+Amp  Hours: 0.92
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1830000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.49
+Watt Hours: 11.24
+Average Watts: 22.10
+Amp  Hours: 0.94
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1860000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.50
+Watt Hours: 11.43
+Average Watts: 22.11
+Amp  Hours: 0.95
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1890000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.51
+Watt Hours: 11.62
+Average Watts: 22.12
+Amp  Hours: 0.97
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1920000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.52
+Watt Hours: 11.81
+Average Watts: 22.14
+Amp  Hours: 0.98
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1950000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.53
+Watt Hours: 12.00
+Average Watts: 22.15
+Amp  Hours: 1.00
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+1980000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.53
+Watt Hours: 12.19
+Average Watts: 22.16
+Amp  Hours: 1.02
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+2010000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.54
+Watt Hours: 12.38
+Average Watts: 22.17
+Amp  Hours: 1.03
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+2040000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.55
+Watt Hours: 12.57
+Average Watts: 22.18
+Amp  Hours: 1.05
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+2070000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.56
+Watt Hours: 12.76
+Average Watts: 22.19
+Amp  Hours: 1.06
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+2100000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.57
+Watt Hours: 12.95
+Average Watts: 22.20
+Amp  Hours: 1.08
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+2130000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:0.58
+Watt Hours: 13.14
+Average Watts: 22.21
+Amp  Hours: 1.10
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+2160000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.58
+Watt Hours: 13.33
+Average Watts: 22.22
+Amp  Hours: 1.11
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+2190000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.59
+Watt Hours: 13.52
+Average Watts: 22.22
+Amp  Hours: 1.13
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+2220000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.60
+Watt Hours: 13.71
+Average Watts: 22.23
+Amp  Hours: 1.14
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+2250000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.61
+Watt Hours: 13.90
+Average Watts: 22.24
+Amp  Hours: 1.16
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+2280000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.62
+Watt Hours: 14.10
+Average Watts: 22.25
+Amp  Hours: 1.17
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+2310000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.63
+Watt Hours: 14.29
+Average Watts: 22.26
+Amp  Hours: 1.19
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2340000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.63
+Watt Hours: 14.48
+Average Watts: 22.27
+Amp  Hours: 1.21
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+2370000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.64
+Watt Hours: 14.67
+Average Watts: 22.27
+Amp  Hours: 1.22
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2400000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.65
+Watt Hours: 14.86
+Average Watts: 22.28
+Amp  Hours: 1.24
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2430000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.66
+Watt Hours: 15.05
+Average Watts: 22.29
+Amp  Hours: 1.25
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2460000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.67
+Watt Hours: 15.24
+Average Watts: 22.29
+Amp  Hours: 1.27
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2490000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.68
+Watt Hours: 15.43
+Average Watts: 22.30
+Amp  Hours: 1.29
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+2520000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:0.68
+Watt Hours: 15.62
+Average Watts: 22.31
+Amp  Hours: 1.30
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+2550000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:0.69
+Watt Hours: 15.81
+Average Watts: 22.31
+Amp  Hours: 1.32
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+2580000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:0.70
+Watt Hours: 16.00
+Average Watts: 22.32
+Amp  Hours: 1.33
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2610000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.71
+Watt Hours: 16.19
+Average Watts: 22.33
+Amp  Hours: 1.35
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2640000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.72
+Watt Hours: 16.38
+Average Watts: 22.33
+Amp  Hours: 1.37
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2670000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.73
+Watt Hours: 16.57
+Average Watts: 22.34
+Amp  Hours: 1.38
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2700000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.73
+Watt Hours: 16.76
+Average Watts: 22.34
+Amp  Hours: 1.40
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2730000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.74
+Watt Hours: 16.95
+Average Watts: 22.35
+Amp  Hours: 1.41
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2760000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.75
+Watt Hours: 17.14
+Average Watts: 22.36
+Amp  Hours: 1.43
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2790000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.76
+Watt Hours: 17.33
+Average Watts: 22.36
+Amp  Hours: 1.44
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2820000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.77
+Watt Hours: 17.52
+Average Watts: 22.37
+Amp  Hours: 1.46
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2850000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.78
+Watt Hours: 17.71
+Average Watts: 22.37
+Amp  Hours: 1.48
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2880000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.78
+Watt Hours: 17.90
+Average Watts: 22.38
+Amp  Hours: 1.49
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+2910000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.79
+Watt Hours: 18.10
+Average Watts: 22.38
+Amp  Hours: 1.51
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2940000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.80
+Watt Hours: 18.29
+Average Watts: 22.39
+Amp  Hours: 1.52
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+2970000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.81
+Watt Hours: 18.48
+Average Watts: 22.39
+Amp  Hours: 1.54
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3000000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.82
+Watt Hours: 18.67
+Average Watts: 22.40
+Amp  Hours: 1.56
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3030000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.83
+Watt Hours: 18.86
+Average Watts: 22.40
+Amp  Hours: 1.57
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3060000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.83
+Watt Hours: 19.05
+Average Watts: 22.40
+Amp  Hours: 1.59
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3090000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.84
+Watt Hours: 19.24
+Average Watts: 22.41
+Amp  Hours: 1.60
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3120000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.85
+Watt Hours: 19.43
+Average Watts: 22.41
+Amp  Hours: 1.62
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3150000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.86
+Watt Hours: 19.62
+Average Watts: 22.42
+Amp  Hours: 1.63
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3180000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.87
+Watt Hours: 19.81
+Average Watts: 22.42
+Amp  Hours: 1.65
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3210000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.88
+Watt Hours: 20.00
+Average Watts: 22.43
+Amp  Hours: 1.67
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3240000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.88
+Watt Hours: 20.19
+Average Watts: 22.43
+Amp  Hours: 1.68
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3270000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.89
+Watt Hours: 20.38
+Average Watts: 22.43
+Amp  Hours: 1.70
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3300000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.90
+Watt Hours: 20.57
+Average Watts: 22.44
+Amp  Hours: 1.71
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3330000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:0.91
+Watt Hours: 20.76
+Average Watts: 22.44
+Amp  Hours: 1.73
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3360000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.92
+Watt Hours: 20.95
+Average Watts: 22.44
+Amp  Hours: 1.75
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3390000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.93
+Watt Hours: 21.14
+Average Watts: 22.45
+Amp  Hours: 1.76
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3420000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.93
+Watt Hours: 21.33
+Average Watts: 22.45
+Amp  Hours: 1.78
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3450000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.94
+Watt Hours: 21.52
+Average Watts: 22.46
+Amp  Hours: 1.79
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3480000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.95
+Watt Hours: 21.71
+Average Watts: 22.46
+Amp  Hours: 1.81
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3510000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:0.96
+Watt Hours: 21.90
+Average Watts: 22.46
+Amp  Hours: 1.83
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+3540000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:0.97
+Watt Hours: 22.10
+Average Watts: 22.47
+Amp  Hours: 1.84
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+3570000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:0.98
+Watt Hours: 22.29
+Average Watts: 22.47
+Amp  Hours: 1.86
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+3600000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:0.98
+Watt Hours: 22.48
+Average Watts: 22.47
+Amp  Hours: 1.87
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+3630000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:0.99
+Watt Hours: 22.67
+Average Watts: 22.48
+Amp  Hours: 1.89
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+3660000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:1.00
+Watt Hours: 22.86
+Average Watts: 22.48
+Amp  Hours: 1.90
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+3690000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:1.01
+Watt Hours: 23.05
+Average Watts: 22.48
+Amp  Hours: 1.92
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+3720000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:1.02
+Watt Hours: 23.24
+Average Watts: 22.48
+Amp  Hours: 1.94
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3750000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:1.03
+Watt Hours: 23.43
+Average Watts: 22.49
+Amp  Hours: 1.95
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3780000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:1.03
+Watt Hours: 23.62
+Average Watts: 22.49
+Amp  Hours: 1.97
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3810000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:1.04
+Watt Hours: 23.81
+Average Watts: 22.49
+Amp  Hours: 1.98
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3840000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:1.05
+Watt Hours: 24.00
+Average Watts: 22.50
+Amp  Hours: 2.00
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3870000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:1.06
+Watt Hours: 24.19
+Average Watts: 22.50
+Amp  Hours: 2.02
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3900000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:1.07
+Watt Hours: 24.38
+Average Watts: 22.50
+Amp  Hours: 2.03
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+3930000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:1.08
+Watt Hours: 24.57
+Average Watts: 22.50
+Amp  Hours: 2.05
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3960000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:1.08
+Watt Hours: 24.76
+Average Watts: 22.51
+Amp  Hours: 2.06
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+3990000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:1.09
+Watt Hours: 24.95
+Average Watts: 22.51
+Amp  Hours: 2.08
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+4020000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:1.10
+Watt Hours: 25.14
+Average Watts: 22.51
+Amp  Hours: 2.10
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+4050000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:1.11
+Watt Hours: 25.33
+Average Watts: 22.52
+Amp  Hours: 2.11
+setPoint, controlInput: 35.00
+23.19
+PID controlOuput: 255.00
+Set Heat PWM :255
+4080000
+Target (C) : 35.00 Temp : 23.19
+Hours Incubated:1.12
+Watt Hours: 25.52
+Average Watts: 22.52
+Amp  Hours: 2.13
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+4110000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:1.13
+Watt Hours: 25.71
+Average Watts: 22.52
+Amp  Hours: 2.14
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+4140000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:1.13
+Watt Hours: 25.90
+Average Watts: 22.52
+Amp  Hours: 2.16
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+4170000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:1.14
+Watt Hours: 26.10
+Average Watts: 22.52
+Amp  Hours: 2.17
+setPoint, controlInput: 35.00
+23.12
+PID controlOuput: 255.00
+Set Heat PWM :255
+4200000
+Target (C) : 35.00 Temp : 23.12
+Hours Incubated:1.15
+Watt Hours: 26.29
+Average Watts: 22.53
+Amp  Hours: 2.19
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4230000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.16
+Watt Hours: 26.48
+Average Watts: 22.53
+Amp  Hours: 2.21
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4260000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.17
+Watt Hours: 26.67
+Average Watts: 22.53
+Amp  Hours: 2.22
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4290000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.18
+Watt Hours: 26.86
+Average Watts: 22.53
+Amp  Hours: 2.24
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4320000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.18
+Watt Hours: 27.05
+Average Watts: 22.54
+Amp  Hours: 2.25
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4350000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.19
+Watt Hours: 27.24
+Average Watts: 22.54
+Amp  Hours: 2.27
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4380000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.20
+Watt Hours: 27.43
+Average Watts: 22.54
+Amp  Hours: 2.29
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4410000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.21
+Watt Hours: 27.62
+Average Watts: 22.54
+Amp  Hours: 2.30
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4440000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.22
+Watt Hours: 27.81
+Average Watts: 22.55
+Amp  Hours: 2.32
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4470000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.23
+Watt Hours: 28.00
+Average Watts: 22.55
+Amp  Hours: 2.33
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4500000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.23
+Watt Hours: 28.19
+Average Watts: 22.55
+Amp  Hours: 2.35
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4530000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.24
+Watt Hours: 28.38
+Average Watts: 22.55
+Amp  Hours: 2.37
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4560000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.25
+Watt Hours: 28.57
+Average Watts: 22.55
+Amp  Hours: 2.38
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4590000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.26
+Watt Hours: 28.76
+Average Watts: 22.56
+Amp  Hours: 2.40
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4620000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.27
+Watt Hours: 28.95
+Average Watts: 22.56
+Amp  Hours: 2.41
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4650000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.28
+Watt Hours: 29.14
+Average Watts: 22.56
+Amp  Hours: 2.43
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4680000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.28
+Watt Hours: 29.33
+Average Watts: 22.56
+Amp  Hours: 2.44
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4710000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.29
+Watt Hours: 29.52
+Average Watts: 22.56
+Amp  Hours: 2.46
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4740000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.30
+Watt Hours: 29.71
+Average Watts: 22.56
+Amp  Hours: 2.48
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4770000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.31
+Watt Hours: 29.90
+Average Watts: 22.57
+Amp  Hours: 2.49
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4800000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.32
+Watt Hours: 30.10
+Average Watts: 22.57
+Amp  Hours: 2.51
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4830000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.33
+Watt Hours: 30.29
+Average Watts: 22.57
+Amp  Hours: 2.52
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+4860000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.33
+Watt Hours: 30.48
+Average Watts: 22.57
+Amp  Hours: 2.54
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4890000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.34
+Watt Hours: 30.67
+Average Watts: 22.57
+Amp  Hours: 2.56
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4920000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.35
+Watt Hours: 30.86
+Average Watts: 22.58
+Amp  Hours: 2.57
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4950000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.36
+Watt Hours: 31.05
+Average Watts: 22.58
+Amp  Hours: 2.59
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+4980000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.37
+Watt Hours: 31.24
+Average Watts: 22.58
+Amp  Hours: 2.60
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+5010000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.38
+Watt Hours: 31.43
+Average Watts: 22.58
+Amp  Hours: 2.62
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5040000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.38
+Watt Hours: 31.62
+Average Watts: 22.58
+Amp  Hours: 2.63
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+5070000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.39
+Watt Hours: 31.81
+Average Watts: 22.58
+Amp  Hours: 2.65
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5100000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.40
+Watt Hours: 32.00
+Average Watts: 22.59
+Amp  Hours: 2.67
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5130000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.41
+Watt Hours: 32.19
+Average Watts: 22.59
+Amp  Hours: 2.68
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+5160000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.42
+Watt Hours: 32.38
+Average Watts: 22.59
+Amp  Hours: 2.70
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5190000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.43
+Watt Hours: 32.57
+Average Watts: 22.59
+Amp  Hours: 2.71
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5220000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.43
+Watt Hours: 32.76
+Average Watts: 22.59
+Amp  Hours: 2.73
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5250000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.44
+Watt Hours: 32.95
+Average Watts: 22.59
+Amp  Hours: 2.75
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5280000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.45
+Watt Hours: 33.14
+Average Watts: 22.59
+Amp  Hours: 2.76
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5310000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.46
+Watt Hours: 33.33
+Average Watts: 22.60
+Amp  Hours: 2.78
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5340000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.47
+Watt Hours: 33.52
+Average Watts: 22.60
+Amp  Hours: 2.79
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+5370000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.48
+Watt Hours: 33.71
+Average Watts: 22.60
+Amp  Hours: 2.81
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+5400000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.48
+Watt Hours: 33.90
+Average Watts: 22.60
+Amp  Hours: 2.83
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+5430000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.49
+Watt Hours: 34.10
+Average Watts: 22.60
+Amp  Hours: 2.84
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+5460000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.50
+Watt Hours: 34.29
+Average Watts: 22.60
+Amp  Hours: 2.86
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+5490000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.51
+Watt Hours: 34.48
+Average Watts: 22.60
+Amp  Hours: 2.87
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+5520000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.52
+Watt Hours: 34.67
+Average Watts: 22.61
+Amp  Hours: 2.89
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+5550000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.53
+Watt Hours: 34.86
+Average Watts: 22.61
+Amp  Hours: 2.90
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+5580000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.53
+Watt Hours: 35.05
+Average Watts: 22.61
+Amp  Hours: 2.92
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+5610000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.54
+Watt Hours: 35.24
+Average Watts: 22.61
+Amp  Hours: 2.94
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+5640000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.55
+Watt Hours: 35.43
+Average Watts: 22.61
+Amp  Hours: 2.95
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+5670000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.56
+Watt Hours: 35.62
+Average Watts: 22.61
+Amp  Hours: 2.97
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+5700000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.57
+Watt Hours: 35.81
+Average Watts: 22.61
+Amp  Hours: 2.98
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+5730000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.58
+Watt Hours: 36.00
+Average Watts: 22.62
+Amp  Hours: 3.00
+setPoint, controlInput: 35.00
+22.81
+PID controlOuput: 255.00
+Set Heat PWM :255
+5760000
+Target (C) : 35.00 Temp : 22.81
+Hours Incubated:1.58
+Watt Hours: 36.19
+Average Watts: 22.62
+Amp  Hours: 3.02
+setPoint, controlInput: 35.00
+22.81
+PID controlOuput: 255.00
+Set Heat PWM :255
+5790000
+Target (C) : 35.00 Temp : 22.81
+Hours Incubated:1.59
+Watt Hours: 36.38
+Average Watts: 22.62
+Amp  Hours: 3.03
+setPoint, controlInput: 35.00
+22.81
+PID controlOuput: 255.00
+Set Heat PWM :255
+5820000
+Target (C) : 35.00 Temp : 22.81
+Hours Incubated:1.60
+Watt Hours: 36.57
+Average Watts: 22.62
+Amp  Hours: 3.05
+setPoint, controlInput: 35.00
+22.81
+PID controlOuput: 255.00
+Set Heat PWM :255
+5850000
+Target (C) : 35.00 Temp : 22.81
+Hours Incubated:1.61
+Watt Hours: 36.76
+Average Watts: 22.62
+Amp  Hours: 3.06
+setPoint, controlInput: 35.00
+22.81
+PID controlOuput: 255.00
+Set Heat PWM :255
+5880000
+Target (C) : 35.00 Temp : 22.81
+Hours Incubated:1.62
+Watt Hours: 36.95
+Average Watts: 22.62
+Amp  Hours: 3.08
+setPoint, controlInput: 35.00
+22.81
+PID controlOuput: 255.00
+Set Heat PWM :255
+5910000
+Target (C) : 35.00 Temp : 22.81
+Hours Incubated:1.63
+Watt Hours: 37.14
+Average Watts: 22.62
+Amp  Hours: 3.10
+setPoint, controlInput: 35.00
+22.81
+PID controlOuput: 255.00
+Set Heat PWM :255
+5940000
+Target (C) : 35.00 Temp : 22.81
+Hours Incubated:1.63
+Watt Hours: 37.33
+Average Watts: 22.62
+Amp  Hours: 3.11
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+5970000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.64
+Watt Hours: 37.52
+Average Watts: 22.63
+Amp  Hours: 3.13
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+6000000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.65
+Watt Hours: 37.71
+Average Watts: 22.63
+Amp  Hours: 3.14
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+6030000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.66
+Watt Hours: 37.90
+Average Watts: 22.63
+Amp  Hours: 3.16
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+6060000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.67
+Watt Hours: 38.10
+Average Watts: 22.63
+Amp  Hours: 3.17
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+6090000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.68
+Watt Hours: 38.29
+Average Watts: 22.63
+Amp  Hours: 3.19
+setPoint, controlInput: 35.00
+22.87
+PID controlOuput: 255.00
+Set Heat PWM :255
+6120000
+Target (C) : 35.00 Temp : 22.87
+Hours Incubated:1.68
+Watt Hours: 38.48
+Average Watts: 22.63
+Amp  Hours: 3.21
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6150000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.69
+Watt Hours: 38.67
+Average Watts: 22.63
+Amp  Hours: 3.22
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6180000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.70
+Watt Hours: 38.86
+Average Watts: 22.63
+Amp  Hours: 3.24
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6210000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.71
+Watt Hours: 39.05
+Average Watts: 22.63
+Amp  Hours: 3.25
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6240000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.72
+Watt Hours: 39.24
+Average Watts: 22.64
+Amp  Hours: 3.27
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6270000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.73
+Watt Hours: 39.43
+Average Watts: 22.64
+Amp  Hours: 3.29
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+6300000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.73
+Watt Hours: 39.62
+Average Watts: 22.64
+Amp  Hours: 3.30
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+6330000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.74
+Watt Hours: 39.81
+Average Watts: 22.64
+Amp  Hours: 3.32
+setPoint, controlInput: 35.00
+23.00
+PID controlOuput: 255.00
+Set Heat PWM :255
+6360000
+Target (C) : 35.00 Temp : 23.00
+Hours Incubated:1.75
+Watt Hours: 40.00
+Average Watts: 22.64
+Amp  Hours: 3.33
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6390000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.76
+Watt Hours: 40.19
+Average Watts: 22.64
+Amp  Hours: 3.35
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6420000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.77
+Watt Hours: 40.38
+Average Watts: 22.64
+Amp  Hours: 3.37
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6450000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.78
+Watt Hours: 40.57
+Average Watts: 22.64
+Amp  Hours: 3.38
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6480000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.78
+Watt Hours: 40.76
+Average Watts: 22.64
+Amp  Hours: 3.40
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6510000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.79
+Watt Hours: 40.95
+Average Watts: 22.64
+Amp  Hours: 3.41
+setPoint, controlInput: 35.00
+22.94
+PID controlOuput: 255.00
+Set Heat PWM :255
+6540000
+Target (C) : 35.00 Temp : 22.94
+Hours Incubated:1.80
+Watt Hours: 41.14
+Average Watts: 22.65
+Amp  Hours: 3.43
+setPoint, controlInput: 35.00
+23.06
+PID controlOuput: 255.00
+Set Heat PWM :255
+6570000
+Target (C) : 35.00 Temp : 23.06
+Hours Incubated:1.81
+Watt Hours: 41.33
+Average Watts: 22.65
+Amp  Hours: 3.44
+setPoint, controlInput: 35.00
+23.25
+PID controlOuput: 255.00
+Set Heat PWM :255
+6600000
+Target (C) : 35.00 Temp : 23.25
+Hours Incubated:1.82
+Watt Hours: 41.52
+Average Watts: 22.65
+Amp  Hours: 3.46
+setPoint, controlInput: 35.00
+23.31
+PID controlOuput: 255.00
+Set Heat PWM :255
+6630000
+Target (C) : 35.00 Temp : 23.31
+Hours Incubated:1.83
+Watt Hours: 41.71
+Average Watts: 22.65
+Amp  Hours: 3.48
+setPoint, controlInput: 35.00
+23.44
+PID controlOuput: 255.00
+Set Heat PWM :255
+6660000
+Target (C) : 35.00 Temp : 23.44
+Hours Incubated:1.83
+Watt Hours: 41.90
+Average Watts: 22.65
+Amp  Hours: 3.49
+setPoint, controlInput: 35.00
+23.56
+PID controlOuput: 255.00
+Set Heat PWM :255
+6690000
+Target (C) : 35.00 Temp : 23.56
+Hours Incubated:1.84
+Watt Hours: 42.10
+Average Watts: 22.65
+Amp  Hours: 3.51
+setPoint, controlInput: 35.00
+23.69
+PID controlOuput: 255.00
+Set Heat PWM :255
+6720000
+Target (C) : 35.00 Temp : 23.69
+Hours Incubated:1.85
+Watt Hours: 42.29
+Average Watts: 22.65
+Amp  Hours: 3.52
+[7m:[27m[K[7mquit[27m                                                                                   [?1l>[37;1H
+[?1049l[screen is terminating]
+[1m[7m%[27m[1m[0m                                                                                   ]7;file://MacBookPro.lan/Users/robertread/scratch[0m[27m[24m[J(base) robertread@MacBookPro scratch % [K[?2004h[?2004l
+
+Saving session...
+...saving history...truncating history files...
+...completed.
+
+Script done on Sat Apr 25 16:23:28 2026
