@@ -107,6 +107,7 @@ const int DEBUG_TEMP = 1;
 #define STOP_M 4
 
 #define MAX_TEMPERATURE_C 42.0
+#define DEF_TEMPERATURE_C 35.0
 #define MAX_INCUBATION_TIME 168
 
 #ifdef USE_LOW_TEMP
@@ -253,8 +254,8 @@ void setup() {
 
   float storedTargetTemp = getTargetTemp();
   if (storedTargetTemp > MAX_TEMPERATURE_C) {
-    setTargetTemp(MAX_TEMPERATURE_C);
-    storedTargetTemp = MAX_TEMPERATURE_C;
+    setTargetTemp(DEF_TEMPERATURE_C);
+    storedTargetTemp = DEF_TEMPERATURE_C;
   }
   if (storedTargetTemp < 25.0) {
     setTargetTemp(35.0);
