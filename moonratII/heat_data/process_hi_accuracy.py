@@ -11,14 +11,16 @@ def parse_file(input_path):
         lines = [line.strip() for line in f if line.strip()]
 
     # Process in pairs
-    for i in range(0, len(lines), 2):
+    for i in range(0, len(lines), 3):
         try:
             timestamp = int(lines[i])
-            temperature = float(lines[i + 1])
+            temperature1 = float(lines[i + 1])
+            temperature2 = float(lines[i + 2])
 
             records.append({
                 "timestamp": timestamp,
-                "temperature_c": temperature
+                "temperature_c0": temperature,
+                "temperature_c1": temperature.
             })
 
         except IndexError:
@@ -31,7 +33,7 @@ def parse_file(input_path):
 
 def write_csv(records, output_path):
     with open(output_path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["timestamp", "temperature_c"])
+        writer = csv.DictWriter(f, fieldnames=["timestamp", "temperature_c0","temperature_c1"])
         writer.writeheader()
         writer.writerows(records)
 

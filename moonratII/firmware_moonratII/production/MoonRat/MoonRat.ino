@@ -176,9 +176,9 @@ int secondsToUpdateDisplay = 10;
 
 #if defined(STRATEGY_PID)
 //* PID controller
-float Kp = 150.0; // reduced from 312
-float Ki = 125.0;
-float Kd = 600.0;
+float Kp = 90.0; // reduced from 312
+float Ki = 0.0;
+float Kd = 80.0;
 double setPoint; // Desired reference for the controller
 double controlInput; // Sensor's information in voltage
 double controlOutput; // Control's output signal
