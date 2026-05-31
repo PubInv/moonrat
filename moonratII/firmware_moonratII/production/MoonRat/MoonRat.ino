@@ -177,14 +177,16 @@ int secondsToUpdateDisplay = 10;
 
 #if defined(STRATEGY_PID)
 //* PID controller
-float Kp = 90.0; // reduced from 312
-float Ki = 0.0;
-float Kd = 80.0;
+float Kp = 6.0; 
+float Ki = 0.05; // very low to limit over shoot 
+float Kd = 0.0;
 double setPoint; // Desired reference for the controller
 double controlInput; // Sensor's information in voltage
 double controlOutput; // Control's output signal
 
 PID moonPID(&controlInput, &controlOutput, &setPoint, Kp, Ki, Kd, DIRECT);
+
+bool TEMP_SENSOR_BAD = false;
 
 #endif
 
@@ -202,7 +204,7 @@ double read_tempC() {
   float tempC = sensor.getTempCByIndex(0);
 
   // Check if reading was successful
-  if (tempC != DEVICE_DISCONNECTED_C) {
+  if ((int) tempC != DEVICE_DISCONNECTED_C) {
     //    Serial.print(F("Temperature for the device 1 (index 0) is: "));
     //   Serial.println(tempC);
   } else {
@@ -657,8 +659,12 @@ void loop() {
 #if defined(STRATEGY_THERMOSTAT)
         outputPWM_fraction = thermostatPWM_fraction(CurrentTempC);
 #endif
-
-        setHeatPWM_fraction(outputPWM_fraction);
+        if ((int) CurrentTempC != DEVICE_DISCONNECTED_C) {
+          setHeatPWM_fraction(outputPWM_fraction);
+        } else {
+          setHeatPWM_fraction(0.0);
+          Serial.println(F("ERROR: PWM set to 0 until temperature restored!!"));
+        }
         if (!inMainMenu) {
           switch (csm) {
             case Status:
