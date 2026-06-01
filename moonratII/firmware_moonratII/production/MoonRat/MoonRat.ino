@@ -177,14 +177,15 @@ int secondsToUpdateDisplay = 10;
 
 #if defined(STRATEGY_PID)
 //* PID controller
-float Kp = 6.0; 
-float Ki = 0.05; // very low to limit over shoot 
-float Kd = 0.0;
+float Kp = 40.0; 
+float Ki_Before_Windup = 0; // May need to do anti-windup
+float Ki_After_Windup = 5;
+float Kd = 10.0;
 double setPoint; // Desired reference for the controller
 double controlInput; // Sensor's information in voltage
 double controlOutput; // Control's output signal
 
-PID moonPID(&controlInput, &controlOutput, &setPoint, Kp, Ki, Kd, DIRECT);
+PID moonPID(&controlInput, &controlOutput, &setPoint, Kp, Ki_Before_Windup, Kd, DIRECT);
 
 bool TEMP_SENSOR_BAD = false;
 
@@ -581,6 +582,15 @@ void slCallBack(byte buttonEvent) {
     }
   }
 }
+// used for anti-windup of PID controller
+bool wound_up = false;
+void checkWindup(float tempC) {
+  if (!wound_up && tempC > targetTemperatureC) {
+    moonPID.SetTunings(Kp, Ki_After_Windup, Kd);
+    Serial.println(F("Anti-Windup Phase Initiated!"));
+    wound_up = true;
+  }
+}
 
 uint32_t last_temp_check_ms = 0;
 uint32_t time_since_last_report_ms = 0;
@@ -646,6 +656,8 @@ void loop() {
   if((seconds - secondsSinceTempUpdate) >= secondsToUpdateTemp) // This occurs one per second....
     {
       CurrentTempC = read_tempC();
+
+      checkWindup(CurrentTempC);
 
       renderDisplay_bool = (seconds - secondsLastDisplay) > secondsToUpdateDisplay;
       if (renderDisplay_bool) {
