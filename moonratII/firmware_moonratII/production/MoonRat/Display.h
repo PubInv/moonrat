@@ -25,7 +25,7 @@ extern float targetTemperatureC;
 extern bool inMainMenu;
 extern bool showingGraph;
 
-void showCurStatus(float temp,int timeMax,int hours,int minutes);
+void showCurStatus(float temp,int timeMax,int hours,int minutes,int calib_tenths);
 void showReport(float temp);
 void showSetTempMenu(float target);
 void showSetTimeMenu(float incubationTime);

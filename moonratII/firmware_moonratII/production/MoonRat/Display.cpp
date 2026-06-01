@@ -25,6 +25,7 @@ extern int selectedOption;
 extern int tempMax;
 extern int timeMax;
 extern int menuSelection;
+extern int calibTenths;
 
 extern uint32_t time_heater_turned_on_ms;
 
@@ -52,7 +53,7 @@ int xaxisright = 128 - 24;
 
 
 
-void showCurStatus(float temp,int timeMax,int hours,int minutes) {
+void showCurStatus(float temp,int timeMax,int hours,int minutes,int calib_tenths) {
   float time_remaining_hrs = (float) timeMax - ((float)hours + minutes/ 60.0);
   display.clearDisplay();  //removes current plots
   display.setCursor(0, 0);
@@ -67,6 +68,10 @@ void showCurStatus(float temp,int timeMax,int hours,int minutes) {
   display.println(ampHours(wh));
   display.println(F("Hours Remaining:"));
   display.println(time_remaining_hrs);
+  display.println(F("Up (U) to increase"));
+  display.println(F("Dn (D) to decrease"));
+  display.print(F("Calib. Temp:"));
+  display.println((float) calib_tenths / 10.0);
   display.display();
 }
 
@@ -237,6 +242,25 @@ void setMaxTemp() {
   display.println("C");
   display.display();
 }
+
+// void setCalibTenths() {
+//   display.clearDisplay();
+//   display.setTextSize(1);
+//   display.setTextColor(SSD1306_WHITE);
+//   display.setCursor(0, 0);
+//   display.print("Calib. Tenths (C)");
+//   display.setCursor(0, 16);
+//   display.print(tempMax);
+//   display.println("C");
+//   display.setCursor(0, 32);
+//   display.print("Inc Time");
+//   display.setCursor(0, 48);
+//   display.print(timeMax);
+//   display.println("C");
+//   display.display();
+// }
+
+
 void displayExitScreen() {
   display.clearDisplay();
   display.setTextSize(1);

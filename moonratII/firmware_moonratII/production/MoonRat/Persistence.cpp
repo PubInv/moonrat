@@ -47,7 +47,7 @@ uint32_t time_of_last_entry = 0;
 // than 48 hours. We record data in the eprom at this rate
 // once the begin is done.
 #define WORDS_IN_EEPROM 8192/2
-#define MAX_SAMPLES (WORDS_IN_EEPROM -2)
+#define MAX_SAMPLES (WORDS_IN_EEPROM -3)
 unsigned long BASE_DATA_RECORD_PERIOD_S = 48 * 60 * 60 / (MAX_SAMPLES -1);
 unsigned long BASE_DATA_RECORD_PERIOD_MS = BASE_DATA_RECORD_PERIOD_S * 1000;
 
@@ -72,6 +72,7 @@ int graphTimeLength = 24;  //2 hours long bexause plotting every 5 mins
 // NOTE: I treat the EEPROM as 16-bit words.
 #define TARGET_TEMP_ADDRESS 4095
 #define INC_TIME_ADDRESS 4094
+#define CALIB_TENTHS_ADDRESS 4093
 
 // Because we keep the "INDEX" at location, we chave to be careful
 // about our accounting and our meaning.
@@ -252,6 +253,17 @@ int getIncubationTime() {
 void setIncubationTime(int incubationTime) {
   Serial.println(F("Setting Incubation Time! "));
   rom_write16(INC_TIME_ADDRESS * 2,incubationTime);
+}
+
+
+int getCalibrationTenths() {
+  uint16_t calibTenths_int = rom_read16(CALIB_TENTHS_ADDRESS  * 2);
+  return calibTenths_int;
+}
+
+void setCalibrationTenths(int setCalibrationTenths) {
+  Serial.println(F("Setting calibration Tenths! "));
+  rom_write16(INC_TIME_ADDRESS * 2,setCalibrationTenths);
 }
 
 // return the number of watt hours used in the current incubation

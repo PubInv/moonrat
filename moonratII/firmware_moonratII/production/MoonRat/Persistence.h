@@ -69,6 +69,9 @@ void setTargetTemp(float temp);
 int getIncubationTime();
 void setIncubationTime(int incubationTime);
 
+int getCalibrationTenths();
+void setCalibrationTenths(int calibTenths);
+
 float wattHours(float& average_watts);
 float ampHours(float watt_hours);
 

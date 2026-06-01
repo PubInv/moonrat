@@ -109,6 +109,8 @@ const int DEBUG_TEMP = 1;
 #define MAX_TEMPERATURE_C 42.0
 #define DEF_TEMPERATURE_C 35.0
 #define MAX_INCUBATION_TIME 168
+#define MAX_CALIB_TENTHS 20
+#define MIN_CALIB_TENTHS -20
 
 #ifdef USE_LOW_TEMP
 float targetTemperatureC = 30.0;  // Celcius
@@ -151,6 +153,8 @@ int timeMin = 0;
 
 int timeMax = 48;
 
+int calibTenths = 0;
+
 
 int totalOptions = 4; // Change this to the total number of options in the menu
 
@@ -177,15 +181,16 @@ int secondsToUpdateDisplay = 10;
 
 #if defined(STRATEGY_PID)
 //* PID controller
-float Kp = 100.0; 
+float Kp = 50.0; 
 float Ki_Before_Windup = 0; // May need to do anti-windup
-float Ki_After_Windup = 30;
-float Kd = 0.0;
+float Ki_After_Windup = 15;
+float Kd_Before_Windup = 0.0;
+float Kd_After_Windup = 4.0;
 double setPoint; // Desired reference for the controller
 double controlInput; // Sensor's information in voltage
 double controlOutput; // Control's output signal
 
-PID moonPID(&controlInput, &controlOutput, &setPoint, Kp, Ki_Before_Windup, Kd, DIRECT);
+PID moonPID(&controlInput, &controlOutput, &setPoint, Kp, Ki_Before_Windup, Kd_Before_Windup, DIRECT);
 
 bool TEMP_SENSOR_BAD = false;
 
@@ -202,7 +207,7 @@ double read_tempC() {
   sensor.requestTemperatures();  // Send the command to get temperatures
   // After we got the temperatures, we can print them here.
   // We use the function ByIndex, and as an example get the temperature from the first sensor only.
-  float tempC = sensor.getTempCByIndex(0);
+  float tempC = sensor.getTempCByIndex(0) - calibTenths;
 
   // Check if reading was successful
   if ((int) tempC != DEVICE_DISCONNECTED_C) {
@@ -278,6 +283,18 @@ void setup() {
     storedIncTime = 1;
   }
   timeMax = storedIncTime;
+
+  calibTenths = getCalibrationTenths();
+  // This is for initialiazation
+  if (calibTenths < MIN_CALIB_TENTHS) {
+    calibTenths = 0;
+    setCalibrationTenths(calibTenths);
+  }
+  if (calibTenths > MAX_CALIB_TENTHS) {
+    calibTenths = 0;
+    setCalibrationTenths(calibTenths);
+  }
+
 
   // This is insufficient to read the DS18B20 temperature sensor
   pinMode(A0, INPUT_PULLUP);
@@ -408,10 +425,15 @@ void upCallBack(byte buttonEvent) {
   } else {
     switch (menuSelection) {
     case STATUS_M:
-      showCurStatus(CurrentTempC,timeMax,hours,minutes);
+      showCurStatus(CurrentTempC,timeMax,hours,minutes,calibTenths);
       showingGraph = false;
       inMainMenu = false;
       csm = Status;
+      if (calibTenths < MAX_CALIB_TENTHS) {
+        calibTenths += 1;
+      }
+ 
+      setCalibrationTenths(calibTenths);
       break;
     case GRAPH_1_M:
       {
@@ -465,8 +487,13 @@ void dnCallBack(byte buttonEvent) {
   } else {
     switch (menuSelection) {
     case STATUS_M:
-      showCurStatus(CurrentTempC,timeMax,hours,minutes);
+      showCurStatus(CurrentTempC,timeMax,hours,minutes,calibTenths);
       inMainMenu = false;
+      showingGraph = false;
+      if (calibTenths > MIN_CALIB_TENTHS) {
+        calibTenths -= 1;
+      }
+      setCalibrationTenths(calibTenths);
       csm = Status;
       break;
     case GRAPH_1_M:
@@ -539,7 +566,7 @@ void slCallBack(byte buttonEvent) {
   } else {
     switch (menuSelection) {
     case STATUS_M:
-      showCurStatus(CurrentTempC,timeMax,hours,minutes);
+      showCurStatus(CurrentTempC,timeMax,hours,minutes,calibTenths);
       inMainMenu = false;
       csm = Status;
       break;
@@ -586,7 +613,7 @@ void slCallBack(byte buttonEvent) {
 bool wound_up = false;
 void checkWindup(float tempC) {
   if (!wound_up && tempC > (targetTemperatureC - 1.0)) {
-    moonPID.SetTunings(Kp, Ki_After_Windup, Kd);
+    moonPID.SetTunings(Kp, Ki_After_Windup, Kd_After_Windup);
     Serial.println(F("Anti-Windup Phase Initiated!"));
     wound_up = true;
   }
@@ -682,7 +709,7 @@ void loop() {
         if (!inMainMenu) {
           switch (csm) {
             case Status:
-              showCurStatus(CurrentTempC,timeMax,hours,minutes);
+              showCurStatus(CurrentTempC,timeMax,hours,minutes,calibTenths);
             break;
             case Graph:
               {
