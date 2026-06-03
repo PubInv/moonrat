@@ -263,7 +263,7 @@ int getCalibrationTenths() {
 
 void setCalibrationTenths(int setCalibrationTenths) {
   Serial.println(F("Setting calibration Tenths! "));
-  rom_write16(INC_TIME_ADDRESS * 2,setCalibrationTenths);
+  rom_write16(CALIB_TENTHS_ADDRESS * 2,setCalibrationTenths);
 }
 
 // return the number of watt hours used in the current incubation

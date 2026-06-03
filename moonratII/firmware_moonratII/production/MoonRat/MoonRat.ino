@@ -181,16 +181,17 @@ int secondsToUpdateDisplay = 10;
 
 #if defined(STRATEGY_PID)
 //* PID controller
-float Kp = 50.0; 
+float Kp_Before_Windup = 20.0; 
+float Kp_After_Windup = 50.0; 
 float Ki_Before_Windup = 0; // May need to do anti-windup
-float Ki_After_Windup = 15;
-float Kd_Before_Windup = 0.0;
+float Ki_After_Windup = 10;
+float Kd_Before_Windup = 5.0;
 float Kd_After_Windup = 4.0;
 double setPoint; // Desired reference for the controller
 double controlInput; // Sensor's information in voltage
 double controlOutput; // Control's output signal
 
-PID moonPID(&controlInput, &controlOutput, &setPoint, Kp, Ki_Before_Windup, Kd_Before_Windup, DIRECT);
+PID moonPID(&controlInput, &controlOutput, &setPoint, Kp_Before_Windup, Ki_Before_Windup, Kd_Before_Windup, DIRECT);
 
 bool TEMP_SENSOR_BAD = false;
 
@@ -613,7 +614,7 @@ void slCallBack(byte buttonEvent) {
 bool wound_up = false;
 void checkWindup(float tempC) {
   if (!wound_up && tempC > (targetTemperatureC - 1.0)) {
-    moonPID.SetTunings(Kp, Ki_After_Windup, Kd_After_Windup);
+    moonPID.SetTunings(Kp_After_Windup, Ki_After_Windup, Kd_After_Windup);
     Serial.println(F("Anti-Windup Phase Initiated!"));
     wound_up = true;
   }
@@ -668,6 +669,7 @@ void loop() {
   if (exit_flag) {
     // What to do in this case is not tested or obvious, but we consider the incubation over.
     setHeatPWM_fraction(0.0);
+    delay(10000);
     return;
   }
 
